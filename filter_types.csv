@@ -1,0 +1,11 @@
+filter_type,installation,flow_min_lph,flow_max_lph,power_min_w,power_max_w,tank_size_min_l,tank_size_max_l,flow_multiplier_recommended,fish_suitability,bioload_level,noise_level,maintenance_frequency,pros,cons,notes
+Sponge Filter,Internal-AirDriven,50,300,2,8,5,80,3,Betta/Shrimp/Fry,Low,Very Low,Weekly rinse,Very gentle flow; great bio filtration; cheap,Needs air pump; limited mechanical filtration,Best for breeding tanks and nano setups
+Internal Power Filter,Internal,200,1200,5,25,20,200,4,Community/Small Cichlids,Medium,Low,Weekly rinse,Compact; easy install,Visible in tank; limited media space,Good starter filter
+Hang-On-Back (HOB),External-Back,300,1500,5,15,40,250,5,Community/Planted,Medium,Medium,Weekly/biweekly,Easy maintenance; decent mechanical+bio,Waterfall noise; evaporation,Choose adjustable flow for betta tanks
+Canister Filter,External,600,3000,15,40,80,600,5,Planted/Community/Large Fish,Medium-High,Low,Monthly,Large media volume; strong bio; clean look,Costly; setup effort,Use spray bar to reduce current
+Sump Filter,External-UnderTank,1500,6000,30,120,200,2000,6,Large Tanks/Marine,High,Medium,Monthly,Massive capacity; highly customizable,Requires plumbing; overflow design,Best for very large or reef systems
+Top Filter (Overhead),External-Top,800,2500,15,45,100,500,5,Goldfish/Community,High,Medium,Weekly,Strong mechanical filtration; easy access,Evaporation; visible on top,Common in large freshwater setups
+Undergravel Filter,Internal-Substrate,200,800,5,15,40,200,3,Low-flow Community,Low,Very Low,Monthly,Even biological filtration,Clogs with debris; not for planted,Less common in modern aquascapes
+Fluidized Bed Filter,External,1000,4000,20,80,200,1500,6,Heavy Bioload,High,Medium,Monthly,Extremely efficient bio filtration,Needs prefilter; complex setup,Used in high-load systems
+Matten Filter (Hamburg),Internal-Wall,100,800,3,12,20,300,3,Shrimp/Breeding/Planted,Low,Very Low,Monthly,Huge bio surface; very stable,Large footprint,Popular in breeding tanks
+Nano Canister,External,200,600,5,12,20,100,4,Nano Planted/Betta,Low-Medium,Low,Monthly,Compact external; clean look,Limited capacity,Use lily pipes for gentle flow

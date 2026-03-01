@@ -1,0 +1,53 @@
+{
+  "plants": [
+    {
+      "id": "java_fern",
+      "commonName": "Java Fern",
+      "scientificName": "Microsorum pteropus",
+      "family": "Polypodiaceae",
+      "origin": "Southeast Asia",
+      "careLevel": "Easy",
+      "growthRate": "Slow",
+      "maxHeight": 35,
+      "lightRequirement": "Low to Medium",
+      "co2Requirement": "None",
+      "temperature": {
+        "min": 20,
+        "max": 28,
+        "unit": "celsius"
+      },
+      "ph": {
+        "min": 6.0,
+        "max": 7.5
+      },
+      "propagation": "Rhizome division",
+      "placement": "Midground/Background",
+      "description": "Hardy and versatile plant that grows attached to rocks or driftwood."
+    },
+    {
+      "id": "anubias",
+      "commonName": "Anubias",
+      "scientificName": "Anubias barteri",
+      "family": "Araceae",
+      "origin": "West Africa",
+      "careLevel": "Easy",
+      "growthRate": "Slow",
+      "maxHeight": 25,
+      "lightRequirement": "Low to Medium",
+      "co2Requirement": "None",
+      "temperature": {
+        "min": 22,
+        "max": 28,
+        "unit": "celsius"
+      },
+      "ph": {
+        "min": 6.0,
+        "max": 7.5
+      },
+      "propagation": "Rhizome division",
+      "placement": "Foreground/Midground",
+      "description": "Durable plant with thick, dark green leaves. Great for beginners."
+    }
+  ]
+}
+

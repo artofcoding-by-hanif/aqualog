@@ -1,0 +1,11 @@
+media_type,category,primary_function,particle_size_microns,biological_efficiency,chemical_action,flow_resistance,lifespan_months,replace_or_rinse,suitable_for_filter_types,suitable_tank_types,bioload_support,pros,cons,notes
+Sponge,Mechanical+Biological,Traps debris and hosts bacteria,20-100,Medium,None,Low,24,Rinse,All,Betta/Shrimp/Community/Planted,Low-Medium,Cheap; reusable; gentle flow,Clogs faster than ceramic,Use coarse + fine layers
+Filter Floss,Mechanical,Polishing fine particles,5-20,Low,None,Medium,1,Replace,All,All,Low,Crystal clear water,Frequent replacement,Use as last stage
+Ceramic Rings,Biological,Nitrifying bacteria surface,1000+,High,None,Low,36,Rinse,Canister/HOB/Sump,Community/Planted,Medium-High,Stable bio filtration,Needs prefilter,Standard bio media
+Bio Balls,Biological,Surface area for bacteria,2000+,Medium,None,Very Low,36,Rinse,Sump/WetDry,Large Tanks/Marine,Medium,Great oxygen exposure,Lower density than ceramic,Best in wet-dry systems
+Sintered Glass (Matrix Type),Biological,Deep porous bio filtration,3000+,Very High,None,Low,48,Rinse,Canister/Sump,Planted/High Bioload,High,Supports denitrification,Costly,Premium bio media
+Activated Carbon,Chemical,Removes organics/odour,NA,None,Adsorption,Low,1,Replace,All,Medication/Cloudy Water,Low,Fast chemical cleanup,Removes nutrients,Use temporarily
+Zeolite,Chemical,Removes ammonia,NA,None,Ion Exchange,Low,1,Replace,All,New Tanks/Emergency,Low,Ammonia control,Exhausts quickly,Temporary use only
+Purigen-like Resin,Chemical,Removes dissolved waste,NA,None,Adsorption,Low,6,Regenerate,Canister/HOB,Planted/Community,Medium,Polishes water; reusable,Costly,Do not use with meds
+Peat,Chemical,Buffers pH; softens water,NA,None,Humic release,Low,2,Replace,Canister/HOB,Blackwater/Betta,Low,Natural conditioning,Water tinting,Optional specialty media
+Lava Rock,Biological,Porous bacteria habitat,500+,Medium,None,Low,36,Rinse,Canister/Sump,Community,Medium,Cheap natural media,Inconsistent porosity,Pre-rinse thoroughly

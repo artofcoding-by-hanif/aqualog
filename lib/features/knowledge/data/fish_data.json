@@ -1,0 +1,51 @@
+{
+  "fish": [
+    {
+      "id": "betta",
+      "commonName": "Betta Fish",
+      "scientificName": "Betta splendens",
+      "family": "Osphronemidae",
+      "origin": "Southeast Asia",
+      "temperament": "Aggressive",
+      "careLevel": "Easy",
+      "maxSize": 7,
+      "lifespan": "3-5 years",
+      "minTankSize": 20,
+      "temperature": {
+        "min": 24,
+        "max": 28,
+        "unit": "celsius"
+      },
+      "ph": {
+        "min": 6.5,
+        "max": 7.5
+      },
+      "diet": "Carnivore",
+      "description": "Beautiful and popular freshwater fish known for their vibrant colors and flowing fins."
+    },
+    {
+      "id": "neon_tetra",
+      "commonName": "Neon Tetra",
+      "scientificName": "Paracheirodon innesi",
+      "family": "Characidae",
+      "origin": "South America",
+      "temperament": "Peaceful",
+      "careLevel": "Easy",
+      "maxSize": 4,
+      "lifespan": "5-8 years",
+      "minTankSize": 40,
+      "temperature": {
+        "min": 20,
+        "max": 26,
+        "unit": "celsius"
+      },
+      "ph": {
+        "min": 6.0,
+        "max": 7.0
+      },
+      "diet": "Omnivore",
+      "description": "Small, peaceful schooling fish with striking blue and red coloration."
+    }
+  ]
+}
+
