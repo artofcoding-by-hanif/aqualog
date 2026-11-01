@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/widgets/empty_state.dart';
+import '../../../core/theme/color_scheme.dart';
 
 /// Log list screen
 
@@ -59,10 +60,10 @@ class LogListScreen extends StatelessWidget {
           width: 48,
           height: 48,
           decoration: BoxDecoration(
-            color: Colors.blue.withValues(alpha: 0.1),
+            color: AquaPalette.azure.withValues(alpha: 0.1),
             borderRadius: BorderRadius.circular(12),
           ),
-          child: const Icon(Icons.water_drop, color: Colors.blue),
+          child: const Icon(Icons.water_drop, color: AquaPalette.azure),
         ),
         title: const Text('Water Change'),
         subtitle: const Text('Changed 25% of water'),

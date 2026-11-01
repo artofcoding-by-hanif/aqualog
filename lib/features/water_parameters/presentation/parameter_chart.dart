@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../core/theme/color_scheme.dart';
 
 /// Parameter chart widget
 
@@ -55,11 +56,11 @@ class ParameterChart extends StatelessWidget {
   Widget _getStatusIcon(double value) {
     // TODO: Check against ideal range
     if (value >= 6.5 && value <= 7.5) {
-      return const Icon(Icons.check_circle, color: Colors.green);
+      return const Icon(Icons.check_circle, color: AquaPalette.healthy);
     } else if (value >= 6.0 && value <= 8.0) {
-      return const Icon(Icons.warning, color: Colors.orange);
+      return const Icon(Icons.warning, color: AquaPalette.caution);
     } else {
-      return const Icon(Icons.error, color: Colors.red);
+      return const Icon(Icons.error, color: AquaPalette.danger);
     }
   }
 }

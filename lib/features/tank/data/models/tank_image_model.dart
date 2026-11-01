@@ -47,4 +47,3 @@ extension TankImageEntityMapper on TankImageEntity {
     );
   }
 }
-

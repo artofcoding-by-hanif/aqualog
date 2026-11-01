@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-import '../../tank/domain/entities/tank.dart';
 import '../../tank/presentation/controllers/tank_provider.dart';
 import '../domain/entities/reminder.dart';
 import 'controllers/reminder_provider.dart';

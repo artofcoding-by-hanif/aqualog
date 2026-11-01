@@ -34,4 +34,3 @@ abstract class TankImageEntity with _$TankImageEntity {
   factory TankImageEntity.fromJson(Map<String, dynamic> json) =>
       _$TankImageEntityFromJson(json);
 }
-

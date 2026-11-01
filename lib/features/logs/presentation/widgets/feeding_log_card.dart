@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/feeding_log.dart';
+import '../../../../core/theme/color_scheme.dart';
 
 /// Feeding log card widget for displaying log summary
 class FeedingLogCard extends StatelessWidget {
@@ -121,13 +122,13 @@ class FeedingLogCard extends StatelessWidget {
   Color _getResponseColor(ColorScheme colorScheme) {
     switch (log.response) {
       case FeedingResponse.ateEagerly:
-        return Colors.green.withValues(alpha: 0.2);
+        return AquaPalette.healthy.withValues(alpha: 0.2);
       case FeedingResponse.ateNormally:
         return colorScheme.primaryContainer;
       case FeedingResponse.ateSome:
-        return Colors.orange.withValues(alpha: 0.2);
+        return AquaPalette.caution.withValues(alpha: 0.2);
       case FeedingResponse.picky:
-        return Colors.amber.withValues(alpha: 0.2);
+        return AquaPalette.caution.withValues(alpha: 0.2);
       case FeedingResponse.ignored:
         return colorScheme.errorContainer;
       case FeedingResponse.unknown:
@@ -139,10 +140,10 @@ class FeedingLogCard extends StatelessWidget {
     switch (log.response) {
       case FeedingResponse.ateEagerly:
       case FeedingResponse.ateNormally:
-        return Colors.green;
+        return AquaPalette.healthy;
       case FeedingResponse.ateSome:
       case FeedingResponse.picky:
-        return Colors.orange;
+        return AquaPalette.caution;
       case FeedingResponse.ignored:
         return colorScheme.error;
       case FeedingResponse.unknown:

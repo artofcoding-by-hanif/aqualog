@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-/// Reusable card widget
+import 'aqua_widgets.dart';
+
+/// Reusable card widget, drawn as a [GlassCard]
 
 class AppCard extends StatelessWidget {
   const AppCard({
@@ -18,17 +20,11 @@ class AppCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: margin ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: padding ?? const EdgeInsets.all(16),
-          child: child,
-        ),
-      ),
+    return GlassCard(
+      margin: margin ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+      padding: padding ?? const EdgeInsets.all(16),
+      onTap: onTap,
+      child: child,
     );
   }
 }
-

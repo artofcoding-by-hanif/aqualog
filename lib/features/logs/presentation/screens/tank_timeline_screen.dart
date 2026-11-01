@@ -5,6 +5,7 @@ import '../../domain/entities/maintenance_log.dart';
 import '../controllers/maintenance_log_provider.dart';
 import '../../../water_parameters/domain/entities/water_parameter_log.dart';
 import '../../../water_parameters/presentation/controllers/water_parameter_log_provider.dart';
+import '../../../../core/theme/color_scheme.dart';
 
 /// Timeline event model for combining different log types
 class _TimelineEvent {
@@ -304,19 +305,19 @@ class TankTimelineScreen extends ConsumerWidget {
     final colorScheme = Theme.of(context).colorScheme;
     switch (type) {
       case MaintenanceType.waterChange:
-        return Colors.blue;
+        return AquaPalette.azure;
       case MaintenanceType.filterCleaning:
-        return Colors.orange;
+        return AquaPalette.caution;
       case MaintenanceType.glassCleaning:
-        return Colors.cyan;
+        return AquaPalette.cyan;
       case MaintenanceType.substrateCleaning:
         return Colors.brown;
       case MaintenanceType.trimming:
-        return Colors.green;
+        return AquaPalette.healthy;
       case MaintenanceType.equipmentMaintenance:
-        return Colors.grey;
+        return AquaPalette.mist;
       case MaintenanceType.medicationDose:
-        return Colors.red;
+        return AquaPalette.danger;
       case MaintenanceType.other:
         return colorScheme.primary;
     }
@@ -325,11 +326,11 @@ class TankTimelineScreen extends ConsumerWidget {
   Color _getStatusColor(ParameterStatus status, BuildContext context) {
     switch (status) {
       case ParameterStatus.optimal:
-        return Colors.green;
+        return AquaPalette.healthy;
       case ParameterStatus.warning:
-        return Colors.orange;
+        return AquaPalette.caution;
       case ParameterStatus.danger:
-        return Colors.red;
+        return AquaPalette.danger;
       case ParameterStatus.unknown:
         return Theme.of(context).colorScheme.outline;
     }

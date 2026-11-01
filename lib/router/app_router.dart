@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'aqua_page_route.dart';
+
 // Import screens
 import '../features/app/presentation/onboarding/onboarding_screen.dart';
 import '../features/app/presentation/settings/settings_screen.dart';
@@ -56,6 +58,8 @@ import '../features/plants/presentation/plant_form.dart';
 import '../features/glass_calculator/presentation/screens/glass_calculator_screen.dart';
 import '../features/glass_calculator/presentation/screens/saved_glass_calculations_screen.dart';
 import '../features/filter_calculator/presentation/screens/filter_calculator_screen.dart';
+import '../features/ai/presentation/screens/ai_chat_screen.dart';
+import '../features/ai/presentation/screens/tank_health_screen.dart';
 
 /// App router for navigation
 
@@ -103,32 +107,50 @@ class AppRouter {
   static const String glassCalculator = '/glass-calculator';
   static const String savedGlassCalculations = '/glass-calculator/saved';
   static const String filterCalculator = '/filter-calculator';
+  static const String aiChat = '/ai/chat';
+  static const String tankHealth = '/ai/health';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case aiChat:
+        final args = settings.arguments as Map<String, dynamic>?;
+        return AquaPageRoute(
+          builder: (_) => AiChatScreen(
+            tankId: args?['tankId'] as int?,
+            tankName: args?['tankName'] as String?,
+          ),
+        );
+      case tankHealth:
+        final args = settings.arguments as Map<String, dynamic>;
+        return AquaPageRoute(
+          builder: (_) => TankHealthScreen(
+            tankId: args['tankId'] as int,
+            tankName: args['tankName'] as String,
+          ),
+        );
       case onboarding:
-        return MaterialPageRoute(builder: (_) => const OnboardingScreen());
+        return AquaPageRoute(builder: (_) => const OnboardingScreen());
       case dashboard:
-        return MaterialPageRoute(builder: (_) => const DashboardScreen());
+        return AquaPageRoute(builder: (_) => const DashboardScreen());
       case tankList:
-        return MaterialPageRoute(builder: (_) => const TankListScreen());
+        return AquaPageRoute(builder: (_) => const TankListScreen());
       case tankDetail:
         final tank = settings.arguments as TankEntity;
-        return MaterialPageRoute(builder: (_) => TankDetailScreen(tank: tank));
+        return AquaPageRoute(builder: (_) => TankDetailScreen(tank: tank));
       case tankForm:
         final tank = settings.arguments as TankEntity?;
-        return MaterialPageRoute(builder: (_) => TankFormScreen(tank: tank));
+        return AquaPageRoute(builder: (_) => TankFormScreen(tank: tank));
       case AppRouter.settings:
-        return MaterialPageRoute(builder: (_) => const SettingsScreen());
+        return AquaPageRoute(builder: (_) => const SettingsScreen());
       case reminders:
-        return MaterialPageRoute(builder: (_) => const ReminderListScreen());
+        return AquaPageRoute(builder: (_) => const ReminderListScreen());
       case logs:
-        return MaterialPageRoute(builder: (_) => const LogListScreen());
+        return AquaPageRoute(builder: (_) => const LogListScreen());
       case knowledge:
-        return MaterialPageRoute(builder: (_) => const KnowledgeListScreen());
+        return AquaPageRoute(builder: (_) => const KnowledgeListScreen());
       case filterList:
         final args = settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(
+        return AquaPageRoute(
           builder: (_) => FilterListScreen(
             tankId: args['tankId'] as int,
             tankName: args['tankName'] as String,
@@ -136,12 +158,12 @@ class AppRouter {
         );
       case filterDetail:
         final filter = settings.arguments as FilterEntity;
-        return MaterialPageRoute(
+        return AquaPageRoute(
           builder: (_) => FilterDetailScreen(filter: filter),
         );
       case filterForm:
         final args = settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(
+        return AquaPageRoute(
           builder: (_) => FilterFormScreen(
             tankId: args['tankId'] as int,
             filter: args['filter'] as FilterEntity?,
@@ -149,7 +171,7 @@ class AppRouter {
         );
       case lightingList:
         final args = settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(
+        return AquaPageRoute(
           builder: (_) => LightingListScreen(
             tankId: args['tankId'] as int,
             tankName: args['tankName'] as String,
@@ -157,12 +179,12 @@ class AppRouter {
         );
       case lightingDetail:
         final lighting = settings.arguments as LightingEntity;
-        return MaterialPageRoute(
+        return AquaPageRoute(
           builder: (_) => LightingDetailScreen(lighting: lighting),
         );
       case lightingForm:
         final args = settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(
+        return AquaPageRoute(
           builder: (_) => LightingFormScreen(
             tankId: args['tankId'] as int,
             tankName: args['tankName'] as String?,
@@ -171,7 +193,7 @@ class AppRouter {
         );
       case fishList:
         final args = settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(
+        return AquaPageRoute(
           builder: (_) => FishListScreen(
             tankId: args['tankId'] as int,
             tankName: args['tankName'] as String,
@@ -179,10 +201,10 @@ class AppRouter {
         );
       case fishDetail:
         final fish = settings.arguments as FishEntity;
-        return MaterialPageRoute(builder: (_) => FishDetailScreen(fish: fish));
+        return AquaPageRoute(builder: (_) => FishDetailScreen(fish: fish));
       case fishForm:
         final args = settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(
+        return AquaPageRoute(
           builder: (_) => FishFormScreen(
             tankId: args['tankId'] as int,
             fish: args['fish'] as FishEntity?,
@@ -190,7 +212,7 @@ class AppRouter {
         );
       case invertebrateList:
         final args = settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(
+        return AquaPageRoute(
           builder: (_) => InvertebrateListScreen(
             tankId: args['tankId'] as int,
             tankName: args['tankName'] as String,
@@ -198,12 +220,12 @@ class AppRouter {
         );
       case invertebrateDetail:
         final invertebrate = settings.arguments as InvertebrateEntity;
-        return MaterialPageRoute(
+        return AquaPageRoute(
           builder: (_) => InvertebrateDetailScreen(invertebrate: invertebrate),
         );
       case invertebrateForm:
         final args = settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(
+        return AquaPageRoute(
           builder: (_) => InvertebrateFormScreen(
             tankId: args['tankId'] as int,
             invertebrate: args['invertebrate'] as InvertebrateEntity?,
@@ -211,7 +233,7 @@ class AppRouter {
         );
       case rockList:
         final args = settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(
+        return AquaPageRoute(
           builder: (_) => RockListScreen(
             tankId: args['tankId'] as int,
             tankName: args['tankName'] as String,
@@ -219,10 +241,10 @@ class AppRouter {
         );
       case rockDetail:
         final rock = settings.arguments as RockEntity;
-        return MaterialPageRoute(builder: (_) => RockDetailScreen(rock: rock));
+        return AquaPageRoute(builder: (_) => RockDetailScreen(rock: rock));
       case rockForm:
         final args = settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(
+        return AquaPageRoute(
           builder: (_) => RockFormScreen(
             tankId: args['tankId'] as int,
             rock: args['rock'] as RockEntity?,
@@ -230,7 +252,7 @@ class AppRouter {
         );
       case driftwoodList:
         final args = settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(
+        return AquaPageRoute(
           builder: (_) => DriftwoodListScreen(
             tankId: args['tankId'] as int,
             tankName: args['tankName'] as String,
@@ -238,12 +260,12 @@ class AppRouter {
         );
       case driftwoodDetail:
         final driftwood = settings.arguments as DriftwoodEntity;
-        return MaterialPageRoute(
+        return AquaPageRoute(
           builder: (_) => DriftwoodDetailScreen(driftwood: driftwood),
         );
       case driftwoodForm:
         final args = settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(
+        return AquaPageRoute(
           builder: (_) => DriftwoodFormScreen(
             tankId: args['tankId'] as int,
             driftwood: args['driftwood'] as DriftwoodEntity?,
@@ -251,12 +273,12 @@ class AppRouter {
         );
       case substrateEditor:
         final args = settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(
+        return AquaPageRoute(
           builder: (_) => SubstrateEditor(tankId: args['tankId'] as int),
         );
       case reminderForm:
         final args = settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(
+        return AquaPageRoute(
           builder: (_) => ReminderFormScreen(
             reminder: args['reminder'] as ReminderEntity?,
             tankId: args['tankId'] as int?,
@@ -264,7 +286,7 @@ class AppRouter {
         );
       case maintenanceLogList:
         final args = settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(
+        return AquaPageRoute(
           builder: (_) => MaintenanceLogListScreen(
             tankId: args['tankId'] as int,
             tankName: args['tankName'] as String,
@@ -272,7 +294,7 @@ class AppRouter {
         );
       case maintenanceLogForm:
         final args = settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(
+        return AquaPageRoute(
           builder: (_) => MaintenanceLogFormScreen(
             tankId: args['tankId'] as int,
             tankName: args['tankName'] as String,
@@ -282,7 +304,7 @@ class AppRouter {
         );
       case feedingLogList:
         final args = settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(
+        return AquaPageRoute(
           builder: (_) => FeedingLogListScreen(
             tankId: args['tankId'] as int,
             tankName: args['tankName'] as String,
@@ -290,7 +312,7 @@ class AppRouter {
         );
       case feedingLogForm:
         final args = settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(
+        return AquaPageRoute(
           builder: (_) => FeedingLogFormScreen(
             tankId: args['tankId'] as int,
             tankName: args['tankName'] as String,
@@ -299,7 +321,7 @@ class AppRouter {
         );
       case waterParameterLogList:
         final args = settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(
+        return AquaPageRoute(
           builder: (_) => WaterParameterLogListScreen(
             tankId: args['tankId'] as int,
             tankName: args['tankName'] as String,
@@ -307,7 +329,7 @@ class AppRouter {
         );
       case waterParameterLogForm:
         final args = settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(
+        return AquaPageRoute(
           builder: (_) => WaterParameterLogFormScreen(
             tankId: args['tankId'] as int,
             tankName: args['tankName'] as String,
@@ -316,7 +338,7 @@ class AppRouter {
         );
       case tankTimeline:
         final args = settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(
+        return AquaPageRoute(
           builder: (_) => TankTimelineScreen(
             tankId: args['tankId'] as int,
             tankName: args['tankName'] as String,
@@ -324,7 +346,7 @@ class AppRouter {
         );
       case tankGallery:
         final args = settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(
+        return AquaPageRoute(
           builder: (_) => TankGalleryScreen(
             tankId: args['tankId'] as int,
             tankName: args['tankName'] as String,
@@ -332,7 +354,7 @@ class AppRouter {
         );
       case plantList:
         final args = settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(
+        return AquaPageRoute(
           builder: (_) => PlantListScreen(
             tankId: args['tankId'] as int,
             tankName: args['tankName'] as String,
@@ -340,29 +362,25 @@ class AppRouter {
         );
       case plantDetail:
         final plant = settings.arguments as PlantEntity;
-        return MaterialPageRoute(
-          builder: (_) => PlantDetailScreen(plant: plant),
-        );
+        return AquaPageRoute(builder: (_) => PlantDetailScreen(plant: plant));
       case plantForm:
         final args = settings.arguments as Map<String, dynamic>;
-        return MaterialPageRoute(
+        return AquaPageRoute(
           builder: (_) => PlantFormScreen(
             tankId: args['tankId'] as int,
             plant: args['plant'] as PlantEntity?,
           ),
         );
       case glassCalculator:
-        return MaterialPageRoute(builder: (_) => const GlassCalculatorScreen());
+        return AquaPageRoute(builder: (_) => const GlassCalculatorScreen());
       case savedGlassCalculations:
-        return MaterialPageRoute(
+        return AquaPageRoute(
           builder: (_) => const SavedGlassCalculationsScreen(),
         );
       case filterCalculator:
-        return MaterialPageRoute(
-          builder: (_) => const FilterCalculatorScreen(),
-        );
+        return AquaPageRoute(builder: (_) => const FilterCalculatorScreen());
       default:
-        return MaterialPageRoute(
+        return AquaPageRoute(
           builder: (_) => Scaffold(
             body: Center(child: Text('No route defined for ${settings.name}')),
           ),

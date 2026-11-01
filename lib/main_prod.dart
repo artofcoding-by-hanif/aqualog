@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'app.dart';
 import 'core/config/app_config.dart';
 import 'core/config/env_config.dart';
+import 'core/firebase/firebase_bootstrap.dart';
+import 'firebase_options_prod.dart' as firebase_options;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,6 +17,11 @@ void main() async {
     apiBaseUrl: EnvConfig.prodConfig.apiBaseUrl,
     enableLogging: EnvConfig.prodConfig.enableLogging,
     enableCrashlytics: EnvConfig.prodConfig.enableCrashlytics,
+  );
+
+  // Online extras (AI); the app works without them
+  await FirebaseBootstrap.initialize(
+    () => firebase_options.DefaultFirebaseOptions.currentPlatform,
   );
 
   // Run app with Riverpod

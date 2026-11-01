@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/water_parameter_log.dart';
+import '../../../../core/theme/color_scheme.dart';
 
 /// Card widget for displaying a water parameter log entry
 class WaterParameterLogCard extends StatelessWidget {
@@ -87,9 +88,9 @@ class WaterParameterLogCard extends StatelessWidget {
   Color _getStatusColor(ParameterStatus status, ColorScheme colorScheme) {
     switch (status) {
       case ParameterStatus.optimal:
-        return Colors.green;
+        return AquaPalette.healthy;
       case ParameterStatus.warning:
-        return Colors.orange;
+        return AquaPalette.caution;
       case ParameterStatus.danger:
         return colorScheme.error;
       case ParameterStatus.unknown:

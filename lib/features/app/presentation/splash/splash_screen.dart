@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/theme/aqua_theme.dart';
+import '../../../../core/widgets/aqua_widgets.dart';
+
 /// Splash screen with animated logo and tagline
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key, required this.onComplete});
@@ -66,9 +69,9 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final aqua = AquaTheme.of(context);
 
     return Scaffold(
-      backgroundColor: colorScheme.primary,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -88,10 +91,11 @@ class _SplashScreenState extends State<SplashScreen>
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(32),
                         boxShadow: [
+                          // Glow halo around the icon
                           BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.2),
-                            blurRadius: 20,
-                            offset: const Offset(0, 10),
+                            color: aqua.glow,
+                            blurRadius: 48,
+                            spreadRadius: 4,
                           ),
                         ],
                       ),
@@ -118,12 +122,11 @@ class _SplashScreenState extends State<SplashScreen>
             // App Name
             FadeTransition(
               opacity: _fadeAnimation,
-              child: Text(
+              child: GradientText(
                 'Aqualog',
-                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 2,
+                style: Theme.of(context).textTheme.displaySmall?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  letterSpacing: 1,
                 ),
               ),
             ),
@@ -136,8 +139,8 @@ class _SplashScreenState extends State<SplashScreen>
                 child: Text(
                   'Smarter care for healthier aquariums.',
                   style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    color: Colors.white.withValues(alpha: 0.9),
-                    fontStyle: FontStyle.italic,
+                    color: colorScheme.onSurfaceVariant,
+                    letterSpacing: 0.3,
                   ),
                   textAlign: TextAlign.center,
                 ),

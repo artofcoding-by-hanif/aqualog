@@ -1,10 +1,18 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:share_plus/share_plus.dart';
 
+import '../../../../core/backup/backup_provider.dart';
+import '../../../../core/backup/backup_service.dart';
+import '../../../../core/database/database_provider.dart';
 import '../../../../core/settings/app_settings.dart';
 import '../../../../core/settings/settings_provider.dart';
+import '../../../reminders/presentation/controllers/reminder_provider.dart';
 import '../../../../router/app_router.dart';
 
 /// Settings screen
@@ -161,22 +169,14 @@ class SettingsScreen extends ConsumerWidget {
             ListTile(
               leading: const Icon(Icons.backup),
               title: const Text('Backup Data'),
-              onTap: () {
-                // TODO: Implement backup
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Backup coming soon')),
-                );
-              },
+              subtitle: const Text('Save tanks, logs and photos to a file'),
+              onTap: () => _backupData(context, ref),
             ),
             ListTile(
               leading: const Icon(Icons.restore),
               title: const Text('Restore Data'),
-              onTap: () {
-                // TODO: Implement restore
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Restore coming soon')),
-                );
-              },
+              subtitle: const Text('Replace all data from a backup file'),
+              onTap: () => _confirmRestore(context, ref),
             ),
             ListTile(
               leading: Icon(
@@ -403,5 +403,116 @@ class SettingsScreen extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  /// Run [task] behind a blocking progress dialog
+  Future<T> _withProgress<T>(
+    BuildContext context,
+    String message,
+    Future<T> Function() task,
+  ) async {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => PopScope(
+        canPop: false,
+        child: AlertDialog(
+          content: Row(
+            children: [
+              const CircularProgressIndicator(),
+              const SizedBox(width: 24),
+              Expanded(child: Text(message)),
+            ],
+          ),
+        ),
+      ),
+    );
+    try {
+      return await task();
+    } finally {
+      if (context.mounted) Navigator.of(context, rootNavigator: true).pop();
+    }
+  }
+
+  Future<void> _backupData(BuildContext context, WidgetRef ref) async {
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      final file = await _withProgress(
+        context,
+        'Creating backup…',
+        () => ref.read(backupServiceProvider).createBackup(),
+      );
+      await SharePlus.instance.share(
+        ShareParams(
+          files: [XFile(file.path, mimeType: 'application/zip')],
+          subject: 'Aqualog backup',
+        ),
+      );
+    } on BackupException catch (e) {
+      messenger.showSnackBar(SnackBar(content: Text(e.message)));
+    }
+  }
+
+  void _confirmRestore(BuildContext context, WidgetRef ref) {
+    showDialog<void>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Restore Data'),
+        content: const Text(
+          'This replaces all tanks, logs, reminders and photos with the '
+          'contents of the backup file. Your current data is saved '
+          'automatically first.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(dialogContext);
+              _restoreData(context, ref);
+            },
+            child: Text(
+              'Choose File',
+              style: TextStyle(color: Theme.of(context).colorScheme.error),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _restoreData(BuildContext context, WidgetRef ref) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final picked = await FilePicker.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['zip'],
+    );
+    final path = picked?.files.single.path;
+    if (path == null || !context.mounted) return;
+
+    try {
+      final summary = await _withProgress(
+        context,
+        'Restoring data…',
+        () => ref.read(backupServiceProvider).restoreBackup(File(path)),
+      );
+
+      // Reload everything that read from the old data
+      ref.invalidate(appDatabaseProvider);
+      ref.invalidate(appSettingsProvider);
+      await ref.read(reminderProvider.notifier).rescheduleAllNotifications();
+
+      messenger.showSnackBar(
+        SnackBar(
+          content: Text(
+            'Restored ${summary.tanks} tanks and ${summary.images} photos',
+          ),
+        ),
+      );
+    } on BackupException catch (e) {
+      messenger.showSnackBar(SnackBar(content: Text(e.message)));
+    }
   }
 }

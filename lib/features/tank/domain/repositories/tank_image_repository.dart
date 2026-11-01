@@ -32,4 +32,3 @@ abstract class TankImageRepository {
   /// Get image count for a tank
   Future<int> getImageCount(int tankId);
 }
-

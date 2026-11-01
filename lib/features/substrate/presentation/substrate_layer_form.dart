@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../domain/entities/substrate_layer.dart';
 import 'controllers/substrate_layer_provider.dart';
+import '../../../core/theme/color_scheme.dart';
 
 /// Substrate layer form screen for adding/editing substrate layers
 class SubstrateLayerFormScreen extends ConsumerStatefulWidget {
@@ -143,12 +144,12 @@ class _SubstrateLayerFormScreenState
                       runSpacing: 4,
                       children: [
                         if (_substrateType.isNutrientRich)
-                          _buildChip('Nutrient Rich', Colors.green),
+                          _buildChip('Nutrient Rich', AquaPalette.healthy),
                         if (_substrateType.affectsWaterChemistry)
-                          _buildChip('Affects Water', Colors.orange),
+                          _buildChip('Affects Water', AquaPalette.caution),
                         if (_substrateType.isInert)
-                          _buildChip('Inert', Colors.blue),
-                        _buildChip(_substrateType.grainSize, Colors.grey),
+                          _buildChip('Inert', AquaPalette.azure),
+                        _buildChip(_substrateType.grainSize, AquaPalette.mist),
                       ],
                     ),
                   ],

@@ -22,7 +22,6 @@ class TimelineScreen extends StatelessWidget {
   }
 
   Widget _buildTimelineItem(BuildContext context, int index) {
-    final isFirst = index == 0;
     final isLast = index == 9;
 
     return IntrinsicHeight(

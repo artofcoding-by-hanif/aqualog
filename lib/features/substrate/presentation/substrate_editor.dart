@@ -5,6 +5,8 @@ import '../domain/entities/substrate_layer.dart';
 import 'controllers/substrate_layer_provider.dart';
 import 'substrate_layer_form.dart';
 import 'widgets/substrate_layer_card.dart';
+import '../../../router/aqua_page_route.dart';
+import '../../../core/theme/color_scheme.dart';
 
 /// Substrate editor screen for managing substrate layers
 class SubstrateEditor extends ConsumerStatefulWidget {
@@ -50,7 +52,7 @@ class _SubstrateEditorState extends ConsumerState<SubstrateEditor> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.error_outline, size: 48, color: Colors.red),
+              const Icon(Icons.error_outline, size: 48, color: AquaPalette.danger),
               const SizedBox(height: 16),
               Text('Error: $error'),
             ],
@@ -194,7 +196,7 @@ class _SubstrateEditorState extends ConsumerState<SubstrateEditor> {
   Future<void> _addLayer() async {
     final result = await Navigator.push<bool>(
       context,
-      MaterialPageRoute(
+      AquaPageRoute(
         builder: (context) => SubstrateLayerFormScreen(
           tankId: widget.tankId,
           nextLayerOrder: _localLayers.length,
@@ -210,7 +212,7 @@ class _SubstrateEditorState extends ConsumerState<SubstrateEditor> {
   Future<void> _editLayer(SubstrateLayerEntity layer) async {
     final result = await Navigator.push<bool>(
       context,
-      MaterialPageRoute(
+      AquaPageRoute(
         builder: (context) =>
             SubstrateLayerFormScreen(tankId: widget.tankId, layer: layer),
       ),

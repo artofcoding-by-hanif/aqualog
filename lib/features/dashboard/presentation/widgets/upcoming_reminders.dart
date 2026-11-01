@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/theme/aqua_theme.dart';
+import '../../../../core/widgets/aqua_widgets.dart';
 import '../../../../router/app_router.dart';
 import '../../../reminders/domain/entities/reminder.dart';
 import '../../../reminders/presentation/controllers/reminder_provider.dart';
@@ -33,9 +35,7 @@ class UpcomingReminders extends ConsumerWidget {
           children: [
             Text(
               'Upcoming Reminders',
-              style: Theme.of(
-                context,
-              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.titleMedium,
             ),
             TextButton(
               onPressed: () {
@@ -45,7 +45,7 @@ class UpcomingReminders extends ConsumerWidget {
             ),
           ],
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 4),
         remindersAsync.when(
           data: (reminders) =>
               _buildRemindersList(context, ref, reminders, tankNameMap),
@@ -55,7 +55,8 @@ class UpcomingReminders extends ConsumerWidget {
               child: CircularProgressIndicator(),
             ),
           ),
-          error: (error, _) => Card(
+          error: (error, _) => GlassCard(
+            padding: EdgeInsets.zero,
             child: ListTile(
               leading: const Icon(Icons.error_outline),
               title: const Text('Error loading reminders'),
@@ -94,24 +95,19 @@ class UpcomingReminders extends ConsumerWidget {
     final displayReminders = activeReminders.take(5).toList();
 
     if (displayReminders.isEmpty) {
-      return Card(
+      final aqua = AquaTheme.of(context);
+      return GlassCard(
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+        glowColor: aqua.healthy,
+        onTap: () => Navigator.pushNamed(context, AppRouter.reminders),
         child: ListTile(
-          leading: Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primaryContainer,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(
-              Icons.check_circle,
-              color: Theme.of(context).colorScheme.primary,
-              size: 20,
-            ),
+          leading: GradientIconTile(
+            icon: Icons.check_rounded,
+            color: aqua.healthy,
+            size: 44,
           ),
           title: const Text('All caught up!'),
           subtitle: const Text('No reminders for today or tomorrow'),
-          onTap: () => Navigator.pushNamed(context, AppRouter.reminders),
         ),
       );
     }
@@ -120,7 +116,7 @@ class UpcomingReminders extends ConsumerWidget {
       children: displayReminders
           .map(
             (reminder) => Padding(
-              padding: const EdgeInsets.only(bottom: 8),
+              padding: const EdgeInsets.only(bottom: 10),
               child: _buildReminderItem(
                 context,
                 ref,
@@ -140,90 +136,74 @@ class UpcomingReminders extends ConsumerWidget {
     String? tankName,
   ) {
     final colorScheme = Theme.of(context).colorScheme;
-    final statusColor = _getStatusColor(reminder, colorScheme);
+    final textTheme = Theme.of(context).textTheme;
+    final status = _getStatus(reminder);
+    final statusColor = AquaTheme.of(context).statusColor(status, colorScheme);
 
-    return Card(
-      child: ListTile(
-        onTap: () => Navigator.pushNamed(
-          context,
-          AppRouter.reminderForm,
-          arguments: {'reminder': reminder},
-        ),
-        leading: Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: statusColor.withValues(alpha: 0.2),
-            borderRadius: BorderRadius.circular(8),
+    return GlassCard(
+      padding: const EdgeInsets.fromLTRB(14, 12, 6, 12),
+      glowColor: status == AquaStatus.danger ? statusColor : null,
+      borderColor: status == AquaStatus.danger
+          ? statusColor.withValues(alpha: 0.35)
+          : null,
+      onTap: () => Navigator.pushNamed(
+        context,
+        AppRouter.reminderForm,
+        arguments: {'reminder': reminder},
+      ),
+      child: Row(
+        children: [
+          GradientIconTile(
+            emoji: reminder.reminderType.icon,
+            color: statusColor,
+            size: 44,
           ),
-          child: Center(
-            child: Text(
-              reminder.reminderType.icon,
-              style: const TextStyle(fontSize: 20),
-            ),
-          ),
-        ),
-        title: Text(
-          reminder.title,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            if (tankName != null)
-              Row(
-                children: [
-                  Icon(Icons.water_drop, size: 12, color: colorScheme.primary),
-                  const SizedBox(width: 4),
-                  Expanded(
-                    child: Text(
-                      tankName,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: colorScheme.primary,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  reminder.title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: textTheme.titleSmall,
+                ),
+                if (tankName != null) ...[
+                  const SizedBox(height: 2),
+                  Text(
+                    tankName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: textTheme.bodySmall?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
                     ),
                   ),
                 ],
-              ),
-            Text(
-              reminder.dueStatusDisplay,
-              style: TextStyle(
-                color: reminder.isOverdue ? colorScheme.error : null,
-                fontWeight: reminder.isOverdue ? FontWeight.bold : null,
-              ),
+                const SizedBox(height: 6),
+                StatusPill(label: reminder.dueStatusDisplay, status: status),
+              ],
             ),
-          ],
-        ),
-        trailing: IconButton(
-          icon: Icon(
-            Icons.check_circle_outline,
-            color: reminder.isOverdue || reminder.isDueToday
-                ? colorScheme.primary
-                : colorScheme.outline,
           ),
-          onPressed: () => _completeReminder(ref, reminder),
-          tooltip: 'Mark as done',
-        ),
+          IconButton(
+            icon: Icon(
+              Icons.check_circle_outline_rounded,
+              color: reminder.isOverdue || reminder.isDueToday
+                  ? colorScheme.primary
+                  : colorScheme.outline,
+            ),
+            onPressed: () => _completeReminder(ref, reminder),
+            tooltip: 'Mark as done',
+          ),
+        ],
       ),
     );
   }
 
-  Color _getStatusColor(ReminderEntity reminder, ColorScheme colorScheme) {
-    if (reminder.isOverdue) {
-      return colorScheme.error;
-    }
-    if (reminder.isDueToday) {
-      return colorScheme.tertiary;
-    }
-    if (reminder.isDueSoon) {
-      return colorScheme.secondary;
-    }
-    return colorScheme.primary;
+  AquaStatus _getStatus(ReminderEntity reminder) {
+    if (reminder.isOverdue) return AquaStatus.danger;
+    if (reminder.isDueToday) return AquaStatus.caution;
+    return AquaStatus.neutral;
   }
 
   void _completeReminder(WidgetRef ref, ReminderEntity reminder) {

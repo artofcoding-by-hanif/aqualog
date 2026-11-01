@@ -4,6 +4,7 @@ import '../../domain/entities/filter_type.dart';
 import '../../domain/entities/filter_recommendation.dart';
 import '../../domain/entities/filter_media_type.dart';
 import '../../domain/entities/filter_media_data.dart';
+import '../../../../core/theme/color_scheme.dart';
 
 class FilterCalculatorScreen extends StatefulWidget {
   const FilterCalculatorScreen({super.key});
@@ -224,7 +225,7 @@ class _FilterCalculatorScreenState extends State<FilterCalculatorScreen> {
         leading: Icon(
           rec.isIdealMatch ? Icons.check_circle : Icons.info_outline,
           color: rec.isIdealMatch
-              ? Colors.green
+              ? AquaPalette.healthy
               : Theme.of(context).colorScheme.outline,
         ),
         title: Text(filter.name),
@@ -318,13 +319,13 @@ class _FilterCalculatorScreenState extends State<FilterCalculatorScreen> {
   Color _getCategoryColor(MediaCategory category) {
     switch (category) {
       case MediaCategory.mechanical:
-        return Colors.blue;
+        return AquaPalette.azure;
       case MediaCategory.biological:
-        return Colors.green;
+        return AquaPalette.healthy;
       case MediaCategory.chemical:
-        return Colors.orange;
+        return AquaPalette.caution;
       case MediaCategory.mechanicalBiological:
-        return Colors.teal;
+        return AquaPalette.teal;
     }
   }
 

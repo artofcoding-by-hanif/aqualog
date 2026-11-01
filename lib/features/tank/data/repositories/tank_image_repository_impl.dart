@@ -17,9 +17,9 @@ class TankImageRepositoryImpl implements TankImageRepository {
 
   @override
   Stream<List<TankImageEntity>> watchImagesForTank(int tankId) {
-    return _database.watchImagesForTank(tankId).map(
-      (images) => images.map((i) => i.toEntity()).toList(),
-    );
+    return _database
+        .watchImagesForTank(tankId)
+        .map((images) => images.map((i) => i.toEntity()).toList());
   }
 
   @override
@@ -64,4 +64,3 @@ class TankImageRepositoryImpl implements TankImageRepository {
     return await _database.getImageCountForTank(tankId);
   }
 }
-

@@ -1,15 +1,31 @@
-// This is a basic Flutter widget test.
-
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:aqualog/app.dart';
+import 'package:aqualog/core/theme/app_theme.dart';
+import 'package:aqualog/features/app/presentation/splash/splash_screen.dart';
 
 void main() {
-  testWidgets('App should render without errors', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const App());
+  testWidgets('Splash screen shows branding and completes after delay', (
+    WidgetTester tester,
+  ) async {
+    var completed = false;
 
-    // Verify the app renders
-    expect(find.text('Dashboard'), findsOneWidget);
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: AppTheme.lightTheme,
+        home: SplashScreen(onComplete: () => completed = true),
+      ),
+    );
+
+    expect(find.text('Aqualog'), findsOneWidget);
+    expect(find.text('Smarter care for healthier aquariums.'), findsOneWidget);
+    expect(completed, isFalse);
+
+    // Splash hands off to the next screen after 2500ms
+    await tester.pump(const Duration(milliseconds: 2500));
+    expect(completed, isTrue);
+
+    // Let the logo animation finish so no timers are left pending
+    await tester.pumpAndSettle();
   });
 }

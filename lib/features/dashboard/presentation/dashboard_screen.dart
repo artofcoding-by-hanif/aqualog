@@ -1,9 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../core/theme/aqua_theme.dart';
+import '../../../core/widgets/aqua_widgets.dart';
 import '../../../router/app_router.dart';
 import '../../logs/domain/entities/maintenance_log.dart';
+import '../../reminders/presentation/controllers/reminder_provider.dart';
 import '../../tank/domain/entities/tank.dart';
+import '../../tank/presentation/controllers/tank_image_provider.dart';
 import '../../tank/presentation/controllers/tank_provider.dart';
 import 'widgets/upcoming_reminders.dart';
 import 'widgets/recent_activity.dart';
@@ -15,297 +21,193 @@ class DashboardScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('AquaLog'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {
-              Navigator.pushNamed(context, '/settings');
-            },
-          ),
-        ],
-      ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          // TODO: Refresh data
-        },
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            _buildTankSection(context, ref),
-            const SizedBox(height: 24),
-            _buildQuickActions(context, ref),
-            const SizedBox(height: 24),
-            const UpcomingReminders(),
-            const SizedBox(height: 24),
-            const RecentActivity(),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTankSection(BuildContext context, WidgetRef ref) {
     final tanksAsync = ref.watch(tanksStreamProvider);
 
-    return tanksAsync.when(
-      loading: () => _buildTankCardLoading(context),
-      error: (error, _) => _buildTankCardError(context, error),
-      data: (tanks) {
-        if (tanks.isEmpty) {
-          return _buildEmptyTankCard(context);
-        }
-        return _buildTankCard(context, tanks);
-      },
-    );
-  }
-
-  Widget _buildTankCardLoading(BuildContext context) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            Container(
-              width: 64,
-              height: 64,
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.surfaceContainerHighest,
-                borderRadius: BorderRadius.circular(12),
+    return Scaffold(
+      body: SafeArea(
+        bottom: false,
+        child: RefreshIndicator(
+          onRefresh: () async {
+            ref.invalidate(tanksStreamProvider);
+            ref.invalidate(remindersStreamProvider);
+          },
+          child: ListView(
+            padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
+            children: [
+              _buildHeader(context),
+              const SizedBox(height: 20),
+              tanksAsync.when(
+                loading: () => const _HeroCardSkeleton(),
+                error: (error, _) => _buildTankCardError(context),
+                data: (tanks) => tanks.isEmpty
+                    ? _buildEmptyTankCard(context)
+                    : _EcosystemHeroCard(tanks: tanks),
               ),
-            ),
-            const SizedBox(width: 16),
-            const Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: 100,
-                    height: 16,
-                    child: LinearProgressIndicator(),
-                  ),
-                  SizedBox(height: 8),
-                  SizedBox(
-                    width: 150,
-                    height: 12,
-                    child: LinearProgressIndicator(),
-                  ),
-                ],
-              ),
-            ),
-          ],
+              if (tanksAsync.value?.isNotEmpty ?? false) ...[
+                const SizedBox(height: 16),
+                _TankCarousel(tanks: tanksAsync.value!),
+              ],
+              const SizedBox(height: 16),
+              _AssistantCard(tanks: tanksAsync.value ?? const []),
+              const SizedBox(height: 24),
+              _buildQuickActions(context, ref),
+              const SizedBox(height: 28),
+              const UpcomingReminders(),
+              const SizedBox(height: 28),
+              const RecentActivity(),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildTankCardError(BuildContext context, Object error) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          children: [
-            Container(
-              width: 64,
-              height: 64,
-              decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.errorContainer,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Icon(
-                Icons.error_outline,
-                size: 32,
-                color: Theme.of(context).colorScheme.error,
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Text(
-                'Failed to load tanks',
-                style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                  color: Theme.of(context).colorScheme.error,
+  Widget _buildHeader(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final scheme = Theme.of(context).colorScheme;
+
+    return Row(
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                _greeting(),
+                style: textTheme.bodyMedium?.copyWith(
+                  color: scheme.onSurfaceVariant,
                 ),
               ),
-            ),
-          ],
+              const SizedBox(height: 2),
+              GradientText(
+                'AquaLog',
+                style: textTheme.headlineMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
         ),
+        _GlassIconButton(
+          icon: Icons.settings_outlined,
+          tooltip: 'Settings',
+          onPressed: () => Navigator.pushNamed(context, AppRouter.settings),
+        ),
+      ],
+    );
+  }
+
+  String _greeting() {
+    final hour = DateTime.now().hour;
+    if (hour < 12) return 'Good morning';
+    if (hour < 17) return 'Good afternoon';
+    return 'Good evening';
+  }
+
+  Widget _buildTankCardError(BuildContext context) {
+    final aqua = AquaTheme.of(context);
+    return GlassCard(
+      glowColor: aqua.danger,
+      child: Row(
+        children: [
+          GradientIconTile(icon: Icons.error_outline, color: aqua.danger),
+          const SizedBox(width: 16),
+          Expanded(
+            child: Text(
+              'Failed to load tanks',
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(color: aqua.danger),
+            ),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildEmptyTankCard(BuildContext context) {
-    return Card(
-      child: InkWell(
-        onTap: () => Navigator.pushNamed(context, AppRouter.tankForm),
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              Container(
-                width: 64,
-                height: 64,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primaryContainer,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(
-                  Icons.add,
-                  size: 32,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'No tanks yet',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Tap to add your first aquarium',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Icon(Icons.chevron_right),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
+    final textTheme = Theme.of(context).textTheme;
+    final scheme = Theme.of(context).colorScheme;
 
-  Widget _buildTankCard(BuildContext context, List<TankEntity> tanks) {
-    final tankCount = tanks.length;
-    // Calculate total volume across all tanks
-    final totalVolume = tanks.fold<double>(
-      0,
-      (sum, tank) => sum + tank.volumeLiters,
-    );
-
-    return Card(
-      child: InkWell(
-        onTap: () => Navigator.pushNamed(context, AppRouter.tankList),
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              Container(
-                width: 64,
-                height: 64,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primaryContainer,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Icon(
-                  Icons.water_drop,
-                  size: 32,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      tankCount == 1 ? '1 Tank' : '$tankCount Tanks',
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      '${totalVolume.toStringAsFixed(0)}L total volume',
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.outline,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      'Tap to manage tanks',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                        color: Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Icon(Icons.chevron_right),
-            ],
+    return GlassCard(
+      padding: const EdgeInsets.all(24),
+      glowColor: scheme.primary,
+      onTap: () => Navigator.pushNamed(context, AppRouter.tankForm),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const GradientIconTile(icon: Icons.add_rounded, size: 56),
+          const SizedBox(height: 20),
+          Text('Set up your first aquarium', style: textTheme.titleLarge),
+          const SizedBox(height: 6),
+          Text(
+            'Track water quality, livestock, plants and maintenance in one place.',
+            style: textTheme.bodyMedium?.copyWith(
+              color: scheme.onSurfaceVariant,
+            ),
           ),
-        ),
+          const SizedBox(height: 20),
+          GradientButton(
+            label: 'Add Tank',
+            icon: Icons.water_drop_rounded,
+            onPressed: () => Navigator.pushNamed(context, AppRouter.tankForm),
+          ),
+        ],
       ),
     );
   }
 
   Widget _buildQuickActions(BuildContext context, WidgetRef ref) {
-    return Row(
+    final actions = [
+      (
+        icon: Icons.water_drop_rounded,
+        label: 'Water\nChange',
+        route: AppRouter.maintenanceLogForm,
+        args: <String, dynamic>{'initialType': MaintenanceType.waterChange},
+      ),
+      (
+        icon: Icons.science_rounded,
+        label: 'Test\nWater',
+        route: AppRouter.waterParameterLogForm,
+        args: <String, dynamic>{},
+      ),
+      (
+        icon: Icons.restaurant_rounded,
+        label: 'Feed\nFish',
+        route: AppRouter.feedingLogForm,
+        args: <String, dynamic>{},
+      ),
+      (
+        icon: Icons.edit_note_rounded,
+        label: 'Add\nNote',
+        route: AppRouter.maintenanceLogForm,
+        args: <String, dynamic>{'initialType': MaintenanceType.other},
+      ),
+    ];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: _buildQuickAction(
-            context,
-            icon: Icons.water_drop,
-            label: 'Water\nChange',
-            onTap: () => _showTankSelectorAndNavigate(
-              context,
-              ref,
-              route: AppRouter.maintenanceLogForm,
-              extraArgs: {'initialType': MaintenanceType.waterChange},
-            ),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: _buildQuickAction(
-            context,
-            icon: Icons.science,
-            label: 'Test\nWater',
-            onTap: () => _showTankSelectorAndNavigate(
-              context,
-              ref,
-              route: AppRouter.waterParameterLogForm,
-            ),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: _buildQuickAction(
-            context,
-            icon: Icons.restaurant,
-            label: 'Feed\nFish',
-            onTap: () => _showTankSelectorAndNavigate(
-              context,
-              ref,
-              route: AppRouter.feedingLogForm,
-            ),
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: _buildQuickAction(
-            context,
-            icon: Icons.note_add,
-            label: 'Add\nNote',
-            onTap: () => _showTankSelectorAndNavigate(
-              context,
-              ref,
-              route: AppRouter.maintenanceLogForm,
-              extraArgs: {'initialType': MaintenanceType.other},
-            ),
-          ),
+        const _SectionTitle('Quick Log'),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            for (final (index, action) in actions.indexed) ...[
+              if (index > 0) const SizedBox(width: 10),
+              Expanded(
+                child: _QuickActionTile(
+                  icon: action.icon,
+                  label: action.label,
+                  onTap: () => _showTankSelectorAndNavigate(
+                    context,
+                    ref,
+                    route: action.route,
+                    extraArgs: action.args,
+                  ),
+                ),
+              ),
+            ],
+          ],
         ),
       ],
     );
@@ -363,35 +265,404 @@ class DashboardScreen extends ConsumerWidget {
       );
     }
   }
+}
 
-  Widget _buildQuickAction(
-    BuildContext context, {
-    required IconData icon,
-    required String label,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.3),
+/// Entry point to the AI assistant, scoped to the active tank if there is one
+class _AssistantCard extends StatelessWidget {
+  const _AssistantCard({required this.tanks});
+
+  final List<TankEntity> tanks;
+
+  @override
+  Widget build(BuildContext context) {
+    final aqua = AquaTheme.of(context);
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+    final tank =
+        tanks.where((t) => t.isActive).firstOrNull ??
+        (tanks.length == 1 ? tanks.first : null);
+
+    return GlassCard(
+      padding: const EdgeInsets.all(16),
+      glowColor: scheme.tertiary,
+      borderColor: scheme.tertiary.withValues(alpha: 0.35),
+      onTap: () => Navigator.pushNamed(
+        context,
+        AppRouter.aiChat,
+        arguments: {'tankId': tank?.id, 'tankName': tank?.name},
+      ),
+      child: Row(
+        children: [
+          GradientIconTile(
+            icon: Icons.auto_awesome_rounded,
+            size: 48,
+            gradient: aqua.accentGradient,
           ),
-          borderRadius: BorderRadius.circular(12),
+          const SizedBox(width: 14),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                GradientText(
+                  'Ask Aqua AI',
+                  gradient: aqua.accentGradient,
+                  style: textTheme.titleMedium,
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  tank == null
+                      ? 'Advice on water quality, livestock and care'
+                      : 'Personalised advice for ${tank.name}',
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: textTheme.bodySmall?.copyWith(
+                    color: scheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Icon(Icons.arrow_forward_rounded, color: scheme.tertiary),
+        ],
+      ),
+    );
+  }
+}
+
+/// Section heading used across the dashboard
+class _SectionTitle extends StatelessWidget {
+  const _SectionTitle(this.title);
+
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(title, style: Theme.of(context).textTheme.titleMedium);
+  }
+}
+
+/// Circular glass button for header actions
+class _GlassIconButton extends StatelessWidget {
+  const _GlassIconButton({
+    required this.icon,
+    required this.onPressed,
+    this.tooltip,
+  });
+
+  final IconData icon;
+  final VoidCallback onPressed;
+  final String? tooltip;
+
+  @override
+  Widget build(BuildContext context) {
+    final aqua = AquaTheme.of(context);
+    return Tooltip(
+      message: tooltip ?? '',
+      child: Material(
+        color: aqua.glassFill,
+        shape: CircleBorder(side: BorderSide(color: aqua.glassBorder)),
+        child: InkWell(
+          customBorder: const CircleBorder(),
+          onTap: onPressed,
+          child: Padding(
+            padding: const EdgeInsets.all(12),
+            child: Icon(icon, size: 22),
+          ),
         ),
-        child: Column(
+      ),
+    );
+  }
+}
+
+/// Hero summary of every tank: count, total volume and task health
+class _EcosystemHeroCard extends ConsumerWidget {
+  const _EcosystemHeroCard({required this.tanks});
+
+  final List<TankEntity> tanks;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final textTheme = Theme.of(context).textTheme;
+    final scheme = Theme.of(context).colorScheme;
+    final aqua = AquaTheme.of(context);
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
+    final totalVolume = tanks.fold<double>(0, (sum, t) => sum + t.volumeLiters);
+    final reminders = ref.watch(remindersStreamProvider).value ?? [];
+    final overdue = reminders.where((r) => r.isEnabled && r.isOverdue).length;
+    final dueToday = reminders
+        .where((r) => r.isEnabled && !r.isOverdue && r.isDueToday)
+        .length;
+
+    final (status, statusLabel) = overdue > 0
+        ? (AquaStatus.danger, '$overdue overdue')
+        : dueToday > 0
+        ? (AquaStatus.caution, '$dueToday due today')
+        : (AquaStatus.healthy, 'All on track');
+
+    return GlassCard(
+      padding: const EdgeInsets.all(22),
+      glowColor: scheme.primary,
+      gradient: LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: isDark
+            ? [
+                const Color(0x3314E0C0),
+                const Color(0x1A22D3EE),
+                const Color(0x0D3B82F6),
+              ]
+            : [const Color(0x2614E0C0), const Color(0x1422D3EE), Colors.white],
+      ),
+      onTap: () => Navigator.pushNamed(context, AppRouter.tankList),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Text(
+                'YOUR ECOSYSTEM',
+                style: textTheme.labelSmall?.copyWith(
+                  color: scheme.onSurfaceVariant,
+                  letterSpacing: 1.6,
+                ),
+              ),
+              const Spacer(),
+              StatusPill(label: statusLabel, status: status),
+            ],
+          ),
+          const SizedBox(height: 16),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Expanded(
+                child: _HeroMetric(
+                  value: '${tanks.length}',
+                  label: tanks.length == 1 ? 'Tank' : 'Tanks',
+                ),
+              ),
+              Container(width: 1, height: 44, color: aqua.glassBorder),
+              const SizedBox(width: 20),
+              Expanded(
+                child: _HeroMetric(
+                  value: totalVolume.toStringAsFixed(0),
+                  unit: 'L',
+                  label: 'Total volume',
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 18),
+          Row(
+            children: [
+              Text(
+                'Manage tanks',
+                style: textTheme.labelLarge?.copyWith(color: scheme.primary),
+              ),
+              const SizedBox(width: 4),
+              Icon(
+                Icons.arrow_forward_rounded,
+                size: 18,
+                color: scheme.primary,
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _HeroMetric extends StatelessWidget {
+  const _HeroMetric({required this.value, required this.label, this.unit});
+
+  final String value;
+  final String label;
+  final String? unit;
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.baseline,
+          textBaseline: TextBaseline.alphabetic,
           children: [
-            Icon(icon, color: Theme.of(context).colorScheme.primary),
-            const SizedBox(height: 8),
-            Text(
-              label,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodySmall,
+            GradientText(
+              value,
+              style: textTheme.displaySmall?.copyWith(
+                fontWeight: FontWeight.w700,
+                height: 1,
+              ),
+            ),
+            if (unit != null) ...[
+              const SizedBox(width: 4),
+              Text(unit!, style: textTheme.titleMedium),
+            ],
+          ],
+        ),
+        const SizedBox(height: 6),
+        Text(
+          label,
+          style: textTheme.bodySmall?.copyWith(
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _HeroCardSkeleton extends StatelessWidget {
+  const _HeroCardSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    return const GlassCard(
+      padding: EdgeInsets.all(22),
+      child: SizedBox(
+        height: 132,
+        child: Center(child: CircularProgressIndicator(strokeWidth: 2)),
+      ),
+    );
+  }
+}
+
+/// Horizontally scrolling tank cards with cover photos
+class _TankCarousel extends StatelessWidget {
+  const _TankCarousel({required this.tanks});
+
+  final List<TankEntity> tanks;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 168,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        clipBehavior: Clip.none,
+        itemCount: tanks.length,
+        separatorBuilder: (_, _) => const SizedBox(width: 12),
+        itemBuilder: (context, index) => _TankTile(tank: tanks[index]),
+      ),
+    );
+  }
+}
+
+class _TankTile extends ConsumerWidget {
+  const _TankTile({required this.tank});
+
+  final TankEntity tank;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final textTheme = Theme.of(context).textTheme;
+    final aqua = AquaTheme.of(context);
+    final cover = tank.id == null
+        ? null
+        : ref.watch(tankCoverImageProvider(tank.id!)).value;
+    final hasPhoto = cover != null && File(cover.imagePath).existsSync();
+
+    return SizedBox(
+      width: 148,
+      child: GlassCard(
+        padding: EdgeInsets.zero,
+        onTap: () =>
+            Navigator.pushNamed(context, AppRouter.tankDetail, arguments: tank),
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            if (hasPhoto)
+              Image.file(
+                File(cover.imagePath),
+                fit: BoxFit.cover,
+                cacheWidth: 400,
+              )
+            else
+              DecoratedBox(
+                decoration: BoxDecoration(gradient: aqua.accentGradient),
+                child: Center(
+                  child: Text(
+                    tank.tankType.icon,
+                    style: const TextStyle(fontSize: 44),
+                  ),
+                ),
+              ),
+            // Darken the bottom so the label reads on any photo
+            const DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [Color(0x00000000), Color(0xCC020814)],
+                  stops: [0.35, 1],
+                ),
+              ),
+            ),
+            Positioned(
+              left: 12,
+              right: 12,
+              bottom: 12,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    tank.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: textTheme.titleSmall?.copyWith(color: Colors.white),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    '${tank.volumeLiters.toStringAsFixed(0)} L · ${tank.tankType.displayName}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: textTheme.bodySmall?.copyWith(
+                      color: Colors.white.withValues(alpha: 0.75),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _QuickActionTile extends StatelessWidget {
+  const _QuickActionTile({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GlassCard(
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 4),
+      radius: 18,
+      onTap: onTap,
+      child: Column(
+        children: [
+          GradientIconTile(icon: icon, size: 42),
+          const SizedBox(height: 10),
+          Text(
+            label,
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+              fontWeight: FontWeight.w600,
+              height: 1.25,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -415,22 +686,9 @@ class _TankSelectorDialog extends StatelessWidget {
           itemBuilder: (context, index) {
             final tank = tanks[index];
             return ListTile(
-              leading: Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.primaryContainer,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Center(
-                  child: Text(
-                    tank.tankType.icon,
-                    style: const TextStyle(fontSize: 20),
-                  ),
-                ),
-              ),
+              leading: GradientIconTile(emoji: tank.tankType.icon, size: 40),
               title: Text(tank.name),
-              subtitle: Text('${tank.volumeLiters.toStringAsFixed(0)}L'),
+              subtitle: Text('${tank.volumeLiters.toStringAsFixed(0)} L'),
               onTap: () => Navigator.pop(context, tank),
             );
           },

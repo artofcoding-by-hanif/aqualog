@@ -7,6 +7,7 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../domain/entities/tank_image.dart';
 import '../controllers/tank_image_provider.dart';
+import '../../../../router/aqua_page_route.dart';
 
 /// Tank gallery screen showing all images for a tank
 class TankGalleryScreen extends ConsumerWidget {
@@ -139,7 +140,7 @@ class TankGalleryScreen extends ConsumerWidget {
   ) {
     Navigator.push(
       context,
-      MaterialPageRoute(
+      AquaPageRoute(
         builder: (_) => _ImageViewerScreen(
           tankId: tankId,
           images: images,

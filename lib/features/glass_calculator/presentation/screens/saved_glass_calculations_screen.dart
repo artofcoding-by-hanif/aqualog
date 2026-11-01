@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/entities/glass_calculation.dart';
 import '../controllers/glass_calculation_provider.dart';
+import '../../../../core/theme/color_scheme.dart';
 
 /// Screen to display saved glass calculations
 class SavedGlassCalculationsScreen extends ConsumerWidget {
@@ -23,14 +24,14 @@ class SavedGlassCalculationsScreen extends ConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.calculate_outlined, size: 64, color: Colors.grey),
+                  Icon(Icons.calculate_outlined, size: 64, color: AquaPalette.mist),
                   SizedBox(height: 16),
                   Text('No saved calculations yet'),
                   SizedBox(height: 8),
                   Text(
                     'Use the calculator to create and save\nglass calculations for your tanks.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.grey),
+                    style: TextStyle(color: AquaPalette.mist),
                   ),
                 ],
               ),

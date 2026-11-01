@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/notifications/local_notification_service.dart';
 import 'core/settings/settings_provider.dart';
 import 'core/theme/app_theme.dart';
+import 'core/widgets/aqua_widgets.dart';
 import 'features/app/presentation/onboarding/onboarding_screen.dart';
 import 'features/app/presentation/splash/splash_screen.dart';
 import 'features/dashboard/presentation/dashboard_screen.dart';
@@ -24,7 +25,7 @@ class App extends ConsumerWidget {
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
       onGenerateRoute: AppRouter.generateRoute,
-      home: const _AppStartup(),
+      home: const AquaBackground(child: _AppStartup()),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/widgets/aqua_widgets.dart';
 import '../../../logs/domain/entities/maintenance_log.dart';
 import '../../../logs/presentation/controllers/maintenance_log_provider.dart';
 import '../../../tank/presentation/controllers/tank_provider.dart';
@@ -58,13 +59,11 @@ class RecentActivity extends ConsumerWidget {
           children: [
             Text(
               'Recent Activity',
-              style: Theme.of(
-                context,
-              ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+              style: Theme.of(context).textTheme.titleMedium,
             ),
           ],
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 12),
         _buildActivityList(
           context,
           maintenanceLogsAsync,
@@ -88,7 +87,8 @@ class RecentActivity extends ConsumerWidget {
         maintenanceLogsAsync.hasError || waterParamLogsAsync.hasError;
 
     if (isLoading) {
-      return const Card(
+      return const GlassCard(
+        padding: EdgeInsets.zero,
         child: ListTile(
           leading: SizedBox(
             width: 40,
@@ -101,7 +101,8 @@ class RecentActivity extends ConsumerWidget {
     }
 
     if (hasError) {
-      return Card(
+      return GlassCard(
+        padding: EdgeInsets.zero,
         child: ListTile(
           leading: Icon(
             Icons.error,
@@ -154,41 +155,32 @@ class RecentActivity extends ConsumerWidget {
     final displayActivities = activities.take(5).toList();
 
     if (displayActivities.isEmpty) {
-      return Card(
+      return const GlassCard(
+        padding: EdgeInsets.symmetric(horizontal: 4, vertical: 4),
         child: ListTile(
-          leading: Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primaryContainer,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(
-              Icons.history,
-              color: Theme.of(context).colorScheme.primary,
-              size: 20,
-            ),
-          ),
-          title: const Text('No recent activity'),
-          subtitle: const Text('Log a water change or test to get started'),
+          leading: GradientIconTile(icon: Icons.history_rounded, size: 44),
+          title: Text('No recent activity'),
+          subtitle: Text('Log a water change or test to get started'),
         ),
       );
     }
 
-    return Column(
-      children: displayActivities.map((activity) {
-        return Padding(
-          padding: const EdgeInsets.only(bottom: 8),
-          child: _buildActivityItem(
-            context,
-            iconData: activity.iconData,
-            emoji: activity.emoji,
-            title: activity.title,
-            subtitle: activity.subtitle,
-            time: activity.timeAgo,
-          ),
-        );
-      }).toList(),
+    return GlassCard(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      child: Column(
+        children: [
+          for (final (index, activity) in displayActivities.indexed)
+            _buildActivityItem(
+              context,
+              iconData: activity.iconData,
+              emoji: activity.emoji,
+              title: activity.title,
+              subtitle: activity.subtitle,
+              time: activity.timeAgo,
+              isLast: index == displayActivities.length - 1,
+            ),
+        ],
+      ),
     );
   }
 
@@ -218,34 +210,80 @@ class RecentActivity extends ConsumerWidget {
     required String title,
     required String subtitle,
     required String time,
+    required bool isLast,
   }) {
-    return Card(
-      child: ListTile(
-        leading: Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primaryContainer,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Center(
-            child: emoji != null
-                ? Text(emoji, style: const TextStyle(fontSize: 20))
-                : Icon(
-                    iconData ?? Icons.history,
-                    color: Theme.of(context).colorScheme.primary,
-                    size: 20,
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          // Timeline rail: node plus connector to the next entry
+          Column(
+            children: [
+              const SizedBox(height: 10),
+              emoji != null
+                  ? GradientIconTile(emoji: emoji, size: 36)
+                  : GradientIconTile(icon: iconData ?? Icons.history, size: 36),
+              if (!isLast)
+                Expanded(
+                  child: Container(
+                    width: 2,
+                    margin: const EdgeInsets.symmetric(vertical: 4),
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          scheme.primary.withValues(alpha: 0.5),
+                          scheme.primary.withValues(alpha: 0.05),
+                        ],
+                      ),
+                    ),
                   ),
+                ),
+            ],
           ),
-        ),
-        title: Text(title, maxLines: 1, overflow: TextOverflow.ellipsis),
-        subtitle: Text(subtitle, maxLines: 1, overflow: TextOverflow.ellipsis),
-        trailing: Text(
-          time,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-            color: Theme.of(context).colorScheme.outline,
+          const SizedBox(width: 14),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: textTheme.titleSmall,
+                        ),
+                      ),
+                      Text(
+                        time,
+                        style: textTheme.labelSmall?.copyWith(
+                          color: scheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: textTheme.bodySmall?.copyWith(
+                      color: scheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

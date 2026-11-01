@@ -1,4 +1,3 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'app_config.dart';
 
 /// All available feature flags in the application

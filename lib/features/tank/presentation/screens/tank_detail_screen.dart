@@ -1,7 +1,12 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/theme/aqua_theme.dart';
+import '../../../../core/widgets/aqua_widgets.dart';
 import '../../../../router/app_router.dart';
+import '../../../ai/presentation/widgets/tank_health_card.dart';
 import '../../../reminders/domain/entities/reminder.dart';
 import '../../../reminders/presentation/controllers/reminder_provider.dart';
 import '../../domain/entities/tank.dart';
@@ -111,197 +116,218 @@ class _TankDetailScreenState extends ConsumerState<TankDetailScreen> {
     }
   }
 
+  void _open(String route, {bool withName = true}) {
+    Navigator.pushNamed(
+      context,
+      route,
+      arguments: {'tankId': _tank.id, if (withName) 'tankName': _tank.name},
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    final imageCount = ref.watch(tankImageCountProvider(_tank.id!)).value;
+    final photoLabel = imageCount == null
+        ? 'Gallery'
+        : imageCount == 0
+        ? 'No photos'
+        : '$imageCount photo${imageCount == 1 ? '' : 's'}';
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(_tank.name),
-        actions: [
-          IconButton(icon: const Icon(Icons.edit), onPressed: _navigateToEdit),
-          PopupMenuButton<String>(
-            onSelected: (value) {
-              if (value == 'delete') {
-                _deleteTank();
-              } else if (value == 'setActive') {
-                _setAsActive();
-              }
-            },
-            itemBuilder: (context) => [
-              if (!_tank.isActive)
-                const PopupMenuItem(
-                  value: 'setActive',
-                  child: Text('Set as Active'),
+      body: CustomScrollView(
+        slivers: [
+          _buildHeroAppBar(context),
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
+            sliver: SliverList.list(
+              children: [
+                _buildInfoCard(context),
+                const SizedBox(height: 16),
+                TankHealthCard(tankId: _tank.id!, tankName: _tank.name),
+                const SizedBox(height: 24),
+                _buildRemindersSection(context),
+                const SizedBox(height: 24),
+                _SectionGrid(
+                  title: 'Livestock & Plants',
+                  tiles: [
+                    _SectionTileData(
+                      'Fish',
+                      Icons.set_meal_rounded,
+                      () => _open(AppRouter.fishList),
+                    ),
+                    _SectionTileData(
+                      'Invertebrates',
+                      Icons.pest_control_rounded,
+                      () => _open(AppRouter.invertebrateList),
+                    ),
+                    _SectionTileData(
+                      'Plants',
+                      Icons.grass_rounded,
+                      () => _open(AppRouter.plantList),
+                    ),
+                  ],
                 ),
-              const PopupMenuItem(value: 'delete', child: Text('Delete')),
-            ],
+                const SizedBox(height: 24),
+                _SectionGrid(
+                  title: 'Equipment',
+                  tiles: [
+                    _SectionTileData(
+                      'Filters',
+                      Icons.filter_alt_rounded,
+                      () => _open(AppRouter.filterList),
+                    ),
+                    _SectionTileData(
+                      'Lighting',
+                      Icons.lightbulb_rounded,
+                      () => _open(AppRouter.lightingList),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+                _SectionGrid(
+                  title: 'Aquascape',
+                  tiles: [
+                    _SectionTileData(
+                      'Rocks',
+                      Icons.terrain_rounded,
+                      () => _open(AppRouter.rockList),
+                    ),
+                    _SectionTileData(
+                      'Driftwood',
+                      Icons.park_rounded,
+                      () => _open(AppRouter.driftwoodList),
+                    ),
+                    _SectionTileData(
+                      'Substrate',
+                      Icons.layers_rounded,
+                      () => _open(AppRouter.substrateEditor, withName: false),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 24),
+                _SectionGrid(
+                  title: 'Logs & Care',
+                  tiles: [
+                    _SectionTileData(
+                      'Water\nParameters',
+                      Icons.analytics_rounded,
+                      () => _open(AppRouter.waterParameterLogList),
+                    ),
+                    _SectionTileData(
+                      'Feeding',
+                      Icons.restaurant_rounded,
+                      () => _open(AppRouter.feedingLogList),
+                    ),
+                    _SectionTileData(
+                      'Maintenance',
+                      Icons.build_rounded,
+                      () => _open(AppRouter.maintenanceLogList),
+                    ),
+                    _SectionTileData(
+                      'Timeline',
+                      Icons.timeline_rounded,
+                      () => _open(AppRouter.tankTimeline),
+                    ),
+                    _SectionTileData(
+                      photoLabel,
+                      Icons.photo_library_rounded,
+                      () => _open(AppRouter.tankGallery),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+    );
+  }
+
+  Widget _buildHeroAppBar(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final cover = ref.watch(tankCoverImageProvider(_tank.id!)).value;
+    final hasPhoto = cover != null && File(cover.imagePath).existsSync();
+
+    return SliverAppBar(
+      pinned: true,
+      stretch: true,
+      expandedHeight: 260,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      foregroundColor: Colors.white,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.auto_awesome_rounded),
+          tooltip: 'Ask the assistant',
+          onPressed: () => _open(AppRouter.aiChat),
+        ),
+        IconButton(
+          icon: const Icon(Icons.edit_rounded),
+          tooltip: 'Edit',
+          onPressed: _navigateToEdit,
+        ),
+        PopupMenuButton<String>(
+          iconColor: Colors.white,
+          onSelected: (value) {
+            if (value == 'delete') {
+              _deleteTank();
+            } else if (value == 'setActive') {
+              _setAsActive();
+            }
+          },
+          itemBuilder: (context) => [
+            if (!_tank.isActive)
+              const PopupMenuItem(
+                value: 'setActive',
+                child: Text('Set as Active'),
+              ),
+            const PopupMenuItem(value: 'delete', child: Text('Delete')),
+          ],
+        ),
+      ],
+      flexibleSpace: FlexibleSpaceBar(
+        titlePadding: const EdgeInsetsDirectional.only(
+          start: 56,
+          end: 96,
+          bottom: 16,
+        ),
+        title: Text(
+          _tank.name,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: textTheme.titleLarge?.copyWith(color: Colors.white),
+        ),
+        background: Stack(
+          fit: StackFit.expand,
           children: [
-            _buildInfoCard(context),
-            const SizedBox(height: 16),
-            _buildGalleryCard(context),
-            const SizedBox(height: 8),
-            _buildSectionCard(
-              context,
-              title: 'Filters',
-              icon: Icons.filter_alt,
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  AppRouter.filterList,
-                  arguments: {'tankId': _tank.id, 'tankName': _tank.name},
-                );
-              },
-            ),
-            const SizedBox(height: 8),
-            _buildSectionCard(
-              context,
-              title: 'Lighting',
-              icon: Icons.lightbulb,
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  AppRouter.lightingList,
-                  arguments: {'tankId': _tank.id, 'tankName': _tank.name},
-                );
-              },
-            ),
-            const SizedBox(height: 8),
-            _buildSectionCard(
-              context,
-              title: 'Fish',
-              icon: Icons.water,
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  AppRouter.fishList,
-                  arguments: {'tankId': _tank.id, 'tankName': _tank.name},
-                );
-              },
-            ),
-            const SizedBox(height: 8),
-            _buildSectionCard(
-              context,
-              title: 'Invertebrates',
-              icon: Icons.bug_report,
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  AppRouter.invertebrateList,
-                  arguments: {'tankId': _tank.id, 'tankName': _tank.name},
-                );
-              },
-            ),
-            const SizedBox(height: 8),
-            _buildSectionCard(
-              context,
-              title: 'Plants',
-              icon: Icons.grass,
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  AppRouter.plantList,
-                  arguments: {'tankId': _tank.id, 'tankName': _tank.name},
-                );
-              },
-            ),
-            const SizedBox(height: 8),
-            _buildSectionCard(
-              context,
-              title: 'Rocks',
-              icon: Icons.terrain,
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  AppRouter.rockList,
-                  arguments: {'tankId': _tank.id, 'tankName': _tank.name},
-                );
-              },
-            ),
-            const SizedBox(height: 8),
-            _buildSectionCard(
-              context,
-              title: 'Driftwood',
-              icon: Icons.park,
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  AppRouter.driftwoodList,
-                  arguments: {'tankId': _tank.id, 'tankName': _tank.name},
-                );
-              },
-            ),
-            const SizedBox(height: 8),
-            _buildSectionCard(
-              context,
-              title: 'Substrate',
-              icon: Icons.layers,
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  AppRouter.substrateEditor,
-                  arguments: {'tankId': _tank.id},
-                );
-              },
-            ),
-            const SizedBox(height: 8),
-            _buildRemindersSection(context),
-            const SizedBox(height: 8),
-            _buildSectionCard(
-              context,
-              title: 'Water Parameters',
-              icon: Icons.analytics,
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  AppRouter.waterParameterLogList,
-                  arguments: {'tankId': _tank.id, 'tankName': _tank.name},
-                );
-              },
-            ),
-            const SizedBox(height: 8),
-            _buildSectionCard(
-              context,
-              title: 'Feeding Log',
-              icon: Icons.restaurant,
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  AppRouter.feedingLogList,
-                  arguments: {'tankId': _tank.id, 'tankName': _tank.name},
-                );
-              },
-            ),
-            const SizedBox(height: 8),
-            _buildSectionCard(
-              context,
-              title: 'Maintenance Log',
-              icon: Icons.history,
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  AppRouter.maintenanceLogList,
-                  arguments: {'tankId': _tank.id, 'tankName': _tank.name},
-                );
-              },
-            ),
-            const SizedBox(height: 8),
-            _buildSectionCard(
-              context,
-              title: 'Timeline',
-              icon: Icons.timeline,
-              onTap: () {
-                Navigator.pushNamed(
-                  context,
-                  AppRouter.tankTimeline,
-                  arguments: {'tankId': _tank.id, 'tankName': _tank.name},
-                );
-              },
+            if (hasPhoto)
+              Image.file(File(cover.imagePath), fit: BoxFit.cover)
+            else
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: AquaTheme.of(context).accentGradient,
+                ),
+                child: Center(
+                  child: Text(
+                    _tank.tankType.icon,
+                    style: const TextStyle(fontSize: 72),
+                  ),
+                ),
+              ),
+            // Scrims top and bottom keep icons and title readable
+            const DecoratedBox(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0x99020814),
+                    Color(0x00020814),
+                    Color(0x00020814),
+                    Color(0xE6020814),
+                  ],
+                  stops: [0, 0.3, 0.55, 1],
+                ),
+              ),
             ),
           ],
         ),
@@ -311,127 +337,87 @@ class _TankDetailScreenState extends ConsumerState<TankDetailScreen> {
 
   Widget _buildInfoCard(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+    final aqua = AquaTheme.of(context);
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
-              children: [
-                Text(_tank.tankType.icon, style: const TextStyle(fontSize: 32)),
-                const SizedBox(width: 12),
-                Column(
+    return GlassCard(
+      padding: const EdgeInsets.all(18),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              GradientIconTile(emoji: _tank.tankType.icon, size: 52),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    GradientText(
                       _tank.volumeDisplay(),
-                      style: Theme.of(context).textTheme.titleLarge,
+                      style: textTheme.headlineSmall?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                     Text(
                       _tank.tankType.displayName,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: colorScheme.outline,
+                      style: textTheme.bodyMedium?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
                       ),
                     ),
                   ],
                 ),
-                const Spacer(),
-                if (_tank.isActive)
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 6,
-                    ),
-                    decoration: BoxDecoration(
-                      color: colorScheme.primaryContainer,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Text(
-                      'Active',
-                      style: TextStyle(
-                        color: colorScheme.primary,
-                        fontWeight: FontWeight.bold,
-                      ),
+              ),
+              if (_tank.isActive)
+                const StatusPill(label: 'Active', status: AquaStatus.healthy),
+            ],
+          ),
+          if (_tank.hasDimensions || _tank.setupDate != null) ...[
+            const SizedBox(height: 18),
+            Row(
+              children: [
+                if (_tank.hasDimensions)
+                  Expanded(
+                    child: _InfoMetric(
+                      icon: Icons.straighten_rounded,
+                      label: 'Dimensions',
+                      value: _tank.dimensionsDisplay ?? '',
                     ),
                   ),
+                if (_tank.setupDate != null) ...[
+                  Expanded(
+                    child: _InfoMetric(
+                      icon: Icons.calendar_today_rounded,
+                      label: 'Set up',
+                      value: _formatDate(_tank.setupDate!),
+                    ),
+                  ),
+                  Expanded(
+                    child: _InfoMetric(
+                      icon: _tank.isCycled
+                          ? Icons.verified_rounded
+                          : Icons.timer_rounded,
+                      label: _tank.isCycled ? 'Cycled' : 'Age',
+                      value: '${_tank.daysSinceSetup} days',
+                      color: _tank.isCycled ? aqua.healthy : null,
+                    ),
+                  ),
+                ],
               ],
             ),
-            const SizedBox(height: 16),
-            if (_tank.hasDimensions) ...[
-              _buildInfoRow(
-                context,
-                icon: Icons.straighten,
-                label: 'Dimensions',
-                value: _tank.dimensionsDisplay ?? '',
-              ),
-              const SizedBox(height: 8),
-            ],
-            if (_tank.setupDate != null) ...[
-              _buildInfoRow(
-                context,
-                icon: Icons.calendar_today,
-                label: 'Setup Date',
-                value: _formatDate(_tank.setupDate!),
-              ),
-              const SizedBox(height: 8),
-              _buildInfoRow(
-                context,
-                icon: Icons.timer,
-                label: 'Age',
-                value:
-                    '${_tank.daysSinceSetup} days${_tank.isCycled ? ' (Cycled)' : ''}',
-              ),
-              const SizedBox(height: 8),
-            ],
-            if (_tank.description != null && _tank.description!.isNotEmpty) ...[
-              const Divider(),
-              const SizedBox(height: 8),
-              Text(
-                _tank.description!,
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            ],
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildInfoRow(
-    BuildContext context, {
-    required IconData icon,
-    required String label,
-    required String value,
-  }) {
-    return Row(
-      children: [
-        Icon(icon, size: 18, color: Theme.of(context).colorScheme.outline),
-        const SizedBox(width: 8),
-        Text(
-          '$label: ',
-          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-            color: Theme.of(context).colorScheme.outline,
-          ),
-        ),
-        Text(value, style: Theme.of(context).textTheme.bodyMedium),
-      ],
-    );
-  }
-
-  Widget _buildSectionCard(
-    BuildContext context, {
-    required String title,
-    required IconData icon,
-    required VoidCallback onTap,
-  }) {
-    return Card(
-      child: ListTile(
-        leading: Icon(icon),
-        title: Text(title),
-        trailing: const Icon(Icons.chevron_right),
-        onTap: onTap,
+          if (_tank.description != null && _tank.description!.isNotEmpty) ...[
+            const SizedBox(height: 16),
+            Divider(color: aqua.glassBorder),
+            const SizedBox(height: 12),
+            Text(
+              _tank.description!,
+              style: textTheme.bodyMedium?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ],
       ),
     );
   }
@@ -440,92 +426,57 @@ class _TankDetailScreenState extends ConsumerState<TankDetailScreen> {
     return '${date.day}/${date.month}/${date.year}';
   }
 
-  Widget _buildGalleryCard(BuildContext context) {
-    final imageCountAsync = ref.watch(tankImageCountProvider(_tank.id!));
-
-    return Card(
-      child: ListTile(
-        leading: const Icon(Icons.photo_library),
-        title: const Text('Gallery'),
-        subtitle: imageCountAsync.when(
-          data: (count) => Text(
-            count == 0 ? 'No photos' : '$count photo${count == 1 ? '' : 's'}',
-          ),
-          loading: () => const Text('...'),
-          error: (e, s) => const Text(''),
-        ),
-        trailing: const Icon(Icons.chevron_right),
-        onTap: () {
-          Navigator.pushNamed(
-            context,
-            AppRouter.tankGallery,
-            arguments: {'tankId': _tank.id, 'tankName': _tank.name},
-          );
-        },
-      ),
-    );
-  }
-
   Widget _buildRemindersSection(BuildContext context) {
     final remindersAsync = ref.watch(remindersForTankStreamProvider(_tank.id!));
+    final textTheme = Theme.of(context).textTheme;
 
-    return Card(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ListTile(
-            leading: const Icon(Icons.notifications),
-            title: const Text('Reminders'),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  icon: const Icon(Icons.add),
-                  onPressed: () {
-                    Navigator.pushNamed(
-                      context,
-                      AppRouter.reminderForm,
-                      arguments: {'tankId': _tank.id},
-                    );
-                  },
-                  tooltip: 'Add Reminder',
-                ),
-                const Icon(Icons.chevron_right),
-              ],
-            ),
-            onTap: () {
-              Navigator.pushNamed(context, AppRouter.reminders);
-            },
-          ),
-          remindersAsync.when(
-            data: (reminders) {
-              if (reminders.isEmpty) {
-                return Padding(
-                  padding: const EdgeInsets.only(
-                    left: 16,
-                    right: 16,
-                    bottom: 16,
-                  ),
-                  child: Text(
-                    'No reminders set',
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: Theme.of(context).colorScheme.outline,
-                    ),
-                  ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Expanded(child: Text('Reminders', style: textTheme.titleMedium)),
+            IconButton(
+              icon: const Icon(Icons.add_rounded),
+              tooltip: 'Add Reminder',
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  AppRouter.reminderForm,
+                  arguments: {'tankId': _tank.id},
                 );
-              }
-
+              },
+            ),
+            TextButton(
+              onPressed: () =>
+                  Navigator.pushNamed(context, AppRouter.reminders),
+              child: const Text('View All'),
+            ),
+          ],
+        ),
+        const SizedBox(height: 4),
+        GlassCard(
+          padding: const EdgeInsets.symmetric(vertical: 6),
+          child: remindersAsync.when(
+            data: (reminders) {
               // Show up to 3 upcoming reminders
               final activeReminders =
                   reminders.where((r) => r.isEnabled && !r.isCompleted).toList()
                     ..sort((a, b) => a.scheduledAt.compareTo(b.scheduledAt));
 
-              final displayReminders = activeReminders.take(3).toList();
+              if (activeReminders.isEmpty) {
+                return ListTile(
+                  leading: const Icon(Icons.notifications_none_rounded),
+                  title: const Text('No reminders set'),
+                  subtitle: const Text('Tap + to add one'),
+                );
+              }
 
               return Column(
-                children: displayReminders.map((reminder) {
-                  return _buildReminderItem(context, reminder);
-                }).toList(),
+                children: activeReminders
+                    .take(3)
+                    .map((reminder) => _buildReminderItem(context, reminder))
+                    .toList(),
               );
             },
             loading: () => const Padding(
@@ -537,36 +488,25 @@ class _TankDetailScreenState extends ConsumerState<TankDetailScreen> {
               child: Text('Error: $e'),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
   Widget _buildReminderItem(BuildContext context, ReminderEntity reminder) {
-    final colorScheme = Theme.of(context).colorScheme;
-    Color statusColor;
-
-    if (reminder.isOverdue) {
-      statusColor = colorScheme.error;
-    } else if (reminder.isDueToday) {
-      statusColor = colorScheme.tertiary;
-    } else if (reminder.isDueSoon) {
-      statusColor = colorScheme.secondary;
-    } else {
-      statusColor = colorScheme.primary;
-    }
+    final status = reminder.isOverdue
+        ? AquaStatus.danger
+        : reminder.isDueToday
+        ? AquaStatus.caution
+        : AquaStatus.neutral;
 
     return ListTile(
-      dense: true,
       leading: Text(
         reminder.reminderType.icon,
-        style: const TextStyle(fontSize: 20),
+        style: const TextStyle(fontSize: 22),
       ),
-      title: Text(reminder.title, style: const TextStyle(fontSize: 14)),
-      subtitle: Text(
-        reminder.dueStatusDisplay,
-        style: TextStyle(color: statusColor, fontSize: 12),
-      ),
+      title: Text(reminder.title),
+      trailing: StatusPill(label: reminder.dueStatusDisplay, status: status),
       onTap: () {
         Navigator.pushNamed(
           context,
@@ -574,6 +514,105 @@ class _TankDetailScreenState extends ConsumerState<TankDetailScreen> {
           arguments: {'reminder': reminder},
         );
       },
+    );
+  }
+}
+
+class _InfoMetric extends StatelessWidget {
+  const _InfoMetric({
+    required this.icon,
+    required this.label,
+    required this.value,
+    this.color,
+  });
+
+  final IconData icon;
+  final String label;
+  final String value;
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
+    final scheme = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(icon, size: 14, color: color ?? scheme.primary),
+            const SizedBox(width: 4),
+            Text(
+              label,
+              style: textTheme.labelSmall?.copyWith(
+                color: color ?? scheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 4),
+        Text(value, style: textTheme.titleSmall),
+      ],
+    );
+  }
+}
+
+class _SectionTileData {
+  const _SectionTileData(this.label, this.icon, this.onTap);
+
+  final String label;
+  final IconData icon;
+  final VoidCallback onTap;
+}
+
+/// Titled grid of navigation tiles, three per row
+class _SectionGrid extends StatelessWidget {
+  const _SectionGrid({required this.title, required this.tiles});
+
+  final String title;
+  final List<_SectionTileData> tiles;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title, style: Theme.of(context).textTheme.titleMedium),
+        const SizedBox(height: 12),
+        GridView.count(
+          padding: EdgeInsets.zero,
+          crossAxisCount: 3,
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+          childAspectRatio: 0.98,
+          children: [
+            for (final tile in tiles)
+              GlassCard(
+                radius: 18,
+                padding: const EdgeInsets.all(8),
+                onTap: tile.onTap,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GradientIconTile(icon: tile.icon, size: 42),
+                    const SizedBox(height: 10),
+                    Text(
+                      tile.label,
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                        fontWeight: FontWeight.w600,
+                        height: 1.2,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+          ],
+        ),
+      ],
     );
   }
 }
