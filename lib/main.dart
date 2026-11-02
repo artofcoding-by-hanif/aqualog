@@ -5,6 +5,7 @@ import 'app.dart';
 import 'core/config/app_config.dart';
 import 'core/config/env_config.dart';
 import 'core/firebase/firebase_bootstrap.dart';
+import 'features/subscription/data/subscription_service.dart';
 import 'firebase_options_dev.dart' as firebase_options;
 
 /// Default entry point - uses dev configuration
@@ -25,6 +26,8 @@ void main() async {
   await FirebaseBootstrap.initialize(
     () => firebase_options.DefaultFirebaseOptions.currentPlatform,
   );
+  // Store subscriptions (no-op when RevenueCat keys aren't set)
+  await SubscriptionService.instance.initialize();
 
   // Run app with Riverpod
   runApp(const ProviderScope(child: App()));

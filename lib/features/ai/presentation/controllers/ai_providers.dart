@@ -63,7 +63,10 @@ class ChatController extends Notifier<ChatState> {
       );
     } on AiException catch (e) {
       state = state.copyWith(
-        messages: [...history, ChatMessage.error(e.message)],
+        messages: [
+          ...history,
+          ChatMessage.error(e.message, isQuota: e.isQuota),
+        ],
         isSending: false,
       );
     }

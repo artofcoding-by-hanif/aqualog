@@ -60,6 +60,7 @@ import '../features/glass_calculator/presentation/screens/saved_glass_calculatio
 import '../features/filter_calculator/presentation/screens/filter_calculator_screen.dart';
 import '../features/ai/presentation/screens/ai_chat_screen.dart';
 import '../features/ai/presentation/screens/tank_health_screen.dart';
+import '../features/subscription/presentation/tank_limit_gate.dart';
 
 /// App router for navigation
 
@@ -139,7 +140,12 @@ class AppRouter {
         return AquaPageRoute(builder: (_) => TankDetailScreen(tank: tank));
       case tankForm:
         final tank = settings.arguments as TankEntity?;
-        return AquaPageRoute(builder: (_) => TankFormScreen(tank: tank));
+        return AquaPageRoute(
+          builder: (_) => tank == null
+              // New tanks count against the free plan's limit
+              ? const TankLimitGate(child: TankFormScreen())
+              : TankFormScreen(tank: tank),
+        );
       case AppRouter.settings:
         return AquaPageRoute(builder: (_) => const SettingsScreen());
       case reminders:

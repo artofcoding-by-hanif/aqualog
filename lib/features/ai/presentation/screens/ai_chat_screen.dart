@@ -7,6 +7,8 @@ import '../../../../core/widgets/aqua_widgets.dart';
 import '../../../tank/presentation/controllers/tank_provider.dart';
 import '../../domain/chat_message.dart';
 import '../controllers/ai_providers.dart';
+import '../../../subscription/presentation/controllers/subscription_providers.dart';
+import '../../../subscription/presentation/paywall_screen.dart';
 
 /// Chat with the AI assistant, optionally about one tank
 class AiChatScreen extends ConsumerStatefulWidget {
@@ -54,6 +56,13 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
     ref.read(chatControllerProvider(_tankId).notifier).send(message);
   }
 
+  Future<void> _upgrade() async {
+    final unlocked = await showPaywall(context, reason: PaywallReason.aiLimit);
+    if (unlocked && mounted) {
+      ref.read(chatControllerProvider(_tankId).notifier).retry();
+    }
+  }
+
   void _scrollToBottom() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!_scroll.hasClients) return;
@@ -69,6 +78,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
   Widget build(BuildContext context) {
     final chat = ref.watch(chatControllerProvider(_tankId));
     final available = ref.watch(aiServiceProvider).isAvailable;
+    final isPremium = ref.watch(isPremiumProvider);
 
     ref.listen(chatControllerProvider(_tankId), (previous, next) {
       if (previous?.messages.length != next.messages.length ||
@@ -108,6 +118,9 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
                       final message = chat.messages[index];
                       return _MessageBubble(
                         message: message,
+                        onUpgrade: message.isQuota && !isPremium
+                            ? _upgrade
+                            : null,
                         onRetry: message.isError
                             ? () => ref
                                   .read(
@@ -272,10 +285,13 @@ class _NotSetUpBanner extends StatelessWidget {
 }
 
 class _MessageBubble extends StatelessWidget {
-  const _MessageBubble({required this.message, this.onRetry});
+  const _MessageBubble({required this.message, this.onRetry, this.onUpgrade});
 
   final ChatMessage message;
   final VoidCallback? onRetry;
+
+  /// Shown instead of Retry when the daily limit was reached
+  final VoidCallback? onUpgrade;
 
   @override
   Widget build(BuildContext context) {
@@ -308,7 +324,15 @@ class _MessageBubble extends StatelessWidget {
               Expanded(child: Text(message.text)),
             ],
           ),
-          if (onRetry != null)
+          if (onUpgrade != null) ...[
+            const SizedBox(height: 10),
+            GradientButton(
+              label: 'Upgrade to Premium',
+              icon: Icons.workspace_premium_rounded,
+              gradient: aqua.accentGradient,
+              onPressed: onUpgrade,
+            ),
+          ] else if (onRetry != null)
             Align(
               alignment: Alignment.centerRight,
               child: TextButton.icon(

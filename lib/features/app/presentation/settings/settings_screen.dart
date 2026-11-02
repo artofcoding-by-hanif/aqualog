@@ -13,6 +13,7 @@ import '../../../../core/database/database_provider.dart';
 import '../../../../core/settings/app_settings.dart';
 import '../../../../core/settings/settings_provider.dart';
 import '../../../reminders/presentation/controllers/reminder_provider.dart';
+import '../../../subscription/presentation/premium_settings_card.dart';
 import '../../../../router/app_router.dart';
 
 /// Settings screen
@@ -40,6 +41,7 @@ class SettingsScreen extends ConsumerWidget {
   ) {
     return ListView(
       children: [
+        const PremiumSettingsCard(),
         _buildSection(
           context,
           title: 'Appearance',

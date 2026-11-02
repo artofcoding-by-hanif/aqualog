@@ -6,6 +6,8 @@ import '../../../../core/widgets/aqua_widgets.dart';
 import '../../../../router/app_router.dart';
 import '../../domain/tank_analysis.dart';
 import '../controllers/ai_providers.dart';
+import '../../../subscription/presentation/controllers/subscription_providers.dart';
+import '../../../subscription/presentation/paywall_screen.dart';
 import 'score_ring.dart';
 
 /// AI health summary for a tank: score, status and the top actions, or a
@@ -83,6 +85,22 @@ class TankHealthCard extends ConsumerWidget {
               state!.error!.message,
               style: textTheme.bodySmall?.copyWith(color: aqua.danger),
             ),
+            if (state.error!.isQuota && !ref.watch(isPremiumProvider)) ...[
+              const SizedBox(height: 10),
+              GradientButton(
+                label: 'Upgrade to Premium',
+                icon: Icons.workspace_premium_rounded,
+                gradient: aqua.accentGradient,
+                expand: true,
+                onPressed: () async {
+                  final unlocked = await showPaywall(
+                    context,
+                    reason: PaywallReason.aiLimit,
+                  );
+                  if (unlocked) runCheck();
+                },
+              ),
+            ],
           ],
         ],
       ),

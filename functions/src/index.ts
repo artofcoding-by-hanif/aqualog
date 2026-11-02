@@ -7,6 +7,7 @@ import { GenerateContentConfig, GoogleGenAI, ThinkingLevel } from "@google/genai
 
 import { AttemptInfo, generateWithRetry, IncompleteResponse, ModelsBusy } from "./gemini.js";
 import { ANALYSIS_SCHEMA, ANALYZE_SYSTEM_PROMPT, CHAT_SYSTEM_PROMPT, withTankData } from "./prompts.js";
+import { hasPremium } from "./entitlement.js";
 import { consumeQuota, refundQuota } from "./quota.js";
 import { InvalidInput, parseAnalyzeRequest, parseChatRequest } from "./validation.js";
 
@@ -24,11 +25,20 @@ const geminiFallbackModel = defineString("GEMINI_FALLBACK_MODEL", {
   default: "gemini-flash-lite-latest",
 });
 
-/** Requests per user per day */
-const dailyLimit = defineInt("AI_DAILY_LIMIT", { default: 30 });
+/** AI requests per user per day, by plan */
+const freeDailyLimit = defineInt("AI_FREE_DAILY_LIMIT", { default: 3 });
+const premiumDailyLimit = defineInt("AI_PREMIUM_DAILY_LIMIT", { default: 100 });
+
+/**
+ * RevenueCat secret API key, used to check the Premium entitlement.
+ * Set with: firebase functions:secrets:set REVENUECAT_SECRET_KEY
+ * (enter "none" until RevenueCat is set up; everyone is then on the free plan)
+ */
+const revenueCatSecretKey = defineSecret("REVENUECAT_SECRET_KEY");
+const ENTITLEMENT_ID = "premium";
 
 const callableOptions = {
-  secrets: [geminiApiKey],
+  secrets: [geminiApiKey, revenueCatSecretKey],
   // Only genuine app builds (or registered debug tokens) may call these
   enforceAppCheck: true,
   // Callables must be publicly invokable at the Cloud Run level; access is
@@ -70,6 +80,20 @@ function modelList(): string[] {
   );
 }
 
+/** The user's plan limit; falls back to the free limit if the lookup fails */
+async function dailyLimitFor(uid: string): Promise<{ limit: number; premium: boolean }> {
+  try {
+    const premium = await hasPremium(uid, {
+      secretKey: revenueCatSecretKey.value(),
+      entitlementId: ENTITLEMENT_ID,
+    });
+    return { limit: premium ? premiumDailyLimit.value() : freeDailyLimit.value(), premium };
+  } catch (error) {
+    logger.warn("Premium lookup failed; applying free limit", { uid, error: String(error) });
+    return { limit: freeDailyLimit.value(), premium: false };
+  }
+}
+
 /**
  * Runs one quota-counted request: takes a unit of quota, refunds it if the
  * request fails, and turns failures into callable errors.
@@ -81,7 +105,7 @@ async function metered<T>(
 ): Promise<T & { remaining: number }> {
   let charged = false;
   try {
-    const remaining = await consumeQuota(uid, dailyLimit.value());
+    const remaining = await consumeQuota(uid, await dailyLimitFor(uid));
     charged = true;
     return { ...(await run()), remaining };
   } catch (error) {

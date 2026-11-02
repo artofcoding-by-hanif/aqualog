@@ -18,8 +18,12 @@ function todayRef(uid: string) {
 }
 
 /** Take one request from today's allowance; returns how many are left */
-export async function consumeQuota(uid: string, dailyLimit: number): Promise<number> {
+export async function consumeQuota(
+  uid: string,
+  plan: { limit: number; premium: boolean },
+): Promise<number> {
   const ref = todayRef(uid);
+  const dailyLimit = plan.limit;
 
   return getFirestore().runTransaction(async (tx) => {
     const snap = await tx.get(ref);
@@ -27,7 +31,10 @@ export async function consumeQuota(uid: string, dailyLimit: number): Promise<num
     if (used >= dailyLimit) {
       throw new HttpsError(
         "resource-exhausted",
-        `Daily AI limit of ${dailyLimit} requests reached. It resets at midnight UTC.`,
+        plan.premium
+          ? `You've reached today's limit of ${dailyLimit} AI requests. It resets at midnight UTC.`
+          : `You've used today's ${dailyLimit} free AI requests. Upgrade to Premium for more, or try again tomorrow.`,
+        { premium: plan.premium },
       );
     }
     tx.set(

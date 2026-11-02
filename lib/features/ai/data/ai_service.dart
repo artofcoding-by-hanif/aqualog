@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import '../../../core/firebase/firebase_bootstrap.dart';
 import '../domain/chat_message.dart';
 import '../domain/tank_analysis.dart';
+import '../../subscription/data/subscription_service.dart';
 import 'tank_context_builder.dart';
 
 /// User-facing AI failure; [message] is safe to show as-is
@@ -96,6 +97,8 @@ class AiService {
     if (auth.currentUser == null) {
       await auth.signInAnonymously();
     }
+    // The server checks Premium by this uid, so purchases must be linked to it
+    await SubscriptionService.instance.identify().catchError((_) {});
   }
 
   AiException _mapFunctionsError(FirebaseFunctionsException e) {
