@@ -310,8 +310,8 @@ class _TrendChart extends StatelessWidget {
     if (series.every((s) => s.isEmpty)) {
       return Center(
         child: Text(
-          'No ${overlay ? 'readings' : parameters.first.label} readings '
-          '${range.days == null ? 'yet' : 'in the last ${range.label}'}',
+          'No ${overlay ? '' : '${parameters.first.label} '}readings '
+          '${range.days == null ? 'yet' : 'in the last ${range.days} days'}',
           style: theme.textTheme.bodyMedium?.copyWith(color: muted),
           textAlign: TextAlign.center,
         ),
@@ -376,13 +376,23 @@ class _TrendChart extends StatelessWidget {
             sideTitles: SideTitles(
               showTitles: !overlay,
               reservedSize: 44,
-              getTitlesWidget: (value, meta) => SideTitleWidget(
-                meta: meta,
-                child: Text(
-                  meta.formattedValue,
-                  style: theme.textTheme.labelSmall?.copyWith(color: muted),
-                ),
-              ),
+              getTitlesWidget: (value, meta) {
+                // The padded min/max land on odd values; label the grid only
+                if ((value == meta.min || value == meta.max) &&
+                    (value / meta.appliedInterval -
+                                (value / meta.appliedInterval).round())
+                            .abs() >
+                        1e-6) {
+                  return const SizedBox.shrink();
+                }
+                return SideTitleWidget(
+                  meta: meta,
+                  child: Text(
+                    meta.formattedValue,
+                    style: theme.textTheme.labelSmall?.copyWith(color: muted),
+                  ),
+                );
+              },
             ),
           ),
           bottomTitles: AxisTitles(
@@ -404,6 +414,7 @@ class _TrendChart extends StatelessWidget {
                     : DateFormat('d MMM');
                 return SideTitleWidget(
                   meta: meta,
+                  fitInside: SideTitleFitInsideData.fromTitleMeta(meta),
                   child: Text(
                     format.format(date),
                     style: theme.textTheme.labelSmall?.copyWith(color: muted),
