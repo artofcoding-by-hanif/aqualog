@@ -9,12 +9,17 @@ import { utcDay } from "./validation.js";
  *
  * Subscriptions will plug in here: premium users get the higher limit.
  */
-export async function consumeQuota(uid: string, dailyLimit: number): Promise<number> {
-  const ref = getFirestore()
+function todayRef(uid: string) {
+  return getFirestore()
     .collection("aiUsage")
     .doc(uid)
     .collection("days")
     .doc(utcDay(new Date()));
+}
+
+/** Take one request from today's allowance; returns how many are left */
+export async function consumeQuota(uid: string, dailyLimit: number): Promise<number> {
+  const ref = todayRef(uid);
 
   return getFirestore().runTransaction(async (tx) => {
     const snap = await tx.get(ref);
@@ -32,4 +37,12 @@ export async function consumeQuota(uid: string, dailyLimit: number): Promise<num
     );
     return dailyLimit - used - 1;
   });
+}
+
+/** Give back a request that failed through no fault of the user */
+export async function refundQuota(uid: string): Promise<void> {
+  await todayRef(uid).set(
+    { count: FieldValue.increment(-1), updatedAt: FieldValue.serverTimestamp() },
+    { merge: true },
+  );
 }

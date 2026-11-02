@@ -1,5 +1,6 @@
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../../core/firebase/firebase_bootstrap.dart';
 import '../domain/chat_message.dart';
@@ -28,7 +29,7 @@ class AiService {
 
   final TankContextBuilder _contextBuilder;
 
-  static const _timeout = Duration(seconds: 70);
+  static const _timeout = Duration(seconds: 130);
 
   bool get isAvailable => FirebaseBootstrap.isReady;
 
@@ -80,8 +81,10 @@ class AiService {
       // Platform channels deliver Map<Object?, Object?>
       return Map<String, dynamic>.from(result.data as Map);
     } on FirebaseFunctionsException catch (e) {
+      debugPrint('AI call $name failed: ${e.code} ${e.message}');
       throw _mapFunctionsError(e);
-    } on FirebaseAuthException {
+    } on FirebaseAuthException catch (e) {
+      debugPrint('AI sign-in failed: ${e.code} ${e.message}');
       throw const AiException(
         'Could not connect to the assistant. Check your internet connection.',
       );

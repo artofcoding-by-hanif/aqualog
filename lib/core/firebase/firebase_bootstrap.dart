@@ -37,8 +37,20 @@ class FirebaseBootstrap {
             : const AppleAppAttestProvider(),
       );
       _ready = true;
+      if (kDebugMode) _logAppCheckStatus();
     } catch (error) {
       debugPrint('Firebase unavailable, online features disabled: $error');
+    }
+  }
+
+  /// Debug builds: report whether the App Check token exchange works, so a
+  /// missing debug-token registration is obvious in the logs
+  static Future<void> _logAppCheckStatus() async {
+    try {
+      final token = await FirebaseAppCheck.instance.getToken(true);
+      debugPrint('App Check OK (token ${token?.length ?? 0} chars)');
+    } catch (error) {
+      debugPrint('App Check token exchange FAILED: $error');
     }
   }
 }

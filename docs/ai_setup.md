@@ -36,7 +36,10 @@ sudo chown -R "$(whoami)" ~/.config ~/.npm
 From the repo root:
 
 ```bash
-dart pub global activate flutterfire_cli
+# Use Flutter's own Dart (an old Homebrew Dart on PATH installs an
+# outdated CLI that crashes on build.gradle.kts)
+flutter pub global activate flutterfire_cli
+firebase login --reauth       # if the CLI says credentials expired (401)
 firebase use --add            # pick the project, alias "default"
 
 # Dev flavor (the build you run with --flavor dev in debug)
@@ -57,9 +60,10 @@ flutterfire configure --yes --project=<project-id> \
 These overwrite the placeholder `lib/firebase_options_*.dart` files. They
 contain public client identifiers (not secrets) and are safe to commit.
 
-> If flutterfire also writes `android/app/google-services.json` or asks to
-> add the Google Services Gradle plugin, you can decline: the app initializes
-> Firebase from the Dart options files.
+> If flutterfire asks to add the Google Services Gradle plugin, decline: the
+> app initializes Firebase from the Dart options files. Any
+> `google-services.json`, `GoogleService-Info.plist` or
+> `firebase_app_id_file.json` it writes are git-ignored and can be deleted.
 
 ## 4. App Check
 
@@ -94,14 +98,15 @@ app.
 
 ## Configuration
 
-Set at deploy time (the CLI prompts on first deploy, or put them in
-`functions/.env`):
+Set at deploy time. The CLI prompts on first deploy and saves the answers in
+`functions/.env.<project-id>` (no secrets; safe to commit). Edit that file and
+redeploy to change them:
 
 | Param               | Default               | Purpose                                   |
 |---------------------|-----------------------|-------------------------------------------|
 | `GEMINI_MODEL`      | `gemini-flash-latest` | Gemini model id                           |
+| `GEMINI_FALLBACK_MODEL` | `gemini-flash-lite-latest` | Used when the main model is overloaded (503/429) |
 | `AI_DAILY_LIMIT`    | `30`                  | Requests per user per day                 |
-| `ENFORCE_APP_CHECK` | `true`                | Reject calls without a valid App Check token |
 
 ## Developing the functions
 
