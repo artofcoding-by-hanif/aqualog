@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../../../core/theme/color_scheme.dart';
+import '../../../../core/widgets/aqua_widgets.dart';
 import '../../../../core/widgets/empty_state.dart';
 import '../../../../router/app_router.dart';
 import '../../domain/entities/water_parameter_log.dart';
@@ -20,11 +22,20 @@ class WaterParameterLogListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final logsAsync = ref.watch(waterParameterLogsForTankStreamProvider(tankId));
+    final logsAsync = ref.watch(
+      waterParameterLogsForTankStreamProvider(tankId),
+    );
 
     return Scaffold(
       appBar: AppBar(
         title: Text('$tankName Parameters'),
+        actions: [
+          IconButton(
+            tooltip: 'Trends',
+            icon: const Icon(Icons.insights_rounded),
+            onPressed: () => _navigateToChart(context),
+          ),
+        ],
       ),
       body: logsAsync.when(
         data: (logs) => _buildLogList(context, ref, logs),
@@ -62,15 +73,54 @@ class WaterParameterLogListScreen extends ConsumerWidget {
       },
       child: ListView.builder(
         padding: const EdgeInsets.only(top: 8, bottom: 88),
-        itemCount: logs.length,
+        itemCount: logs.length + 1,
         itemBuilder: (context, index) {
-          final log = logs[index];
+          if (index == 0) return _buildTrendsCard(context);
+          final log = logs[index - 1];
           return WaterParameterLogCard(
             log: log,
             onTap: () => _navigateToEditLog(context, log),
             onDelete: () => _confirmDelete(context, ref, log),
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildTrendsCard(BuildContext context) {
+    final theme = Theme.of(context);
+    return GlassCard(
+      margin: const EdgeInsets.fromLTRB(16, 4, 16, 8),
+      onTap: () => _navigateToChart(context),
+      child: Row(
+        children: [
+          const GradientIconTile(
+            icon: Icons.insights_rounded,
+            color: AquaHue.testing,
+            size: 40,
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Trends',
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                Text(
+                  'Chart readings over time against ideal ranges',
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const Icon(Icons.chevron_right_rounded),
+        ],
       ),
     );
   }
@@ -104,6 +154,14 @@ class WaterParameterLogListScreen extends ConsumerWidget {
     );
   }
 
+  void _navigateToChart(BuildContext context) {
+    Navigator.pushNamed(
+      context,
+      AppRouter.waterParameterChart,
+      arguments: {'tankId': tankId, 'tankName': tankName},
+    );
+  }
+
   void _navigateToAddLog(BuildContext context) {
     Navigator.pushNamed(
       context,
@@ -129,7 +187,9 @@ class WaterParameterLogListScreen extends ConsumerWidget {
       context: context,
       builder: (context) => AlertDialog(
         title: const Text('Delete Log'),
-        content: const Text('Are you sure you want to delete this parameter log?'),
+        content: const Text(
+          'Are you sure you want to delete this parameter log?',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
@@ -148,11 +208,10 @@ class WaterParameterLogListScreen extends ConsumerWidget {
           .read(waterParameterLogProvider(tankId).notifier)
           .deleteLog(log.id!, tankId);
       if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Log deleted')),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Log deleted')));
       }
     }
   }
 }
-

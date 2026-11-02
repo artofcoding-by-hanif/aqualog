@@ -15,9 +15,7 @@ class SubscriptionConfig {
     'REVENUECAT_ANDROID_KEY',
   );
 
-  static const String iosApiKey = String.fromEnvironment(
-    'REVENUECAT_IOS_KEY',
-  );
+  static const String iosApiKey = String.fromEnvironment('REVENUECAT_IOS_KEY');
 
   /// Entitlement that unlocks Premium, as named in the RevenueCat dashboard
   static const String entitlementId = 'premium';
@@ -28,4 +26,7 @@ class SubscriptionConfig {
   /// AI requests per day, shown in the paywall (enforced by Cloud Functions)
   static const int freeAiDailyLimit = 3;
   static const int premiumAiDailyLimit = 100;
+
+  /// Days of water parameter history free accounts can chart
+  static const int freeChartDays = 30;
 }
