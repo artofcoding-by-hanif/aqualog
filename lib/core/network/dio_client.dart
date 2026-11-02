@@ -12,4 +12,3 @@ class DioClient {
 
   // TODO: Add Dio instance and configuration
 }
-

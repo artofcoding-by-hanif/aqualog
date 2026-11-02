@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../core/theme/aqua_theme.dart';
+import '../../../../core/theme/color_scheme.dart';
 import '../../../../core/widgets/aqua_widgets.dart';
 import '../../../../router/app_router.dart';
 import '../../../ai/presentation/widgets/tank_health_card.dart';
@@ -153,16 +154,19 @@ class _TankDetailScreenState extends ConsumerState<TankDetailScreen> {
                     _SectionTileData(
                       'Fish',
                       Icons.set_meal_rounded,
+                      AquaHue.fish,
                       () => _open(AppRouter.fishList),
                     ),
                     _SectionTileData(
                       'Invertebrates',
                       Icons.pest_control_rounded,
+                      AquaHue.invertebrates,
                       () => _open(AppRouter.invertebrateList),
                     ),
                     _SectionTileData(
                       'Plants',
                       Icons.grass_rounded,
+                      AquaHue.plants,
                       () => _open(AppRouter.plantList),
                     ),
                   ],
@@ -174,11 +178,13 @@ class _TankDetailScreenState extends ConsumerState<TankDetailScreen> {
                     _SectionTileData(
                       'Filters',
                       Icons.filter_alt_rounded,
+                      AquaHue.filters,
                       () => _open(AppRouter.filterList),
                     ),
                     _SectionTileData(
                       'Lighting',
                       Icons.lightbulb_rounded,
+                      AquaHue.lighting,
                       () => _open(AppRouter.lightingList),
                     ),
                   ],
@@ -190,16 +196,19 @@ class _TankDetailScreenState extends ConsumerState<TankDetailScreen> {
                     _SectionTileData(
                       'Rocks',
                       Icons.terrain_rounded,
+                      AquaHue.rocks,
                       () => _open(AppRouter.rockList),
                     ),
                     _SectionTileData(
                       'Driftwood',
                       Icons.park_rounded,
+                      AquaHue.driftwood,
                       () => _open(AppRouter.driftwoodList),
                     ),
                     _SectionTileData(
                       'Substrate',
                       Icons.layers_rounded,
+                      AquaHue.substrate,
                       () => _open(AppRouter.substrateEditor, withName: false),
                     ),
                   ],
@@ -211,26 +220,31 @@ class _TankDetailScreenState extends ConsumerState<TankDetailScreen> {
                     _SectionTileData(
                       'Water\nParameters',
                       Icons.analytics_rounded,
+                      AquaHue.testing,
                       () => _open(AppRouter.waterParameterLogList),
                     ),
                     _SectionTileData(
                       'Feeding',
                       Icons.restaurant_rounded,
+                      AquaHue.feeding,
                       () => _open(AppRouter.feedingLogList),
                     ),
                     _SectionTileData(
                       'Maintenance',
                       Icons.build_rounded,
+                      AquaHue.maintenance,
                       () => _open(AppRouter.maintenanceLogList),
                     ),
                     _SectionTileData(
                       'Timeline',
                       Icons.timeline_rounded,
+                      AquaHue.timeline,
                       () => _open(AppRouter.tankTimeline),
                     ),
                     _SectionTileData(
                       photoLabel,
                       Icons.photo_library_rounded,
+                      AquaHue.gallery,
                       () => _open(AppRouter.tankGallery),
                     ),
                   ],
@@ -558,10 +572,11 @@ class _InfoMetric extends StatelessWidget {
 }
 
 class _SectionTileData {
-  const _SectionTileData(this.label, this.icon, this.onTap);
+  const _SectionTileData(this.label, this.icon, this.hue, this.onTap);
 
   final String label;
   final IconData icon;
+  final Color hue;
   final VoidCallback onTap;
 }
 
@@ -596,7 +611,11 @@ class _SectionGrid extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    GradientIconTile(icon: tile.icon, size: 42),
+                    GradientIconTile(
+                      icon: tile.icon,
+                      color: tile.hue,
+                      size: 44,
+                    ),
                     const SizedBox(height: 10),
                     Text(
                       tile.label,

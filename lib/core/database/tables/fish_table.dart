@@ -2,11 +2,7 @@ import 'package:drift/drift.dart';
 import 'tanks_table.dart';
 
 /// Water type for fish
-enum WaterTypeDb {
-  freshwater,
-  saltwater,
-  brackish,
-}
+enum WaterTypeDb { freshwater, saltwater, brackish }
 
 /// Fish temperament
 enum FishTemperamentDb {
@@ -29,20 +25,10 @@ enum FishDietDb {
 }
 
 /// Care level difficulty
-enum CareLevelDb {
-  beginner,
-  intermediate,
-  advanced,
-  expert,
-}
+enum CareLevelDb { beginner, intermediate, advanced, expert }
 
 /// Swimming level in tank
-enum SwimmingLevelDb {
-  top,
-  middle,
-  bottom,
-  all,
-}
+enum SwimmingLevelDb { top, middle, bottom, all }
 
 /// Table for storing fish
 class Fish extends Table {
@@ -132,4 +118,3 @@ class Fish extends Table {
   /// Updated timestamp
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
 }
-

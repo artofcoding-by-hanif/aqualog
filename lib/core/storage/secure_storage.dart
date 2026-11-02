@@ -27,4 +27,3 @@ class SecureStorage {
     // TODO: Implement delete all
   }
 }
-

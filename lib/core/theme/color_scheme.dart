@@ -42,6 +42,36 @@ class AquaPalette {
   static const Color cyanDeep = Color(0xFF0891B2);
 }
 
+/// One hue per kind of thing in the app, so icons are recognisable at a
+/// glance. Used to tint glass icon tiles; tuned for dark mode and darkened
+/// automatically on light surfaces.
+class AquaHue {
+  AquaHue._();
+
+  // Life
+  static const Color fish = Color(0xFF22D3EE);
+  static const Color invertebrates = Color(0xFFFB7185);
+  static const Color plants = Color(0xFF34D399);
+
+  // Equipment
+  static const Color filters = Color(0xFF60A5FA);
+  static const Color lighting = Color(0xFFFBBF24);
+
+  // Aquascape
+  static const Color rocks = Color(0xFF94A3B8);
+  static const Color driftwood = Color(0xFFD9A066);
+  static const Color substrate = Color(0xFFC4B5FD);
+
+  // Care and logs
+  static const Color water = Color(0xFF38BDF8);
+  static const Color testing = Color(0xFF2DD4BF);
+  static const Color feeding = Color(0xFFFB923C);
+  static const Color maintenance = Color(0xFFA78BFA);
+  static const Color notes = Color(0xFF818CF8);
+  static const Color timeline = Color(0xFF818CF8);
+  static const Color gallery = Color(0xFFF472B6);
+}
+
 /// Application color schemes built from [AquaPalette]
 class AppColorScheme {
   AppColorScheme._();

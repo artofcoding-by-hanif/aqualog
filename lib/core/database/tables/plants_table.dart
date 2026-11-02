@@ -15,43 +15,19 @@ enum PlantTypeDb {
 }
 
 /// Lighting requirement for database
-enum LightingRequirementDb {
-  low,
-  medium,
-  high,
-  veryHigh,
-}
+enum LightingRequirementDb { low, medium, high, veryHigh }
 
 /// CO2 requirement for database
-enum CO2RequirementDb {
-  none,
-  low,
-  medium,
-  high,
-}
+enum CO2RequirementDb { none, low, medium, high }
 
 /// Growth rate for database
-enum GrowthRateDb {
-  slow,
-  medium,
-  fast,
-}
+enum GrowthRateDb { slow, medium, fast }
 
 /// Placement zone for database
-enum PlacementZoneDb {
-  foreground,
-  midground,
-  background,
-  floating,
-}
+enum PlacementZoneDb { foreground, midground, background, floating }
 
 /// Difficulty level for database
-enum PlantDifficultyLevelDb {
-  easy,
-  moderate,
-  difficult,
-  expert,
-}
+enum PlantDifficultyLevelDb { easy, moderate, difficult, expert }
 
 /// Table for storing aquarium plants
 class Plants extends Table {
@@ -89,7 +65,8 @@ class Plants extends Table {
   IntColumn get growthRate => intEnum<GrowthRateDb>().nullable()();
 
   /// Difficulty level
-  IntColumn get difficultyLevel => intEnum<PlantDifficultyLevelDb>().nullable()();
+  IntColumn get difficultyLevel =>
+      intEnum<PlantDifficultyLevelDb>().nullable()();
 
   /// Maximum height in cm
   RealColumn get maxHeightCm => real().nullable()();
@@ -116,8 +93,7 @@ class Plants extends Table {
   DateTimeColumn get dateRemoved => dateTime().nullable()();
 
   /// Is this plant propagated from another
-  BoolColumn get isPropagated =>
-      boolean().withDefault(const Constant(false))();
+  BoolColumn get isPropagated => boolean().withDefault(const Constant(false))();
 
   /// Parent plant ID (if propagated)
   IntColumn get parentPlantId => integer().nullable()();
@@ -140,4 +116,3 @@ class Plants extends Table {
   /// Updated timestamp
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
 }
-

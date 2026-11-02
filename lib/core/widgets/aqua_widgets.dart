@@ -195,7 +195,12 @@ class GlassCard extends StatelessWidget {
   }
 }
 
-/// Rounded square holding an icon or emoji on a gradient, with a soft glow
+/// Glass icon tile: a translucent tile tinted in one hue, with a glowing
+/// edge, a sheen across the top and a luminous icon.
+///
+/// Pass [color] for a category hue (see [AquaHue]); pass [gradient] to paint
+/// the icon and edge with a gradient (e.g. AI features). With neither, the
+/// theme's primary colour is used.
 class GradientIconTile extends StatelessWidget {
   const GradientIconTile({
     super.key,
@@ -210,49 +215,136 @@ class GradientIconTile extends StatelessWidget {
   final String? emoji;
   final double size;
 
-  /// Defaults to the theme's primary gradient
+  /// Paints the icon and edge with this gradient
   final Gradient? gradient;
 
-  /// Tints the tile with a single color instead of a gradient
+  /// Hue that tints the tile, edge, glow and icon
   final Color? color;
+
+  static Color _shift(Color color, double lightness) {
+    final hsl = HSLColor.fromColor(color);
+    return hsl
+        .withLightness((hsl.lightness + lightness).clamp(0.0, 1.0))
+        .toColor();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final aqua = AquaTheme.of(context);
-    final fill = color != null
-        ? LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              color!.withValues(alpha: 0.35),
-              color!.withValues(alpha: 0.12),
-            ],
-          )
-        : (gradient ?? aqua.primaryGradient);
-    final glow = color ?? aqua.glow;
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+    final scheme = Theme.of(context).colorScheme;
+    final gradientColors = gradient is LinearGradient
+        ? (gradient! as LinearGradient).colors
+        : null;
 
+    // Light surfaces need deeper tints for contrast
+    Color tone(Color c) => isDark ? c : _shift(c, -0.18);
+    final hue = tone(color ?? gradientColors?.first ?? scheme.primary);
+    final edgeEnd = tone(gradientColors?.last ?? hue);
+    final radius = BorderRadius.circular(size * 0.3);
+    final innerRadius = BorderRadius.circular(size * 0.3 - 1);
+
+    final iconColor = isDark ? _shift(hue, 0.12) : hue;
+    Widget glyph = emoji != null
+        ? Text(emoji!, style: TextStyle(fontSize: size * 0.46))
+        : Icon(
+            icon,
+            size: size * 0.48,
+            color: iconColor,
+            shadows: [
+              Shadow(
+                color: hue.withValues(alpha: isDark ? 0.75 : 0.35),
+                blurRadius: size * 0.22,
+              ),
+            ],
+          );
+    if (gradient != null && emoji == null) {
+      final paint = isDark
+          ? gradient!
+          : LinearGradient(
+              colors: gradientColors?.map(tone).toList() ?? [hue, edgeEnd],
+            );
+      glyph = ShaderMask(
+        blendMode: BlendMode.srcIn,
+        shaderCallback: (bounds) => paint.createShader(bounds),
+        child: glyph,
+      );
+    }
+
+    // Outer container is the 1px gradient edge; inner is the tinted glass
     return Container(
       width: size,
       height: size,
+      padding: const EdgeInsets.all(1),
       decoration: BoxDecoration(
-        gradient: fill,
-        borderRadius: BorderRadius.circular(size * 0.32),
-        border: color != null
-            ? Border.all(color: color!.withValues(alpha: 0.4))
-            : null,
+        borderRadius: radius,
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            hue.withValues(alpha: isDark ? 0.75 : 0.55),
+            edgeEnd.withValues(alpha: isDark ? 0.12 : 0.15),
+          ],
+        ),
         boxShadow: [
           BoxShadow(
-            color: glow.withValues(alpha: 0.35),
-            blurRadius: size * 0.4,
-            spreadRadius: -size * 0.12,
-            offset: Offset(0, size * 0.1),
+            color: hue.withValues(alpha: isDark ? 0.28 : 0.16),
+            blurRadius: size * 0.45,
+            spreadRadius: -size * 0.14,
+            offset: Offset(0, size * 0.08),
           ),
         ],
       ),
-      alignment: Alignment.center,
-      child: emoji != null
-          ? Text(emoji!, style: TextStyle(fontSize: size * 0.48))
-          : Icon(icon, size: size * 0.5, color: color ?? Colors.white),
+      child: ClipRRect(
+        borderRadius: innerRadius,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: isDark
+                  ? [
+                      hue.withValues(alpha: 0.26),
+                      const Color(0xFF07122A).withValues(alpha: 0.85),
+                    ]
+                  : [
+                      Color.alphaBlend(
+                        hue.withValues(alpha: 0.16),
+                        Colors.white,
+                      ),
+                      Color.alphaBlend(
+                        hue.withValues(alpha: 0.05),
+                        Colors.white,
+                      ),
+                    ],
+            ),
+          ),
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              // Sheen across the upper half, like light on glass
+              Positioned(
+                top: 0,
+                left: 0,
+                right: 0,
+                height: size * 0.5,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [
+                        Colors.white.withValues(alpha: isDark ? 0.14 : 0.6),
+                        Colors.white.withValues(alpha: 0),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              glyph,
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

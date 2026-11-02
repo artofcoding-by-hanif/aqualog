@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 /// Loading indicator widget
 
 class LoadingIndicator extends StatelessWidget {
-  const LoadingIndicator({
-    super.key,
-    this.message,
-  });
+  const LoadingIndicator({super.key, this.message});
 
   final String? message;
 
@@ -19,14 +16,10 @@ class LoadingIndicator extends StatelessWidget {
           const CircularProgressIndicator(),
           if (message != null) ...[
             const SizedBox(height: 16),
-            Text(
-              message!,
-              style: Theme.of(context).textTheme.bodyMedium,
-            ),
+            Text(message!, style: Theme.of(context).textTheme.bodyMedium),
           ],
         ],
       ),
     );
   }
 }
-

@@ -8,4 +8,3 @@ class FeatureFlags {
   static const bool enableDarkMode = true;
   static const bool enableAnalytics = false;
 }
-

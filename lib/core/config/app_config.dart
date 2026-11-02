@@ -34,4 +34,3 @@ class AppConfig {
     _enableCrashlytics = enableCrashlytics;
   }
 }
-

@@ -29,4 +29,3 @@ class _ProdConfig {
   bool get enableLogging => false;
   bool get enableCrashlytics => true;
 }
-

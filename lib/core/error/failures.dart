@@ -25,4 +25,3 @@ class ValidationFailure extends Failure {
 class NotFoundFailure extends Failure {
   const NotFoundFailure([super.message = 'Not found']);
 }
-

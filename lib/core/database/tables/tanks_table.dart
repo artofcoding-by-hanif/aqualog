@@ -1,15 +1,7 @@
 import 'package:drift/drift.dart';
 
 /// Tank/Aquarium types
-enum TankType {
-  freshwater,
-  saltwater,
-  brackish,
-  planted,
-  reef,
-  shrimp,
-  pond,
-}
+enum TankType { freshwater, saltwater, brackish, planted, reef, shrimp, pond }
 
 /// Table for storing aquarium/tank information
 class Tanks extends Table {
@@ -52,4 +44,3 @@ class Tanks extends Table {
   /// Updated timestamp
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
 }
-

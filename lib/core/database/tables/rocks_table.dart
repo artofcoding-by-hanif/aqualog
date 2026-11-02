@@ -29,7 +29,8 @@ class Rocks extends Table {
   TextColumn get name => text().withLength(min: 1, max: 100)();
 
   /// Type of rock
-  IntColumn get rockType => intEnum<RockTypeDb>().withDefault(const Constant(0))();
+  IntColumn get rockType =>
+      intEnum<RockTypeDb>().withDefault(const Constant(0))();
 
   /// Weight in kilograms
   RealColumn get weightKg => real().nullable()();
@@ -67,4 +68,3 @@ class Rocks extends Table {
   /// Updated timestamp
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
 }
-

@@ -96,4 +96,3 @@ class Lightings extends Table {
   /// Updated timestamp
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
 }
-

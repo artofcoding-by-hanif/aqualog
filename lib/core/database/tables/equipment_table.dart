@@ -20,13 +20,7 @@ enum EquipmentType {
 }
 
 /// Equipment status
-enum EquipmentStatus {
-  active,
-  inactive,
-  maintenance,
-  broken,
-  replaced,
-}
+enum EquipmentStatus { active, inactive, maintenance, broken, replaced }
 
 /// Table for storing equipment
 class Equipment extends Table {
@@ -79,4 +73,3 @@ class Equipment extends Table {
   /// Updated timestamp
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
 }
-

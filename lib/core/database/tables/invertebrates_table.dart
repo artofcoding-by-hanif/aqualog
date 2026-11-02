@@ -16,19 +16,10 @@ enum InvertebrateTypeDb {
 }
 
 /// Water type for invertebrates
-enum InvertWaterTypeDb {
-  freshwater,
-  saltwater,
-  brackish,
-}
+enum InvertWaterTypeDb { freshwater, saltwater, brackish }
 
 /// Care level difficulty for invertebrates
-enum InvertCareLevelDb {
-  beginner,
-  intermediate,
-  advanced,
-  expert,
-}
+enum InvertCareLevelDb { beginner, intermediate, advanced, expert }
 
 /// Table for storing invertebrates (shrimp, snails, crabs, etc.)
 class Invertebrates extends Table {
@@ -117,4 +108,3 @@ class Invertebrates extends Table {
   /// Updated timestamp
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
 }
-

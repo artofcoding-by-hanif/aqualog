@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../core/theme/aqua_theme.dart';
+import '../../../core/theme/color_scheme.dart';
 import '../../../core/widgets/aqua_widgets.dart';
 import '../../../router/app_router.dart';
 import '../../logs/domain/entities/maintenance_log.dart';
@@ -160,24 +161,28 @@ class DashboardScreen extends ConsumerWidget {
   Widget _buildQuickActions(BuildContext context, WidgetRef ref) {
     final actions = [
       (
+        hue: AquaHue.water,
         icon: Icons.water_drop_rounded,
         label: 'Water\nChange',
         route: AppRouter.maintenanceLogForm,
         args: <String, dynamic>{'initialType': MaintenanceType.waterChange},
       ),
       (
+        hue: AquaHue.testing,
         icon: Icons.science_rounded,
         label: 'Test\nWater',
         route: AppRouter.waterParameterLogForm,
         args: <String, dynamic>{},
       ),
       (
+        hue: AquaHue.feeding,
         icon: Icons.restaurant_rounded,
         label: 'Feed\nFish',
         route: AppRouter.feedingLogForm,
         args: <String, dynamic>{},
       ),
       (
+        hue: AquaHue.notes,
         icon: Icons.edit_note_rounded,
         label: 'Add\nNote',
         route: AppRouter.maintenanceLogForm,
@@ -197,6 +202,7 @@ class DashboardScreen extends ConsumerWidget {
               Expanded(
                 child: _QuickActionTile(
                   icon: action.icon,
+                  hue: action.hue,
                   label: action.label,
                   onTap: () => _showTankSelectorAndNavigate(
                     context,
@@ -636,11 +642,13 @@ class _TankTile extends ConsumerWidget {
 class _QuickActionTile extends StatelessWidget {
   const _QuickActionTile({
     required this.icon,
+    required this.hue,
     required this.label,
     required this.onTap,
   });
 
   final IconData icon;
+  final Color hue;
   final String label;
   final VoidCallback onTap;
 
@@ -652,7 +660,7 @@ class _QuickActionTile extends StatelessWidget {
       onTap: onTap,
       child: Column(
         children: [
-          GradientIconTile(icon: icon, size: 42),
+          GradientIconTile(icon: icon, color: hue, size: 44),
           const SizedBox(height: 10),
           Text(
             label,

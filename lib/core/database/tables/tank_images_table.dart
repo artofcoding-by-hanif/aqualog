@@ -25,4 +25,3 @@ class TankImages extends Table {
   /// Created timestamp
   DateTimeColumn get createdAt => dateTime().withDefault(currentDateAndTime)();
 }
-

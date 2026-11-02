@@ -3,11 +3,7 @@ import 'package:flutter/material.dart';
 /// Section header widget
 
 class SectionHeader extends StatelessWidget {
-  const SectionHeader({
-    super.key,
-    required this.title,
-    this.action,
-  });
+  const SectionHeader({super.key, required this.title, this.action});
 
   final String title;
   final Widget? action;
@@ -21,9 +17,9 @@ class SectionHeader extends StatelessWidget {
         children: [
           Text(
             title,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
           if (action != null) action!,
         ],
@@ -31,4 +27,3 @@ class SectionHeader extends StatelessWidget {
     );
   }
 }
-

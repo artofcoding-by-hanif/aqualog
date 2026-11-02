@@ -172,4 +172,3 @@ class FeatureFlags {
     return {for (var flag in FeatureFlag.values) flag: isEnabled(flag)};
   }
 }
-

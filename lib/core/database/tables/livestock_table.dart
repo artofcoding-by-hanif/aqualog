@@ -2,22 +2,10 @@ import 'package:drift/drift.dart';
 import 'tanks_table.dart';
 
 /// Types of livestock
-enum LivestockType {
-  fish,
-  invertebrate,
-  coral,
-  plant,
-  other,
-}
+enum LivestockType { fish, invertebrate, coral, plant, other }
 
 /// Health status of livestock
-enum HealthStatus {
-  healthy,
-  sick,
-  quarantine,
-  deceased,
-  unknown,
-}
+enum HealthStatus { healthy, sick, quarantine, deceased, unknown }
 
 /// Table for storing livestock (fish, invertebrates, plants, etc.)
 class Livestock extends Table {
@@ -61,4 +49,3 @@ class Livestock extends Table {
   /// Updated timestamp
   DateTimeColumn get updatedAt => dateTime().withDefault(currentDateAndTime)();
 }
-

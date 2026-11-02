@@ -35,4 +35,3 @@ class ValidationException implements Exception {
   @override
   String toString() => message ?? 'Validation Exception';
 }
-

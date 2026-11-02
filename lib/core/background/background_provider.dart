@@ -19,4 +19,3 @@ Future<bool> backgroundTasksInitialized(Ref ref) async {
   }
   return service.isInitialized;
 }
-

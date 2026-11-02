@@ -11,4 +11,3 @@ class NetworkInfoImpl implements NetworkInfo {
     return true;
   }
 }
-
