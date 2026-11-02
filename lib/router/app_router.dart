@@ -51,6 +51,7 @@ import '../features/logs/presentation/screens/tank_timeline_screen.dart';
 import '../features/water_parameters/domain/entities/water_parameter_log.dart';
 import '../features/water_parameters/presentation/screens/water_parameter_log_list_screen.dart';
 import '../features/water_parameters/presentation/screens/water_parameter_log_form_screen.dart';
+import '../features/water_parameters/presentation/parameter_chart.dart';
 import '../features/plants/domain/entities/plant.dart';
 import '../features/plants/presentation/screens/plant_list_screen.dart';
 import '../features/plants/presentation/screens/plant_detail_screen.dart';
@@ -100,6 +101,7 @@ class AppRouter {
   static const String feedingLogForm = '/logs/feeding/form';
   static const String waterParameterLogList = '/parameters';
   static const String waterParameterLogForm = '/parameters/form';
+  static const String waterParameterChart = '/parameters/chart';
   static const String tankTimeline = '/tanks/timeline';
   static const String tankGallery = '/tanks/gallery';
   static const String plantList = '/plants';
@@ -340,6 +342,14 @@ class AppRouter {
             tankId: args['tankId'] as int,
             tankName: args['tankName'] as String,
             log: args['log'] as WaterParameterLogEntity?,
+          ),
+        );
+      case waterParameterChart:
+        final args = settings.arguments as Map<String, dynamic>;
+        return AquaPageRoute(
+          builder: (_) => ParameterChartScreen(
+            tankId: args['tankId'] as int,
+            tankName: args['tankName'] as String,
           ),
         );
       case tankTimeline:

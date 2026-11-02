@@ -22,6 +22,10 @@ enum PaywallReason {
   aiLimit(
     "You've used today's free AI",
     'Free accounts get ${SubscriptionConfig.freeAiDailyLimit} AI requests a day. Premium gives you far more.',
+  ),
+  charts(
+    'See your full water history',
+    'Free accounts chart the last ${SubscriptionConfig.freeChartDays} days. Premium adds 90-day, 1-year and all-time trends, parameter overlays and CSV export.',
   );
 
   const PaywallReason(this.title, this.subtitle);
@@ -83,7 +87,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
       Icons.insights_rounded,
       AquaHue.testing,
       'Advanced charts & export',
-      'Coming soon to Premium',
+      'Full-history trends, parameter overlays and CSV export',
     ),
   ];
 
