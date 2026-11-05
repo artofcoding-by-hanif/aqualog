@@ -1,0 +1,237 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AquaLog Privacy Policy</title>
+<meta name="description" content="How the AquaLog aquarium app handles your data.">
+<style>
+  :root {
+    --bg: #f1f7fc;
+    --card: #ffffff;
+    --text: #0b1b36;
+    --muted: #52688a;
+    --accent: #0891b2;
+    --border: #d3e1ee;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #040a16;
+      --card: #0b1b36;
+      --text: #e8f4ff;
+      --muted: #8fa8c8;
+      --accent: #22d3ee;
+      --border: #1f3a60;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+  }
+  main { max-width: 760px; margin: 0 auto; padding: 40px 16px 64px; }
+  h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 4px; }
+  h2 { font-size: 1.25rem; margin: 36px 0 8px; }
+  h3 { font-size: 1.05rem; margin: 20px 0 4px; }
+  p, li { color: var(--text); }
+  .muted { color: var(--muted); }
+  a { color: var(--accent); }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px 20px;
+    margin: 20px 0;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 0.95rem; }
+  th, td { text-align: left; vertical-align: top; padding: 8px 10px; border-bottom: 1px solid var(--border); }
+  th { color: var(--muted); font-weight: 600; }
+  .scroll { overflow-x: auto; }
+  ul { padding-left: 1.25rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>AquaLog Privacy Policy</h1>
+  <p class="muted">Effective 5 November 2026</p>
+
+  <p>
+    AquaLog is an aquarium management app published by Growdiom ("we", "us").
+    This policy explains what information the app handles, where it goes and
+    the choices you have.
+  </p>
+
+  <div class="card">
+    <strong>The short version</strong>
+    <ul>
+      <li>Your tanks, logs, livestock, plants, reminders and photos are stored <strong>on your device</strong>. We don't upload them to our servers.</li>
+      <li>We don't ask for your name, email or phone number, and there's no sign-up.</li>
+      <li>When you use the <strong>AI assistant or health check</strong>, a summary of the selected tank and your messages are sent to our server and to Google's Gemini service to generate the answer. We don't store your conversations.</li>
+      <li>Purchases are handled by <strong>Google Play</strong> or the <strong>App Store</strong> through <strong>RevenueCat</strong>. We never see your payment card.</li>
+      <li>No advertising, no analytics, no selling of data.</li>
+    </ul>
+  </div>
+
+  <h2>1. Data stored on your device</h2>
+  <p>
+    Everything you enter in AquaLog is saved in the app's private storage on
+    your phone: tank details, water test readings, livestock, plants,
+    equipment, hardscape, maintenance and feeding logs, reminders and app
+    settings. Tank photos you take with the camera or choose from your gallery
+    are copied into the app's storage.
+  </p>
+  <p>
+    This data stays on your device. It is removed when you delete it in the
+    app, clear the app's data or uninstall AquaLog.
+  </p>
+  <p>
+    <strong>Backups.</strong> When you tap <em>Backup Data</em>, the app
+    creates a file containing your data and photos and opens your device's
+    share sheet. The file goes only where you choose to save or send it (for
+    example Google Drive or your Files app). Before a restore, the app keeps
+    a copy of your current data on the device.
+  </p>
+  <p>
+    <strong>Reminders</strong> are scheduled as local notifications on your
+    device and are not sent to us.
+  </p>
+
+  <h2>2. Data that leaves your device</h2>
+
+  <h3>Anonymous app identity</h3>
+  <p>
+    The first time you use an online feature (the AI assistant or a purchase),
+    the app signs in to Google Firebase Authentication <strong>anonymously</strong>.
+    This creates a random identifier that isn't linked to your name, email or
+    Google account. We use it to apply daily usage limits and to connect
+    purchases to your app. Firebase records when the identifier was created
+    and last used and, like any online service, processes your IP address to
+    provide and protect the service. Settings in the app shows this identifier
+    as your <em>Support ID</em>.
+  </p>
+
+  <h3>App integrity checks</h3>
+  <p>
+    To stop other apps from misusing our AI service, the app uses Firebase App
+    Check, which asks Google Play Integrity (Android) or Apple App Attest (iOS)
+    to confirm that requests come from a genuine copy of AquaLog. These
+    services receive information about your device and app installation
+    needed to make that check.
+  </p>
+
+  <h3>AI assistant and health check</h3>
+  <p>When you send a chat message or run a health check, the app sends to our server (Google Cloud Functions):</p>
+  <ul>
+    <li>Your chat messages in the current conversation (for chat), and</li>
+    <li>A summary of the tank you selected: name, type, size, setup date, recent water test readings, livestock, plants, filters, lighting, substrate, hardscape, recent maintenance and feeding entries, and open reminders.</li>
+  </ul>
+  <p>
+    The summary <strong>does not include photos</strong>, file locations or
+    internal record numbers. Our server forwards this information to
+    <strong>Google's Gemini API</strong> to generate the answer and returns
+    the answer to your device. Google processes this data under the
+    <a href="https://ai.google.dev/gemini-api/terms">Gemini API Additional Terms of Service</a>.
+    Please avoid typing personal information into the chat.
+  </p>
+  <p>
+    <strong>We do not store your messages, the AI's replies or your tank
+    summary on our servers.</strong> Chat history lives on your device for as
+    long as the app is open, and the latest health report is saved on your
+    device. Our server keeps only:
+  </p>
+  <ul>
+    <li>A <strong>daily request counter</strong> per anonymous identifier, used to apply free and Premium limits. Counters are deleted automatically after 30 days.</li>
+    <li><strong>Technical logs</strong> (anonymous identifier, time, which AI model answered, how long it took and any error) to keep the service working. Logs are deleted automatically after 30 days.</li>
+  </ul>
+
+  <h3>Subscriptions and purchases</h3>
+  <p>
+    If you buy AquaLog Premium, the payment is processed by Google Play or the
+    App Store under their own terms; we don't receive your card or billing
+    details. We use <a href="https://www.revenuecat.com/privacy">RevenueCat</a>
+    to verify purchases and manage your subscription status. RevenueCat
+    receives your anonymous identifier, your purchase and subscription
+    history (products, dates, renewals, store transaction IDs), your country
+    or currency, and basic device and app information. Our server asks
+    RevenueCat whether your identifier has an active Premium subscription.
+  </p>
+
+  <h3>Fonts</h3>
+  <p>
+    The app downloads its typefaces from Google Fonts the first time it runs.
+    Like any web request, this shares your IP address and device type with
+    Google. See <a href="https://developers.google.com/fonts/faq/privacy">Google Fonts privacy</a>.
+  </p>
+
+  <h2>3. Service providers</h2>
+  <div class="scroll">
+  <table>
+    <tr><th>Provider</th><th>Purpose</th><th>Policy</th></tr>
+    <tr><td>Google Firebase (Authentication, App Check, Cloud Functions, Firestore, Cloud Logging)</td><td>Anonymous identity, integrity checks, AI request handling, usage limits, logs</td><td><a href="https://firebase.google.com/support/privacy">Firebase privacy</a></td></tr>
+    <tr><td>Google Gemini API</td><td>Generating AI answers and health reports</td><td><a href="https://policies.google.com/privacy">Google Privacy Policy</a></td></tr>
+    <tr><td>RevenueCat</td><td>Purchase verification and subscription status</td><td><a href="https://www.revenuecat.com/privacy">RevenueCat privacy</a></td></tr>
+    <tr><td>Google Play / Apple App Store</td><td>Payments and app integrity</td><td><a href="https://policies.google.com/privacy">Google</a> · <a href="https://www.apple.com/legal/privacy/">Apple</a></td></tr>
+  </table>
+  </div>
+  <p>
+    These providers may process data in the United States and other
+    countries where they operate. They process it on our behalf or under
+    their own terms as described above.
+  </p>
+
+  <h2>4. What we don't do</h2>
+  <ul>
+    <li>We don't sell or rent your data.</li>
+    <li>We don't show ads or use advertising identifiers.</li>
+    <li>We don't use analytics or crash-reporting tools.</li>
+    <li>We don't access your contacts, location or microphone.</li>
+    <li>We don't use your data to build profiles or train our own models.</li>
+  </ul>
+
+  <h2>5. Your choices and rights</h2>
+  <ul>
+    <li><strong>Use AquaLog offline.</strong> Everything except the AI assistant and purchases works without sending data to us.</li>
+    <li><strong>Delete your on-device data</strong> by deleting it in the app, clearing the app's storage or uninstalling.</li>
+    <li><strong>Delete server-side data.</strong> Usage counters and logs delete themselves after 30 days. To have them deleted sooner, email us your Support ID (Settings → About → Support ID). Without it we can't tell which anonymous records are yours.</li>
+    <li><strong>Subscriptions</strong> can be managed or cancelled in Google Play or App Store settings.</li>
+  </ul>
+  <p>
+    Depending on where you live (for example under the EU/UK GDPR or India's
+    Digital Personal Data Protection Act), you may have rights to access,
+    correct or delete your personal data, or to complain to a data protection
+    authority. Contact us to exercise them.
+  </p>
+
+  <h2>6. Children</h2>
+  <p>
+    AquaLog is not directed at children under 13, and we don't knowingly
+    collect personal information from them. If you believe a child has used
+    the AI assistant and want related records deleted, contact us with the
+    Support ID.
+  </p>
+
+  <h2>7. Security</h2>
+  <p>
+    Data sent to our server travels over encrypted connections (HTTPS). Our
+    AI service only accepts requests from genuine copies of the app, and our
+    API keys are kept on the server, not in the app. No method of
+    transmission or storage is completely secure, so keep regular backups.
+  </p>
+
+  <h2>8. Changes</h2>
+  <p>
+    We'll update this page when our practices change and revise the
+    effective date above. Significant changes will also be noted in the app
+    or its store listing.
+  </p>
+
+  <h2>9. Contact</h2>
+  <p>
+    Growdiom<br>
+    Email: <a href="mailto:privacy@growdiom.com">privacy@growdiom.com</a>
+  </p>
+</main>
+</body>
+</html>

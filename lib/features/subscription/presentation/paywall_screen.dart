@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
+import '../../../core/config/legal_links.dart';
 import '../../../core/config/subscription_config.dart';
 import '../../../core/theme/aqua_theme.dart';
 import '../../../core/theme/color_scheme.dart';
@@ -290,6 +292,13 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
           'the period. Manage or cancel anytime in your store settings.',
           textAlign: TextAlign.center,
           style: textTheme.labelSmall?.copyWith(color: scheme.onSurfaceVariant),
+        ),
+        TextButton(
+          onPressed: () => launchUrl(
+            Uri.parse(LegalLinks.privacyPolicy),
+            mode: LaunchMode.externalApplication,
+          ),
+          child: const Text('Privacy Policy'),
         ),
       ],
     );

@@ -1,4 +1,4 @@
-import { getFirestore, FieldValue } from "firebase-admin/firestore";
+import { getFirestore, FieldValue, Timestamp } from "firebase-admin/firestore";
 import { HttpsError } from "firebase-functions/v2/https";
 
 import { utcDay } from "./validation.js";
@@ -9,6 +9,13 @@ import { utcDay } from "./validation.js";
  *
  * Subscriptions will plug in here: premium users get the higher limit.
  */
+/** Counters are deleted by a Firestore TTL policy on `expireAt` */
+const RETENTION_DAYS = 30;
+
+function expireAt(): Timestamp {
+  return Timestamp.fromMillis(Date.now() + RETENTION_DAYS * 24 * 60 * 60 * 1000);
+}
+
 function todayRef(uid: string) {
   return getFirestore()
     .collection("aiUsage")
@@ -39,7 +46,11 @@ export async function consumeQuota(
     }
     tx.set(
       ref,
-      { count: FieldValue.increment(1), updatedAt: FieldValue.serverTimestamp() },
+      {
+        count: FieldValue.increment(1),
+        updatedAt: FieldValue.serverTimestamp(),
+        expireAt: expireAt(),
+      },
       { merge: true },
     );
     return dailyLimit - used - 1;

@@ -1,14 +1,18 @@
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../core/backup/backup_provider.dart';
 import '../../../../core/backup/backup_service.dart';
+import '../../../../core/config/legal_links.dart';
+import '../../../../core/firebase/firebase_bootstrap.dart';
 import '../../../../core/database/database_provider.dart';
 import '../../../../core/settings/app_settings.dart';
 import '../../../../core/settings/settings_provider.dart';
@@ -209,9 +213,41 @@ class SettingsScreen extends ConsumerWidget {
                 );
               },
             ),
+            ListTile(
+              leading: const Icon(Icons.privacy_tip_outlined),
+              title: const Text('Privacy Policy'),
+              trailing: const Icon(Icons.open_in_new_rounded, size: 18),
+              onTap: () => launchUrl(
+                Uri.parse(LegalLinks.privacyPolicy),
+                mode: LaunchMode.externalApplication,
+              ),
+            ),
+            _buildSupportIdTile(context),
           ],
         ),
       ],
+    );
+  }
+
+  /// Anonymous Firebase id; users quote it to request deletion of
+  /// server-side data (see the privacy policy)
+  Widget _buildSupportIdTile(BuildContext context) {
+    final uid = FirebaseBootstrap.isReady
+        ? FirebaseAuth.instance.currentUser?.uid
+        : null;
+    return ListTile(
+      leading: const Icon(Icons.badge_outlined),
+      title: const Text('Support ID'),
+      subtitle: Text(uid ?? 'Created when you first use the AI assistant'),
+      trailing: uid == null ? null : const Icon(Icons.copy_rounded, size: 18),
+      onTap: uid == null
+          ? null
+          : () {
+              Clipboard.setData(ClipboardData(text: uid));
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Support ID copied')),
+              );
+            },
     );
   }
 
