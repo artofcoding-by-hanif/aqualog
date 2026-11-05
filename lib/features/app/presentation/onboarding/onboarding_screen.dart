@@ -21,7 +21,7 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
 
   List<OnboardingPageData> get _pages => [
     OnboardingPageData(
-      title: 'Welcome to Aqualog',
+      title: 'Welcome to TankMind',
       description:
           'Your all-in-one companion for aquarium care.\nSmarter care for healthier aquariums.',
       illustration: const WelcomeIllustration(),

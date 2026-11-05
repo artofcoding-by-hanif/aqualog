@@ -483,7 +483,7 @@ class SettingsScreen extends ConsumerWidget {
       await SharePlus.instance.share(
         ShareParams(
           files: [XFile(file.path, mimeType: 'application/zip')],
-          subject: 'Aqualog backup',
+          subject: 'TankMind backup',
         ),
       );
     } on BackupException catch (e) {

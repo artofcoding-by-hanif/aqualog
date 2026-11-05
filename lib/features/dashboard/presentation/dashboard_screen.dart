@@ -81,7 +81,7 @@ class DashboardScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 2),
               GradientText(
-                'AquaLog',
+                'TankMind',
                 style: textTheme.headlineMedium?.copyWith(
                   fontWeight: FontWeight.w700,
                 ),
@@ -310,7 +310,7 @@ class _AssistantCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 GradientText(
-                  'Ask Aqua AI',
+                  'Ask TankMind AI',
                   gradient: aqua.accentGradient,
                   style: textTheme.titleMedium,
                 ),

@@ -13,7 +13,7 @@ class EnvConfig {
 class _DevConfig {
   const _DevConfig();
 
-  String get appName => 'Aqualog Dev';
+  String get appName => 'TankMind Dev';
   String get appSuffix => '.dev';
   String get apiBaseUrl => 'https://api-dev.aqualog.app';
   bool get enableLogging => true;
@@ -23,7 +23,7 @@ class _DevConfig {
 class _ProdConfig {
   const _ProdConfig();
 
-  String get appName => 'Aqualog';
+  String get appName => 'TankMind';
   String get appSuffix => '';
   String get apiBaseUrl => 'https://api.aqualog.app';
   bool get enableLogging => false;

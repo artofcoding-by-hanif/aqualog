@@ -91,7 +91,7 @@ void main() {
     await dbB.close();
   });
 
-  test('rejects files that are not Aqualog backups', () async {
+  test('rejects files that are not TankMind backups', () async {
     final db = AppDatabase(NativeDatabase.memory());
     final bogus = File('${root.path}/bogus.zip')..writeAsStringSync('nope');
 

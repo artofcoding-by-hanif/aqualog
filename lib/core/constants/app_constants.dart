@@ -2,7 +2,7 @@
 class AppConstants {
   AppConstants._();
 
-  static const String appName = 'Aqualog';
+  static const String appName = 'TankMind';
   static const String appVersion = '1.0.0';
 
   // Database

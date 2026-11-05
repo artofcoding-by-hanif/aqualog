@@ -174,7 +174,7 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('Aqua Assistant', style: textTheme.titleMedium),
+                Text('TankMind AI', style: textTheme.titleMedium),
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [

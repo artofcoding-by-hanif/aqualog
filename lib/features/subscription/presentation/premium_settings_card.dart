@@ -44,7 +44,7 @@ class PremiumSettingsCard extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     GradientText(
-                      isPremium ? 'AquaLog Premium' : 'Free plan',
+                      isPremium ? 'TankMind Premium' : 'Free plan',
                       gradient: aqua.accentGradient,
                       style: textTheme.titleMedium,
                     ),

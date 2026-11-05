@@ -20,7 +20,7 @@ Future<void> shareWaterParameterCsv({
       .replaceAll(RegExp(r'^_+|_+$'), '');
   final date = DateFormat('yyyy-MM-dd').format(DateTime.now());
   final file = File(
-    '${dir.path}/aqualog_${slug.isEmpty ? 'tank' : slug}_water_$date.csv',
+    '${dir.path}/tankmind_${slug.isEmpty ? 'tank' : slug}_water_$date.csv',
   );
   await file.writeAsString(waterParametersToCsv(logs));
 

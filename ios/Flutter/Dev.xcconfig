@@ -3,6 +3,6 @@
 // Development flavor configuration
 FLUTTER_TARGET=lib/main_dev.dart
 PRODUCT_BUNDLE_IDENTIFIER=com.growdiom.aqualog.dev
-PRODUCT_NAME=Aqualog Dev
-DISPLAY_NAME=Aqualog Dev
+PRODUCT_NAME=TankMind Dev
+DISPLAY_NAME=TankMind Dev
 

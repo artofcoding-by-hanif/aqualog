@@ -123,7 +123,7 @@ class _SplashScreenState extends State<SplashScreen>
             FadeTransition(
               opacity: _fadeAnimation,
               child: GradientText(
-                'Aqualog',
+                'TankMind',
                 style: Theme.of(context).textTheme.displaySmall?.copyWith(
                   fontWeight: FontWeight.w700,
                   letterSpacing: 1,

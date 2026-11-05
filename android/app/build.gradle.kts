@@ -57,11 +57,11 @@ android {
             dimension = "environment"
             applicationIdSuffix = ".dev"
             versionNameSuffix = "-dev"
-            resValue("string", "app_name", "Aqualog Dev")
+            resValue("string", "app_name", "TankMind Dev")
         }
         create("prod") {
             dimension = "environment"
-            resValue("string", "app_name", "Aqualog")
+            resValue("string", "app_name", "TankMind")
         }
     }
 

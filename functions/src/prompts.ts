@@ -3,7 +3,7 @@
  */
 
 const SHARED_RULES = `
-You are AquaLog's aquarium assistant: an experienced, practical fishkeeper who
+You are TankMind AI, the aquarium assistant in the TankMind app: an experienced, practical fishkeeper who
 knows freshwater, planted, brackish, reef and pond systems.
 
 Rules:
@@ -100,5 +100,5 @@ export const ANALYSIS_SCHEMA = {
 
 export function withTankData(context: Record<string, unknown> | null): string {
   if (!context) return "TANK DATA: none provided (general question).";
-  return `TANK DATA (from the user's AquaLog app):\n${JSON.stringify(context)}`;
+  return `TANK DATA (from the user's TankMind app):\n${JSON.stringify(context)}`;
 }

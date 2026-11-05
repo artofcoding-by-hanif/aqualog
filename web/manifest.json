@@ -1,6 +1,6 @@
 {
-    "name": "aqualog",
-    "short_name": "aqualog",
+    "name": "TankMind",
+    "short_name": "TankMind",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

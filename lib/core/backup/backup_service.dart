@@ -55,7 +55,7 @@ class BackupService {
   Future<File> createBackup() async {
     final tmp = await getTemporaryDirectory();
     final stamp = DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
-    final zipPath = '${tmp.path}/Aqualog-backup-$stamp.zip';
+    final zipPath = '${tmp.path}/TankMind-backup-$stamp.zip';
     await _writeBackup(zipPath);
     return File(zipPath);
   }
@@ -73,7 +73,7 @@ class BackupService {
     try {
       await extractFileToDisk(zipFile.path, work.path);
     } catch (_) {
-      throw const BackupException('This file is not a valid Aqualog backup.');
+      throw const BackupException('This file is not a valid TankMind backup.');
     }
 
     try {
@@ -81,7 +81,7 @@ class BackupService {
       final backupSchema = manifest['schemaVersion'] as int? ?? 0;
       if (backupSchema > _db.schemaVersion) {
         throw const BackupException(
-          'This backup was made by a newer version of Aqualog. '
+          'This backup was made by a newer version of TankMind. '
           'Update the app and try again.',
         );
       }
@@ -199,11 +199,11 @@ class BackupService {
   Future<Map<String, dynamic>> _readManifest(Directory work) async {
     final file = File('${work.path}/$_manifestName');
     if (!await file.exists()) {
-      throw const BackupException('This file is not an Aqualog backup.');
+      throw const BackupException('This file is not a TankMind backup.');
     }
     final manifest = jsonDecode(await file.readAsString());
     if (manifest is! Map<String, dynamic> || manifest['app'] != 'aqualog') {
-      throw const BackupException('This file is not an Aqualog backup.');
+      throw const BackupException('This file is not a TankMind backup.');
     }
     return manifest;
   }

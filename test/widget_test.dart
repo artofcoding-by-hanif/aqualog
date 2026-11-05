@@ -17,7 +17,7 @@ void main() {
       ),
     );
 
-    expect(find.text('Aqualog'), findsOneWidget);
+    expect(find.text('TankMind'), findsOneWidget);
     expect(find.text('Smarter care for healthier aquariums.'), findsOneWidget);
     expect(completed, isFalse);
 

@@ -14,7 +14,7 @@ import 'controllers/subscription_providers.dart';
 /// Why the paywall opened; tailors the headline
 enum PaywallReason {
   general(
-    'Unlock AquaLog Premium',
+    'Unlock TankMind Premium',
     'Everything you need to keep every tank thriving.',
   ),
   tankLimit(
@@ -178,7 +178,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
             const SizedBox(height: 8),
             Text(
               isPremium
-                  ? 'Thanks for supporting AquaLog. Everything is unlocked.'
+                  ? 'Thanks for supporting TankMind. Everything is unlocked.'
                   : widget.reason.subtitle,
               style: textTheme.bodyMedium?.copyWith(
                 color: scheme.onSurfaceVariant,

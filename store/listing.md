@@ -2,7 +2,7 @@
 
 ## App name (max 30)
 
-AquaLog: Aquarium Manager
+TankMind: AI Aquarium Care
 
 ## Short description (max 80)
 
@@ -10,7 +10,7 @@ Track tanks, water tests & livestock, with an AI assistant for healthier fish.
 
 ## Full description (max 4000)
 
-AquaLog is the all-in-one companion for fishkeepers. Log every tank, water test and water change, keep track of your fish, shrimp and plants, and get personalised advice from a built-in AI assistant that actually knows your aquarium.
+TankMind is the smart companion for fishkeepers. Log every tank, water test and water change, keep track of your fish, shrimp and plants, and get personalised advice from a built-in AI assistant that actually knows your aquarium.
 
 🐠 EVERY TANK IN ONE PLACE
 • Freshwater, planted, saltwater, reef, brackish, shrimp and pond setups
@@ -33,7 +33,7 @@ AquaLog is the all-in-one companion for fishkeepers. Log every tank, water test 
 • Overdue tasks highlighted on your dashboard
 • A timeline of everything that happened in each tank
 
-✨ AQUA AI ASSISTANT
+✨ TANKMIND AI ASSISTANT
 • Ask anything about your tank and get answers based on its own readings, livestock, plants, equipment and maintenance history
 • AI Health Check gives each tank a health score, explains what it found and builds a step-by-step action plan
 • Clear, practical advice with livestock welfare first
@@ -47,7 +47,7 @@ AquaLog is the all-in-one companion for fishkeepers. Log every tank, water test 
 • No account, no sign-up, no ads
 • Back up everything to a single file and restore it anytime
 
-⭐ AQUALOG PREMIUM (optional)
+⭐ TANKMIND PREMIUM (optional)
 Free includes 2 tanks, 3 AI requests a day and 30 days of charts. Premium unlocks:
 • Unlimited tanks
 • Up to 100 AI requests a day
@@ -74,5 +74,5 @@ Privacy policy: https://aqualog-app-b8331.web.app/privacy
 - **App category:** Lifestyle
 - **Tags:** Pets, Hobbies, plus the closest aquarium/fish tags offered
 - **Contact email:** kkssoftwaresolutions@gmail.com
-- **Website:** https://haniftech.in/ (switch to https://aqualog.haniftech.in/ when live)
+- **Website:** https://haniftech.in/ (switch to https://tankmind.haniftech.in/ when live)
 - **Privacy policy:** https://aqualog-app-b8331.web.app/privacy

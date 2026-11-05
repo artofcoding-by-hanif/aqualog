@@ -18,7 +18,7 @@ ICON = ROOT.parent / "app_icon.png"
 
 SHOTS = [
     ("01-dashboard.png", "All your aquariums, at a glance", "Tanks, volumes and overdue tasks on one dashboard"),
-    ("07-chat.png", "Ask Aqua AI about your tank", "Advice based on your own readings, livestock and history"),
+    ("07-chat.png", "Ask TankMind AI about your tank", "Advice based on your own readings, livestock and history"),
     ("03-tank-hero.png", "A health check for every tank", "An AI health score and the reasons behind it"),
     ("05-report-plan.png", "Know exactly what to do next", "Step-by-step action plans, prioritised for you"),
     ("02-dashboard-lower.png", "Never miss a water change", "Reminders and one-tap logging built in"),
@@ -93,7 +93,7 @@ def feature_html(image: pathlib.Path) -> str:
   .phone img {{ width: {phone_w}px; margin-top: -{round(STATUS_BAR * scale)}px; display: block; }}
 </style></head><body>
   <div class="left">
-    <div class="brand"><img src="{ICON.as_uri()}"><h1>AquaLog</h1></div>
+    <div class="brand"><img src="{ICON.as_uri()}"><h1>TankMind</h1></div>
     <p>Smarter care for healthier aquariums.</p>
     <div class="pills"><span class="pill">✨ AI assistant</span><span class="pill">💧 Water tracking</span><span class="pill">⏰ Reminders</span></div>
   </div>

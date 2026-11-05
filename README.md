@@ -1,4 +1,4 @@
-# Aqualog
+# TankMind
 
 A Flutter application for aquarium management and logging.
 
@@ -74,7 +74,7 @@ flutter build ios --flavor prod -t lib/main_prod.dart
 
 | Setting | Dev | Prod |
 |---------|-----|------|
-| App Name | Aqualog Dev | Aqualog |
+| App Name | TankMind Dev | TankMind |
 | Bundle ID | com.growdiom.aqualog.dev | com.growdiom.aqualog |
 | Logging | Enabled | Disabled |
 | Crashlytics | Disabled | Enabled |
