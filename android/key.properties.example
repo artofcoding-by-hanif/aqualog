@@ -1,0 +1,6 @@
+# Copy to android/key.properties (git-ignored) and fill in.
+# storeFile is resolved relative to android/app/, so use an absolute path.
+storeFile=/Users/you/aqualog-upload.jks
+storePassword=
+keyAlias=upload
+keyPassword=
