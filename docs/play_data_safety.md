@@ -50,7 +50,9 @@ tank data stays on device except for AI requests).
 **Is all of the user data collected by your app encrypted in transit?** Yes
 
 **Do you provide a way for users to request that their data is deleted?**
-Yes: email with the Support ID (Settings → About); server records also
+Yes. Deletion link: **https://aqualog-app-b8331.web.app/delete-data**
+(`hosting/public/delete-data.html`): explains on-device deletion and how to
+email a request with the Support ID (Settings → About); server records also
 auto-delete after 30 days.
 
 **Account creation:** the app has no user-created accounts (anonymous

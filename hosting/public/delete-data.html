@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Delete Your AquaLog Data</title>
+<meta name="description" content="How to delete data stored by the AquaLog aquarium app.">
+<style>
+  :root {
+    --bg: #f1f7fc;
+    --card: #ffffff;
+    --text: #0b1b36;
+    --muted: #52688a;
+    --accent: #0891b2;
+    --border: #d3e1ee;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #040a16;
+      --card: #0b1b36;
+      --text: #e8f4ff;
+      --muted: #8fa8c8;
+      --accent: #22d3ee;
+      --border: #1f3a60;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+  }
+  main { max-width: 720px; margin: 0 auto; padding: 40px 16px 64px; }
+  h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 8px; }
+  h2 { font-size: 1.2rem; margin: 32px 0 8px; }
+  .muted { color: var(--muted); }
+  a { color: var(--accent); }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 16px 20px;
+    margin: 16px 0;
+  }
+  .button {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 12px 20px;
+    border-radius: 12px;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  ol, ul { padding-left: 1.25rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Delete your AquaLog data</h1>
+  <p class="muted">AquaLog by <a href="https://haniftech.in/">Hanif Tech</a></p>
+
+  <p>
+    AquaLog doesn't have user accounts. Almost everything you enter is stored
+    only on your device, and the little that reaches our servers is tied to a
+    random anonymous ID and deletes itself after 30 days.
+  </p>
+
+  <h2>Data on your device</h2>
+  <div class="card">
+    <p>Tanks, logs, livestock, plants, reminders, photos and settings are stored only on your phone. To delete them:</p>
+    <ul>
+      <li>Delete individual items inside the app, or</li>
+      <li>Clear the app's storage (Android: Settings → Apps → AquaLog → Storage → Clear storage), or</li>
+      <li>Uninstall AquaLog.</li>
+    </ul>
+    <p class="muted">Backup files you exported yourself are stored wherever you saved them (for example Google Drive); delete those files there.</p>
+  </div>
+
+  <h2>Data on our servers</h2>
+  <div class="card">
+    <p>If you used the AI assistant or bought Premium, our servers hold:</p>
+    <ul>
+      <li>Daily AI usage counters linked to your anonymous ID</li>
+      <li>Technical logs of AI requests (time, model, errors)</li>
+      <li>Purchase records held by RevenueCat for subscription status</li>
+    </ul>
+    <p>
+      Usage counters and logs are <strong>deleted automatically after 30
+      days</strong>. We do not store your AI conversations.
+    </p>
+  </div>
+
+  <h2>Request deletion now</h2>
+  <ol>
+    <li>Open AquaLog → <strong>Settings → About → Support ID</strong> and tap it to copy.</li>
+    <li>Email us with the subject "Delete my data" and paste your Support ID.</li>
+  </ol>
+  <a class="button" href="mailto:kkssoftwaresolutions@gmail.com?subject=AquaLog%3A%20Delete%20my%20data&amp;body=Support%20ID%3A%20">Email a deletion request</a>
+  <p>
+    Or write to <a href="mailto:kkssoftwaresolutions@gmail.com">kkssoftwaresolutions@gmail.com</a>.
+    We delete the usage counters, logs and purchase-service records linked to
+    that Support ID within 30 days and confirm by reply.
+  </p>
+  <p class="muted">
+    Without the Support ID we can't identify which anonymous records are
+    yours. If you no longer have the app installed, the records expire on
+    their own within 30 days. To stop a subscription, cancel it in Google
+    Play (Payments &amp; subscriptions → Subscriptions) or App Store settings;
+    store purchase records are kept by Google or Apple under their policies.
+  </p>
+
+  <p><a href="/privacy">Privacy Policy</a></p>
+</main>
+</body>
+</html>
