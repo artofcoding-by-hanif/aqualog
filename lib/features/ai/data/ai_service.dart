@@ -51,6 +51,23 @@ class AiService {
     return reply;
   }
 
+  /// Flags AI output as harmful, offensive or wrong (Play AI-content policy).
+  /// [kind] is "chat" or "health"; [reason] one of harmful, offensive,
+  /// inaccurate, other.
+  Future<void> report({
+    required String kind,
+    required String reason,
+    required String content,
+    String? note,
+  }) async {
+    await _call('reportAiContent', {
+      'kind': kind,
+      'reason': reason,
+      'content': content,
+      if (note != null && note.trim().isNotEmpty) 'note': note.trim(),
+    });
+  }
+
   Future<TankAnalysis> analyze(int tankId) async {
     final context = await _contextBuilder.build(tankId);
     if (context == null) throw const AiException('Tank not found.');

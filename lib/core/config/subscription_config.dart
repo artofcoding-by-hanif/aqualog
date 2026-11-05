@@ -13,6 +13,7 @@ class SubscriptionConfig {
 
   static const String androidApiKey = String.fromEnvironment(
     'REVENUECAT_ANDROID_KEY',
+    defaultValue: 'goog_ufPhXFEHKnAOVPFoKoZfqxzVBPv',
   );
 
   static const String iosApiKey = String.fromEnvironment('REVENUECAT_IOS_KEY');

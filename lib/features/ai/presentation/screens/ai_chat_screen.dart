@@ -7,6 +7,7 @@ import '../../../../core/widgets/aqua_widgets.dart';
 import '../../../tank/presentation/controllers/tank_provider.dart';
 import '../../domain/chat_message.dart';
 import '../controllers/ai_providers.dart';
+import '../widgets/report_ai_sheet.dart';
 import '../../../subscription/presentation/controllers/subscription_providers.dart';
 import '../../../subscription/presentation/paywall_screen.dart';
 
@@ -344,14 +345,37 @@ class _MessageBubble extends StatelessWidget {
         ],
       );
     } else {
-      content = MarkdownBody(
-        data: message.text,
-        selectable: true,
-        styleSheet: MarkdownStyleSheet.fromTheme(theme).copyWith(
-          p: theme.textTheme.bodyMedium?.copyWith(height: 1.45),
-          listBullet: theme.textTheme.bodyMedium,
-          strong: TextStyle(fontWeight: FontWeight.w700, color: scheme.primary),
-        ),
+      content = Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          MarkdownBody(
+            data: message.text,
+            selectable: true,
+            styleSheet: MarkdownStyleSheet.fromTheme(theme).copyWith(
+              p: theme.textTheme.bodyMedium?.copyWith(height: 1.45),
+              listBullet: theme.textTheme.bodyMedium,
+              strong: TextStyle(
+                fontWeight: FontWeight.w700,
+                color: scheme.primary,
+              ),
+            ),
+          ),
+          // In-app reporting of AI output (Play AI-generated content policy)
+          Align(
+            alignment: Alignment.centerRight,
+            child: IconButton(
+              icon: const Icon(Icons.outlined_flag_rounded, size: 18),
+              tooltip: 'Report this response',
+              visualDensity: VisualDensity.compact,
+              color: scheme.onSurfaceVariant,
+              onPressed: () => showReportAiSheet(
+                context,
+                kind: 'chat',
+                content: message.text,
+              ),
+            ),
+          ),
+        ],
       );
     }
 

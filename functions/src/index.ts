@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase-admin/app";
+import { FieldValue, getFirestore, Timestamp } from "firebase-admin/firestore";
 import { setGlobalOptions } from "firebase-functions/v2";
 import { CallableRequest, HttpsError, onCall } from "firebase-functions/v2/https";
 import { defineInt, defineSecret, defineString } from "firebase-functions/params";
@@ -9,7 +10,7 @@ import { AttemptInfo, generateWithRetry, IncompleteResponse, ModelsBusy } from "
 import { ANALYSIS_SCHEMA, ANALYZE_SYSTEM_PROMPT, CHAT_SYSTEM_PROMPT, withTankData } from "./prompts.js";
 import { hasPremium } from "./entitlement.js";
 import { consumeQuota, refundQuota } from "./quota.js";
-import { InvalidInput, parseAnalyzeRequest, parseChatRequest } from "./validation.js";
+import { InvalidInput, parseAnalyzeRequest, parseChatRequest, parseReportRequest } from "./validation.js";
 
 initializeApp();
 setGlobalOptions({ region: "us-central1", maxInstances: 10 });
@@ -207,3 +208,39 @@ export const analyzeTank = onCall(callableOptions, async (request) => {
     }
   });
 });
+
+/** Reports are reviewed by the developer, then deleted by a Firestore TTL */
+const REPORT_RETENTION_DAYS = 90;
+
+/**
+ * Lets users flag AI output they find harmful, offensive or wrong, as
+ * Google Play's AI-generated content policy requires. Stored in
+ * `aiReports/{id}` for review; no AI quota is used.
+ *
+ * Request:  { kind: "chat"|"health", reason, content, note? }
+ * Response: { ok: true }
+ */
+export const reportAiContent = onCall(
+  { enforceAppCheck: true, invoker: "public", timeoutSeconds: 20 },
+  async (request) => {
+    const uid = requireUser(request);
+    let report;
+    try {
+      report = parseReportRequest(request.data);
+    } catch (error) {
+      if (error instanceof InvalidInput) throw new HttpsError("invalid-argument", error.message);
+      throw error;
+    }
+
+    await getFirestore()
+      .collection("aiReports")
+      .add({
+        ...report,
+        uid,
+        createdAt: FieldValue.serverTimestamp(),
+        expireAt: Timestamp.fromMillis(Date.now() + REPORT_RETENTION_DAYS * 24 * 60 * 60 * 1000),
+      });
+    logger.info("AI content reported", { uid, kind: report.kind, reason: report.reason });
+    return { ok: true };
+  },
+);

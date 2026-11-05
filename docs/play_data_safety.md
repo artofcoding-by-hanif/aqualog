@@ -32,9 +32,11 @@ policy, and `LegalLinks.privacyPolicy` in
    section and its short-version / provider-table mentions, change the
    Data safety "Shared" answer below back to **No**, update the effective
    date and redeploy hosting.
-3. Turn on automatic deletion of AI usage counters: Firebase console →
-   Firestore → **Time-to-live** → Create policy: collection group `days`,
-   timestamp field `expireAt`. (The policy promises 30-day deletion.)
+3. Turn on automatic deletion in Google Cloud console → Firestore →
+   **Time-to-live** → Create policy, once per collection group (timestamp
+   field `expireAt`, offset 0):
+   - `days`: AI usage counters (policy promises 30-day deletion)
+   - `aiReports`: reported AI responses (policy promises 90-day deletion)
 4. Deploy: `firebase deploy --only hosting`
 5. Paste the URL into Play Console → **Policy → App content → Privacy policy**.
 
@@ -63,7 +65,7 @@ account".
 
 | Category → type | Collected | Shared | Ephemeral | Required? | Purposes |
 |---|---|---|---|---|---|
-| App activity → Other user-generated content (AI chat messages and the tank summary sent with them) | Yes | **Yes**† | Yes | Optional (only when using AI) | App functionality (collected); shared with Google for its product improvement |
+| App activity → Other user-generated content (AI chat messages and the tank summary sent with them; AI responses users report) | Yes | **Yes**† | **No** (reports are kept 90 days) | Optional (only when using AI) | App functionality (collected); shared with Google for its product improvement |
 | Device or other IDs (anonymous Firebase ID, App Check / Play Integrity) | Yes | No* | No | Required for AI and purchases | App functionality, Fraud prevention / security |
 | Financial info → Purchase history (subscriptions via RevenueCat) | Yes | No* | No | Optional (only when buying) | App functionality, Account management |
 | App info and performance → Diagnostics (server logs: timing, errors) | Yes | No* | No | Required for AI | App functionality |

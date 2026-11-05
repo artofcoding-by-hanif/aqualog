@@ -10,6 +10,10 @@ export const LIMITS = {
   historyMessages: 20,
   /** Characters in one chat message */
   messageChars: 4_000,
+  /** Characters of AI output attached to a report */
+  reportContentChars: 12_000,
+  /** Characters in the reporter's optional note */
+  reportNoteChars: 500,
 } as const;
 
 export class InvalidInput extends Error {}
@@ -85,4 +89,38 @@ export function parseAnalyzeRequest(data: unknown): AnalyzeRequest {
 /** Calendar day in UTC, used as the quota bucket */
 export function utcDay(now: Date): string {
   return now.toISOString().slice(0, 10);
+}
+
+export const REPORT_REASONS = ["harmful", "offensive", "inaccurate", "other"] as const;
+export type ReportReason = (typeof REPORT_REASONS)[number];
+
+export interface ReportRequest {
+  kind: "chat" | "health";
+  reason: ReportReason;
+  content: string;
+  note: string | null;
+}
+
+/** A user's report of AI output they found harmful, offensive or wrong */
+export function parseReportRequest(data: unknown): ReportRequest {
+  if (!isPlainObject(data)) throw new InvalidInput("Request must be an object.");
+  const { kind, reason, content, note } = data;
+  if (kind !== "chat" && kind !== "health") {
+    throw new InvalidInput('kind must be "chat" or "health".');
+  }
+  if (typeof reason !== "string" || !(REPORT_REASONS as readonly string[]).includes(reason)) {
+    throw new InvalidInput(`reason must be one of ${REPORT_REASONS.join(", ")}.`);
+  }
+  if (typeof content !== "string" || content.trim().length === 0) {
+    throw new InvalidInput("content is required.");
+  }
+  if (note !== undefined && note !== null && typeof note !== "string") {
+    throw new InvalidInput("note must be a string.");
+  }
+  return {
+    kind,
+    reason: reason as ReportReason,
+    content: content.trim().slice(0, LIMITS.reportContentChars),
+    note: typeof note === "string" && note.trim() ? note.trim().slice(0, LIMITS.reportNoteChars) : null,
+  };
 }

@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { InvalidInput, LIMITS, parseAnalyzeRequest, parseChatRequest, utcDay } from "./validation.js";
+import { InvalidInput, LIMITS, parseAnalyzeRequest, parseChatRequest, parseReportRequest, utcDay } from "./validation.js";
 
 test("accepts a valid chat request and trims text", () => {
   const parsed = parseChatRequest({
@@ -48,4 +48,30 @@ test("analyze requires a reasonably sized context", () => {
 
 test("quota buckets by UTC day", () => {
   assert.equal(utcDay(new Date("2026-11-01T23:59:59Z")), "2026-11-01");
+});
+
+test("accepts and trims a report", () => {
+  const report = parseReportRequest({
+    kind: "chat",
+    reason: "harmful",
+    content: "  Add bleach to the tank  ",
+    note: "  dangerous  ",
+  });
+  assert.equal(report.content, "Add bleach to the tank");
+  assert.equal(report.note, "dangerous");
+});
+
+test("caps report size and rejects bad reports", () => {
+  const long = parseReportRequest({ kind: "health", reason: "other", content: "x".repeat(20_000) });
+  assert.equal(long.content.length, LIMITS.reportContentChars);
+  assert.equal(long.note, null);
+  for (const data of [
+    {},
+    { kind: "email", reason: "harmful", content: "x" },
+    { kind: "chat", reason: "spam", content: "x" },
+    { kind: "chat", reason: "harmful", content: "   " },
+    { kind: "chat", reason: "harmful", content: "x", note: 5 },
+  ]) {
+    assert.throws(() => parseReportRequest(data), InvalidInput, JSON.stringify(data));
+  }
 });

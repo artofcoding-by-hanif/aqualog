@@ -6,6 +6,7 @@ import '../../../../core/widgets/aqua_widgets.dart';
 import '../../../../router/app_router.dart';
 import '../../domain/tank_analysis.dart';
 import '../controllers/ai_providers.dart';
+import '../widgets/report_ai_sheet.dart';
 import '../widgets/score_ring.dart';
 import '../widgets/tank_health_card.dart' show timeAgo;
 
@@ -40,6 +41,16 @@ class _TankHealthScreenState extends ConsumerState<TankHealthScreen> {
       appBar: AppBar(
         title: const Text('Health Report'),
         actions: [
+          if (analysis != null)
+            IconButton(
+              icon: const Icon(Icons.outlined_flag_rounded),
+              tooltip: 'Report this report',
+              onPressed: () => showReportAiSheet(
+                context,
+                kind: 'health',
+                content: _reportText(analysis),
+              ),
+            ),
           if (refreshing)
             const Padding(
               padding: EdgeInsets.all(16),
@@ -132,6 +143,17 @@ class _TankHealthScreenState extends ConsumerState<TankHealthScreen> {
               ],
             ),
     );
+  }
+
+  /// Plain-text copy of the analysis for the report sheet
+  String _reportText(TankAnalysis analysis) {
+    return [
+      'Score ${analysis.score} (${analysis.status.label}): ${analysis.headline}',
+      analysis.summary,
+      for (final f in analysis.findings) '- ${f.title}: ${f.detail}',
+      for (final a in analysis.actions)
+        '* [${a.priority.label}] ${a.title}: ${a.detail}',
+    ].join('\n');
   }
 
   Widget _buildHero(BuildContext context, TankAnalysis analysis) {
