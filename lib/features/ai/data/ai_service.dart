@@ -132,6 +132,11 @@ class AiService {
         return const AiException(
           'This app build is not verified for AI features yet.',
         );
+      case 'not-found':
+      case 'unimplemented':
+        return const AiException(
+          "This feature isn't available right now. Please update the app or try again later.",
+        );
       case 'deadline-exceeded':
         return const AiException(
           'The assistant took too long to answer. Please try again.',
