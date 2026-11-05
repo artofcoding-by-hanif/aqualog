@@ -410,7 +410,7 @@ class _TrendChart extends StatelessWidget {
                   Duration(minutes: (value * 24 * 60).round()),
                 );
                 final format = maxX > 300
-                    ? DateFormat('MMM yy')
+                    ? DateFormat("MMM ''yy")
                     : DateFormat('d MMM');
                 return SideTitleWidget(
                   meta: meta,
