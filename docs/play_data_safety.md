@@ -3,11 +3,28 @@
 Privacy policy: `hosting/public/privacy.html`, served at
 **https://aqualog-app-b8331.web.app/privacy**
 
+### Moving to aqualog.haniftech.in
+
+When the AquaLog website is ready, either:
+
+- **Host the site on this Firebase Hosting project** (recommended): put the
+  site's files in `hosting/public/` next to `privacy.html`, then Firebase
+  console → Hosting → **Add custom domain** → `aqualog.haniftech.in` and add
+  the DNS records it shows. The policy is then served at both
+  `https://aqualog.haniftech.in/privacy` and the current `web.app` URL, so
+  existing app builds keep working.
+- **Or host the site elsewhere** and publish this same policy page there.
+
+Then point everything at the new URL: Play Console → App content → Privacy
+policy, and `LegalLinks.privacyPolicy` in
+`lib/core/config/legal_links.dart` (takes effect in the next app build).
+
 ## Publishing the policy
 
 1. The contact email is `kkssoftwaresolutions@gmail.com`; if it changes,
-   update `hosting/public/privacy.html` and redeploy hosting. Confirm the
-   publisher name (Growdiom).
+   update `hosting/public/privacy.html` and redeploy hosting. The publisher
+   is Hanif Tech (https://haniftech.in/); the package name
+   `com.growdiom.aqualog` is unchanged and can't be changed after release.
 2. The policy says AquaLog uses the **free tier** of the Gemini API (Google
    may use request content to improve its products). **When you switch to
    the paid tier** (billing enabled on the key's Google Cloud project),
