@@ -5,9 +5,9 @@ Privacy policy: `hosting/public/privacy.html`, served at
 
 ## Publishing the policy
 
-1. Replace the placeholder contact email (`privacy@growdiom.com`) in
-   `hosting/public/privacy.html` with a real, monitored address, and confirm
-   the publisher name.
+1. The contact email is `kkssoftwaresolutions@gmail.com`; if it changes,
+   update `hosting/public/privacy.html` and redeploy hosting. Confirm the
+   publisher name (Growdiom).
 2. Confirm your Gemini API key is on the **paid tier** (the Google Cloud
    project behind the key has billing enabled). On the free tier Google may
    use prompts to improve its products, and the policy would need to say so.
