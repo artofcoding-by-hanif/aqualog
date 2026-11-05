@@ -8,9 +8,13 @@ Privacy policy: `hosting/public/privacy.html`, served at
 1. The contact email is `kkssoftwaresolutions@gmail.com`; if it changes,
    update `hosting/public/privacy.html` and redeploy hosting. Confirm the
    publisher name (Growdiom).
-2. Confirm your Gemini API key is on the **paid tier** (the Google Cloud
-   project behind the key has billing enabled). On the free tier Google may
-   use prompts to improve its products, and the policy would need to say so.
+2. The policy says AquaLog uses the **free tier** of the Gemini API (Google
+   may use request content to improve its products). **When you switch to
+   the paid tier** (billing enabled on the key's Google Cloud project),
+   remove that paragraph from the policy's "AI assistant and health check"
+   section and its short-version / provider-table mentions, change the
+   Data safety "Shared" answer below back to **No**, update the effective
+   date and redeploy hosting.
 3. Turn on automatic deletion of AI usage counters: Firebase console →
    Firestore → **Time-to-live** → Create policy: collection group `days`,
    timestamp field `expireAt`. (The policy promises 30-day deletion.)
@@ -40,13 +44,17 @@ account".
 
 | Category → type | Collected | Shared | Ephemeral | Required? | Purposes |
 |---|---|---|---|---|---|
-| App activity → Other user-generated content (AI chat messages and the tank summary sent with them) | Yes | No* | Yes | Optional (only when using AI) | App functionality |
+| App activity → Other user-generated content (AI chat messages and the tank summary sent with them) | Yes | **Yes**† | Yes | Optional (only when using AI) | App functionality (collected); shared with Google for its product improvement |
 | Device or other IDs (anonymous Firebase ID, App Check / Play Integrity) | Yes | No* | No | Required for AI and purchases | App functionality, Fraud prevention / security |
 | Financial info → Purchase history (subscriptions via RevenueCat) | Yes | No* | No | Optional (only when buying) | App functionality, Account management |
 | App info and performance → Diagnostics (server logs: timing, errors) | Yes | No* | No | Required for AI | App functionality |
 
-\* Google (Firebase, Gemini) and RevenueCat process this data **on our
-behalf** as service providers, which Play does not count as "sharing".
+\* Google (Firebase) and RevenueCat process this data **on our behalf** as
+service providers, which Play does not count as "sharing".
+
+† While AquaLog uses the **free** Gemini API tier, Google may use AI request
+content for its own product improvement, so Play counts it as shared. Under
+the **paid** tier Google acts as a service provider and this becomes **No**.
 
 **Not collected:** name, email, phone, address, location, contacts, photos
 (stay on device), audio, health/fitness, messages (SMS/email), web history,
