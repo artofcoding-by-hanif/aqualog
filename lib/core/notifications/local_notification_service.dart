@@ -214,7 +214,7 @@ class LocalNotificationService {
       tzScheduledDate,
       details,
       payload: payload,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
     );
   }
 
@@ -253,7 +253,7 @@ class LocalNotificationService {
       scheduledDate,
       details,
       payload: payload,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
       matchDateTimeComponents: DateTimeComponents.time,
     );
   }
@@ -281,7 +281,7 @@ class LocalNotificationService {
       scheduledDate,
       details,
       payload: payload,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
       matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
     );
   }

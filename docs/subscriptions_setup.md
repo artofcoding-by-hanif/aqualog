@@ -8,7 +8,7 @@ and a yearly plan (yearly with a 7-day free trial).
 | Tanks | 2 (existing extra tanks are kept) | Unlimited |
 | AI chat + health checks | 3 per day | 100 per day (fair use) |
 | Backup & restore | ✓ | ✓ |
-| Advanced charts & export | – | coming soon |
+| Water-parameter charts | Last 30 days | Full history, overlays, CSV export |
 
 ```
 App ──purchase──▶ Google Play / App Store ──▶ RevenueCat ◀──REST── aiChat / analyzeTank
