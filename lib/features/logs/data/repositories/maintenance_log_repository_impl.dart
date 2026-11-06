@@ -7,7 +7,8 @@ import '../models/maintenance_log_model.dart';
 class MaintenanceLogRepositoryImpl implements MaintenanceLogRepository {
   final AppDatabase _db;
 
-  MaintenanceLogRepositoryImpl({required AppDatabase database}) : _db = database;
+  MaintenanceLogRepositoryImpl({required AppDatabase database})
+    : _db = database;
 
   @override
   Future<List<MaintenanceLogEntity>> getLogsForTank(int tankId) async {
@@ -58,9 +59,8 @@ class MaintenanceLogRepositoryImpl implements MaintenanceLogRepository {
 
   @override
   Stream<List<MaintenanceLogEntity>> watchLogsForTank(int tankId) {
-    return _db.watchMaintenanceLogsForTank(tankId).map(
-          (logs) => logs.map((l) => l.toEntity()).toList(),
-        );
+    return _db
+        .watchMaintenanceLogsForTank(tankId)
+        .map((logs) => logs.map((l) => l.toEntity()).toList());
   }
 }
-

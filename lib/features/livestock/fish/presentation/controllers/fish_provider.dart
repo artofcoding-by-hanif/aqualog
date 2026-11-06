@@ -107,4 +107,3 @@ class FishNotifier extends _$FishNotifier {
     ref.invalidateSelf();
   }
 }
-

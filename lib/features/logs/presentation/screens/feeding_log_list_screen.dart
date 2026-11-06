@@ -153,4 +153,3 @@ class FeedingLogListScreen extends ConsumerWidget {
     }
   }
 }
-

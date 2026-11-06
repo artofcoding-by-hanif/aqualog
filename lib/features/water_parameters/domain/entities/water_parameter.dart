@@ -59,4 +59,3 @@ class ParameterRange {
     return value >= minValue && value <= maxValue;
   }
 }
-

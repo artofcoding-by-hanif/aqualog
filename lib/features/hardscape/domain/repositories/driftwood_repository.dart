@@ -23,4 +23,3 @@ abstract class DriftwoodRepository {
   /// Watch all driftwoods for a tank (reactive stream)
   Stream<List<DriftwoodEntity>> watchDriftwoodsForTank(int tankId);
 }
-

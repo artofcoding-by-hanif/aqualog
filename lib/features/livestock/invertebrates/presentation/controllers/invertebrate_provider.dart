@@ -130,4 +130,3 @@ class InvertebrateNotifier extends _$InvertebrateNotifier {
     ref.invalidateSelf();
   }
 }
-

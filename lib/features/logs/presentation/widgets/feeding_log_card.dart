@@ -53,15 +53,15 @@ class FeedingLogCard extends StatelessWidget {
                     Text(
                       log.displayTitle,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       _buildSubtitle(),
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: colorScheme.outline,
-                          ),
+                        color: colorScheme.outline,
+                      ),
                     ),
                     if (log.response != FeedingResponse.unknown) ...[
                       const SizedBox(height: 4),
@@ -74,10 +74,10 @@ class FeedingLogCard extends StatelessWidget {
                           const SizedBox(width: 4),
                           Text(
                             log.response.displayName,
-                            style:
-                                Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: _getResponseTextColor(colorScheme),
-                                    ),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(
+                                  color: _getResponseTextColor(colorScheme),
+                                ),
                           ),
                         ],
                       ),
@@ -94,10 +94,8 @@ class FeedingLogCard extends StatelessWidget {
                           const SizedBox(width: 4),
                           Text(
                             tankName!,
-                            style:
-                                Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: colorScheme.primary,
-                                    ),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(color: colorScheme.primary),
                           ),
                         ],
                       ),
@@ -160,4 +158,3 @@ class FeedingLogCard extends StatelessWidget {
     return parts.join(' • ');
   }
 }
-

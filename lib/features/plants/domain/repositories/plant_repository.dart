@@ -26,4 +26,3 @@ abstract class PlantRepository {
   /// Get count of active plants for a tank
   Future<int> getActivePlantCount(int tankId);
 }
-

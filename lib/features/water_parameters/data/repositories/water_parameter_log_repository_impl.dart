@@ -8,7 +8,7 @@ class WaterParameterLogRepositoryImpl implements WaterParameterLogRepository {
   final AppDatabase _db;
 
   WaterParameterLogRepositoryImpl({required AppDatabase database})
-      : _db = database;
+    : _db = database;
 
   @override
   Future<List<WaterParameterLogEntity>> getLogsForTank(int tankId) async {
@@ -50,9 +50,8 @@ class WaterParameterLogRepositoryImpl implements WaterParameterLogRepository {
 
   @override
   Stream<List<WaterParameterLogEntity>> watchLogsForTank(int tankId) {
-    return _db.watchWaterParametersForTank(tankId).map(
-          (logs) => logs.map((l) => l.toEntity()).toList(),
-        );
+    return _db
+        .watchWaterParametersForTank(tankId)
+        .map((logs) => logs.map((l) => l.toEntity()).toList());
   }
 }
-

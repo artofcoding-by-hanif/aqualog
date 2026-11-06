@@ -23,9 +23,7 @@ class FilterListScreen extends ConsumerWidget {
     final filtersAsync = ref.watch(filtersForTankStreamProvider(tankId));
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('$tankName Filters'),
-      ),
+      appBar: AppBar(title: Text('$tankName Filters')),
       body: filtersAsync.when(
         data: (filters) => _buildFilterList(context, ref, filters),
         loading: () => const Center(child: CircularProgressIndicator()),
@@ -112,11 +110,6 @@ class FilterListScreen extends ConsumerWidget {
   }
 
   void _navigateToFilterDetail(BuildContext context, FilterEntity filter) {
-    Navigator.pushNamed(
-      context,
-      AppRouter.filterDetail,
-      arguments: filter,
-    );
+    Navigator.pushNamed(context, AppRouter.filterDetail, arguments: filter);
   }
 }
-

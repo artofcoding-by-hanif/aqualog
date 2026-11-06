@@ -43,9 +43,8 @@ class LightingRepositoryImpl implements LightingRepository {
 
   @override
   Stream<List<LightingEntity>> watchLightingsForTank(int tankId) {
-    return _db.watchLightingsForTank(tankId).map(
-      (lightings) => lightings.map((l) => l.toEntity()).toList(),
-    );
+    return _db
+        .watchLightingsForTank(tankId)
+        .map((lightings) => lightings.map((l) => l.toEntity()).toList());
   }
 }
-

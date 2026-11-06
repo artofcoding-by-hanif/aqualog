@@ -27,4 +27,3 @@ Future<GlassCalculationEntity?> glassCalculationById(Ref ref, int id) async {
   final repo = ref.watch(glassCalculationRepositoryProvider);
   return repo.getCalculationById(id);
 }
-

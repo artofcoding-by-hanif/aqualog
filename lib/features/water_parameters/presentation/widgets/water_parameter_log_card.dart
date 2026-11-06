@@ -35,8 +35,10 @@ class WaterParameterLogCard extends StatelessWidget {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: _getStatusColor(log.overallStatus, colorScheme)
-                      .withValues(alpha: 0.15),
+                  color: _getStatusColor(
+                    log.overallStatus,
+                    colorScheme,
+                  ).withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Center(
@@ -72,10 +74,7 @@ class WaterParameterLogCard extends StatelessWidget {
               // Delete button
               if (onDelete != null)
                 IconButton(
-                  icon: Icon(
-                    Icons.delete_outline,
-                    color: colorScheme.error,
-                  ),
+                  icon: Icon(Icons.delete_outline, color: colorScheme.error),
                   onPressed: onDelete,
                 ),
             ],
@@ -111,4 +110,3 @@ class WaterParameterLogCard extends StatelessWidget {
     }
   }
 }
-

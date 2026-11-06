@@ -23,9 +23,7 @@ class RockListScreen extends ConsumerWidget {
     final rocksAsync = ref.watch(rocksForTankStreamProvider(tankId));
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('$tankName Rocks'),
-      ),
+      appBar: AppBar(title: Text('$tankName Rocks')),
       body: rocksAsync.when(
         data: (rockList) => _buildRockList(context, ref, rockList),
         loading: () => const Center(child: CircularProgressIndicator()),
@@ -115,4 +113,3 @@ class RockListScreen extends ConsumerWidget {
     Navigator.pushNamed(context, AppRouter.rockDetail, arguments: rock);
   }
 }
-

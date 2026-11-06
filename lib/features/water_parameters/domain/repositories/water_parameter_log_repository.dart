@@ -26,4 +26,3 @@ abstract class WaterParameterLogRepository {
   /// Watch all water parameter logs for a tank (reactive stream)
   Stream<List<WaterParameterLogEntity>> watchLogsForTank(int tankId);
 }
-

@@ -20,10 +20,7 @@ class KnowledgeListScreen extends StatelessWidget {
           ),
         ),
         body: TabBarView(
-          children: [
-            _buildFishList(context),
-            _buildPlantList(context),
-          ],
+          children: [_buildFishList(context), _buildPlantList(context)],
         ),
       ),
     );
@@ -106,4 +103,3 @@ class KnowledgeListScreen extends StatelessWidget {
     );
   }
 }
-

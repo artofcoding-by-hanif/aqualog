@@ -23,9 +23,7 @@ class FishListScreen extends ConsumerWidget {
     final fishAsync = ref.watch(fishForTankStreamProvider(tankId));
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('$tankName Fish'),
-      ),
+      appBar: AppBar(title: Text('$tankName Fish')),
       body: fishAsync.when(
         data: (fishList) => _buildFishList(context, ref, fishList),
         loading: () => const Center(child: CircularProgressIndicator()),
@@ -73,8 +71,8 @@ class FishListScreen extends ConsumerWidget {
               child: Text(
                 'Active (${aliveFish.length})',
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+                  color: Theme.of(context).colorScheme.primary,
+                ),
               ),
             ),
             ...aliveFish.map(
@@ -90,8 +88,8 @@ class FishListScreen extends ConsumerWidget {
               child: Text(
                 'Deceased (${deceasedFish.length})',
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      color: Theme.of(context).colorScheme.outline,
-                    ),
+                  color: Theme.of(context).colorScheme.outline,
+                ),
               ),
             ),
             ...deceasedFish.map(
@@ -147,4 +145,3 @@ class FishListScreen extends ConsumerWidget {
     Navigator.pushNamed(context, AppRouter.fishDetail, arguments: fish);
   }
 }
-

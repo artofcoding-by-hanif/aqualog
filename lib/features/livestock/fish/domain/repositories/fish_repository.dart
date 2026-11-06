@@ -26,4 +26,3 @@ abstract class FishRepository {
   /// Get count of alive fish for a tank
   Future<int> getAliveFishCount(int tankId);
 }
-

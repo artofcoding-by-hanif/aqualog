@@ -1,7 +1,8 @@
 import 'package:drift/drift.dart';
 
 import '../../../../core/database/app_database.dart';
-import '../../../../core/database/tables/maintenance_logs_table.dart' as db_types;
+import '../../../../core/database/tables/maintenance_logs_table.dart'
+    as db_types;
 import '../../domain/entities/maintenance_log.dart';
 
 /// Extension to map between Drift MaintenanceLog and MaintenanceLogEntity
@@ -79,7 +80,9 @@ extension MaintenanceLogEntityMapper on MaintenanceLogEntity {
     );
   }
 
-  static db_types.MaintenanceType _mapToDbMaintenanceType(MaintenanceType type) {
+  static db_types.MaintenanceType _mapToDbMaintenanceType(
+    MaintenanceType type,
+  ) {
     switch (type) {
       case MaintenanceType.waterChange:
         return db_types.MaintenanceType.waterChange;
@@ -100,4 +103,3 @@ extension MaintenanceLogEntityMapper on MaintenanceLogEntity {
     }
   }
 }
-

@@ -18,16 +18,11 @@ class _PhotoperiodEditorState extends State<PhotoperiodEditor> {
       appBar: AppBar(
         title: const Text('Light Schedule'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: _addPeriod,
-          ),
+          IconButton(icon: const Icon(Icons.add), onPressed: _addPeriod),
         ],
       ),
       body: _periods.isEmpty
-          ? const Center(
-              child: Text('No schedule set. Tap + to add a period.'),
-            )
+          ? const Center(child: Text('No schedule set. Tap + to add a period.'))
           : ListView.builder(
               padding: const EdgeInsets.all(16),
               itemCount: _periods.length,
@@ -55,11 +50,9 @@ class _PhotoperiodEditorState extends State<PhotoperiodEditor> {
   void _addPeriod() {
     // TODO: Show time picker dialog
     setState(() {
-      _periods.add(PhotoperiodItem(
-        startTime: '08:00',
-        endTime: '20:00',
-        intensity: 100,
-      ));
+      _periods.add(
+        PhotoperiodItem(startTime: '08:00', endTime: '20:00', intensity: 100),
+      );
     });
   }
 }
@@ -75,4 +68,3 @@ class PhotoperiodItem {
     required this.intensity,
   });
 }
-

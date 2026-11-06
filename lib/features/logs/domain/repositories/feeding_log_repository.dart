@@ -29,4 +29,3 @@ abstract class FeedingLogRepository {
   /// Watch all feeding logs for a tank (reactive stream)
   Stream<List<FeedingLogEntity>> watchLogsForTank(int tankId);
 }
-

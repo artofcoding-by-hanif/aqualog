@@ -8,7 +8,7 @@ class GlassCalculationRepositoryImpl implements GlassCalculationRepository {
   final AppDatabase _db;
 
   GlassCalculationRepositoryImpl({required AppDatabase database})
-      : _db = database;
+    : _db = database;
 
   @override
   Future<List<GlassCalculationEntity>> getAllCalculations() async {
@@ -40,8 +40,7 @@ class GlassCalculationRepositoryImpl implements GlassCalculationRepository {
   @override
   Stream<List<GlassCalculationEntity>> watchAllCalculations() {
     return _db.watchAllGlassCalculations().map(
-          (calculations) => calculations.map((c) => c.toEntity()).toList(),
-        );
+      (calculations) => calculations.map((c) => c.toEntity()).toList(),
+    );
   }
 }
-

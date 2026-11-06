@@ -7,10 +7,13 @@ import '../models/substrate_layer_model.dart';
 class SubstrateLayerRepositoryImpl implements SubstrateLayerRepository {
   final AppDatabase _db;
 
-  SubstrateLayerRepositoryImpl({required AppDatabase database}) : _db = database;
+  SubstrateLayerRepositoryImpl({required AppDatabase database})
+    : _db = database;
 
   @override
-  Future<List<SubstrateLayerEntity>> getSubstrateLayersForTank(int tankId) async {
+  Future<List<SubstrateLayerEntity>> getSubstrateLayersForTank(
+    int tankId,
+  ) async {
     final layers = await _db.getSubstrateLayersForTank(tankId);
     return layers.map((l) => l.toEntity()).toList();
   }
@@ -43,9 +46,9 @@ class SubstrateLayerRepositoryImpl implements SubstrateLayerRepository {
 
   @override
   Stream<List<SubstrateLayerEntity>> watchSubstrateLayersForTank(int tankId) {
-    return _db.watchSubstrateLayersForTank(tankId).map(
-      (layers) => layers.map((l) => l.toEntity()).toList(),
-    );
+    return _db
+        .watchSubstrateLayersForTank(tankId)
+        .map((layers) => layers.map((l) => l.toEntity()).toList());
   }
 
   @override
@@ -53,4 +56,3 @@ class SubstrateLayerRepositoryImpl implements SubstrateLayerRepository {
     await _db.reorderSubstrateLayers(tankId, layerIds);
   }
 }
-

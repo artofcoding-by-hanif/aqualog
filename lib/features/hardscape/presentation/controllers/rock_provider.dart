@@ -65,4 +65,3 @@ class RockNotifier extends _$RockNotifier {
     ref.invalidateSelf();
   }
 }
-

@@ -7,7 +7,8 @@ import '../models/reminder_model.dart';
 class ReminderRepositoryImpl implements ReminderRepository {
   final AppDatabase _database;
 
-  ReminderRepositoryImpl({required AppDatabase database}) : _database = database;
+  ReminderRepositoryImpl({required AppDatabase database})
+    : _database = database;
 
   @override
   Future<List<ReminderEntity>> getAllReminders() async {
@@ -85,9 +86,9 @@ class ReminderRepositoryImpl implements ReminderRepository {
 
   @override
   Stream<List<ReminderEntity>> watchRemindersForTank(int tankId) {
-    return _database.watchRemindersForTank(tankId).map(
-      (reminders) => reminders.map((r) => r.toEntity()).toList(),
-    );
+    return _database
+        .watchRemindersForTank(tankId)
+        .map((reminders) => reminders.map((r) => r.toEntity()).toList());
   }
 
   @override
@@ -105,4 +106,3 @@ class ReminderRepositoryImpl implements ReminderRepository {
     return _database.snoozeReminder(reminderId, duration);
   }
 }
-

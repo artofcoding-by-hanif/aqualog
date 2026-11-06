@@ -84,11 +84,10 @@ class FilterType {
   double estimatePowerForFlow(int flowLph) {
     if (flowLph <= flowMinLph) return powerMinW.toDouble();
     if (flowLph >= flowMaxLph) return powerMaxW.toDouble();
-    
+
     final flowRange = flowMaxLph - flowMinLph;
     final powerRange = powerMaxW - powerMinW;
     final flowRatio = (flowLph - flowMinLph) / flowRange;
     return powerMinW + (powerRange * flowRatio);
   }
 }
-

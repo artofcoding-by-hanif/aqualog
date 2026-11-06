@@ -139,4 +139,3 @@ extension DriftwoodEntityMapper on DriftwoodEntity {
     }
   }
 }
-

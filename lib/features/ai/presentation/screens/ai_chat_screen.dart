@@ -8,6 +8,7 @@ import '../../../tank/presentation/controllers/tank_provider.dart';
 import '../../domain/chat_message.dart';
 import '../controllers/ai_providers.dart';
 import '../widgets/report_ai_sheet.dart';
+import '../../../share/presentation/share_actions.dart';
 import '../../../subscription/presentation/controllers/subscription_providers.dart';
 import '../../../subscription/presentation/paywall_screen.dart';
 
@@ -117,8 +118,21 @@ class _AiChatScreenState extends ConsumerState<AiChatScreen> {
                         return const _TypingBubble();
                       }
                       final message = chat.messages[index];
+                      // The question this answer replied to, for share cards
+                      final question =
+                          index > 0 && chat.messages[index - 1].isUser
+                          ? chat.messages[index - 1].text
+                          : null;
                       return _MessageBubble(
                         message: message,
+                        onShare: message.isUser || message.isError
+                            ? null
+                            : () => shareAiTip(
+                                context,
+                                answer: message.text,
+                                question: question,
+                                tankName: _tankName,
+                              ),
                         onUpgrade: message.isQuota && !isPremium
                             ? _upgrade
                             : null,
@@ -286,10 +300,18 @@ class _NotSetUpBanner extends StatelessWidget {
 }
 
 class _MessageBubble extends StatelessWidget {
-  const _MessageBubble({required this.message, this.onRetry, this.onUpgrade});
+  const _MessageBubble({
+    required this.message,
+    this.onRetry,
+    this.onUpgrade,
+    this.onShare,
+  });
 
   final ChatMessage message;
   final VoidCallback? onRetry;
+
+  /// Opens a share card for this answer
+  final VoidCallback? onShare;
 
   /// Shown instead of Retry when the daily limit was reached
   final VoidCallback? onUpgrade;
@@ -360,20 +382,30 @@ class _MessageBubble extends StatelessWidget {
               ),
             ),
           ),
-          // In-app reporting of AI output (Play AI-generated content policy)
-          Align(
-            alignment: Alignment.centerRight,
-            child: IconButton(
-              icon: const Icon(Icons.outlined_flag_rounded, size: 18),
-              tooltip: 'Report this response',
-              visualDensity: VisualDensity.compact,
-              color: scheme.onSurfaceVariant,
-              onPressed: () => showReportAiSheet(
-                context,
-                kind: 'chat',
-                content: message.text,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              if (onShare != null)
+                IconButton(
+                  icon: const Icon(Icons.ios_share_rounded, size: 18),
+                  tooltip: 'Share this tip',
+                  visualDensity: VisualDensity.compact,
+                  color: scheme.onSurfaceVariant,
+                  onPressed: onShare,
+                ),
+              // In-app reporting of AI output (Play AI-generated content policy)
+              IconButton(
+                icon: const Icon(Icons.outlined_flag_rounded, size: 18),
+                tooltip: 'Report this response',
+                visualDensity: VisualDensity.compact,
+                color: scheme.onSurfaceVariant,
+                onPressed: () => showReportAiSheet(
+                  context,
+                  kind: 'chat',
+                  content: message.text,
+                ),
               ),
-            ),
+            ],
           ),
         ],
       );

@@ -4,11 +4,7 @@ import '../../domain/entities/invertebrate.dart';
 
 /// Invertebrate card widget for displaying invertebrate summary
 class InvertebrateCard extends StatelessWidget {
-  const InvertebrateCard({
-    super.key,
-    required this.invertebrate,
-    this.onTap,
-  });
+  const InvertebrateCard({super.key, required this.invertebrate, this.onTap});
 
   final InvertebrateEntity invertebrate;
   final VoidCallback? onTap;
@@ -48,15 +44,15 @@ class InvertebrateCard extends StatelessWidget {
                     Text(
                       invertebrate.displayName,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       _buildSubtitle(),
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: colorScheme.outline,
-                          ),
+                        color: colorScheme.outline,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     _buildStatusRow(context, colorScheme),
@@ -95,13 +91,17 @@ class InvertebrateCard extends StatelessWidget {
     if (invertebrate.isDeceased) {
       return Row(
         children: [
-          Icon(Icons.sentiment_very_dissatisfied, size: 14, color: colorScheme.outline),
+          Icon(
+            Icons.sentiment_very_dissatisfied,
+            size: 14,
+            color: colorScheme.outline,
+          ),
           const SizedBox(width: 4),
           Text(
             'Deceased',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: colorScheme.outline,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: colorScheme.outline),
           ),
         ],
       );
@@ -114,9 +114,9 @@ class InvertebrateCard extends StatelessWidget {
           const SizedBox(width: 4),
           Text(
             'Quarantined${invertebrate.quarantineDaysRemaining != null ? ' (${invertebrate.quarantineDaysRemaining} days left)' : ''}',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: colorScheme.tertiary,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: colorScheme.tertiary),
           ),
         ],
       );
@@ -129,9 +129,9 @@ class InvertebrateCard extends StatelessWidget {
           const SizedBox(width: 4),
           Text(
             'Breeding Colony • ${invertebrate.ageInTankDisplay}',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: colorScheme.secondary,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: colorScheme.secondary),
           ),
         ],
       );
@@ -143,9 +143,9 @@ class InvertebrateCard extends StatelessWidget {
         const SizedBox(width: 4),
         Text(
           invertebrate.ageInTankDisplay,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: colorScheme.outline,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodySmall?.copyWith(color: colorScheme.outline),
         ),
         if (invertebrate.sizeDisplay != 'Unknown') ...[
           const SizedBox(width: 8),
@@ -153,13 +153,12 @@ class InvertebrateCard extends StatelessWidget {
           const SizedBox(width: 4),
           Text(
             invertebrate.sizeDisplay,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: colorScheme.outline,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: colorScheme.outline),
           ),
         ],
       ],
     );
   }
 }
-

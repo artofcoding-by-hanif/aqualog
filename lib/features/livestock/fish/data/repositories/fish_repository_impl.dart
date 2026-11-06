@@ -43,9 +43,9 @@ class FishRepositoryImpl implements FishRepository {
 
   @override
   Stream<List<FishEntity>> watchFishForTank(int tankId) {
-    return _db.watchFishForTank(tankId).map(
-      (fishList) => fishList.map((f) => f.toEntity()).toList(),
-    );
+    return _db
+        .watchFishForTank(tankId)
+        .map((fishList) => fishList.map((f) => f.toEntity()).toList());
   }
 
   @override
@@ -53,4 +53,3 @@ class FishRepositoryImpl implements FishRepository {
     return await _db.getAliveFishCount(tankId);
   }
 }
-

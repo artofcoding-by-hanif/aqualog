@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../../../core/database/database_provider.dart' hide FoodType, FeedingResponse;
+import '../../../../core/database/database_provider.dart'
+    hide FoodType, FeedingResponse;
 import '../../data/models/feeding_log_model.dart';
 import '../../data/repositories/feeding_log_repository_impl.dart';
 import '../../domain/entities/feeding_log.dart';
@@ -17,10 +18,7 @@ FeedingLogRepository feedingLogRepository(Ref ref) {
 
 /// Provider to watch all feeding logs for a tank
 @Riverpod(keepAlive: true)
-Stream<List<FeedingLogEntity>> feedingLogsForTankStream(
-  Ref ref,
-  int tankId,
-) {
+Stream<List<FeedingLogEntity>> feedingLogsForTankStream(Ref ref, int tankId) {
   final repo = ref.watch(feedingLogRepositoryProvider);
   return repo.watchLogsForTank(tankId);
 }
@@ -95,4 +93,3 @@ Stream<List<FeedingLogEntity>> recentFeedingLogsStream(Ref ref) {
       .watchRecentFeedingLogs(limit: 10)
       .map((logs) => logs.map((log) => log.toEntity()).toList());
 }
-

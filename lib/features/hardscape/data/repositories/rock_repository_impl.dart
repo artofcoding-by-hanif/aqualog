@@ -43,9 +43,8 @@ class RockRepositoryImpl implements RockRepository {
 
   @override
   Stream<List<RockEntity>> watchRocksForTank(int tankId) {
-    return _db.watchRocksForTank(tankId).map(
-      (rocks) => rocks.map((r) => r.toEntity()).toList(),
-    );
+    return _db
+        .watchRocksForTank(tankId)
+        .map((rocks) => rocks.map((r) => r.toEntity()).toList());
   }
 }
-

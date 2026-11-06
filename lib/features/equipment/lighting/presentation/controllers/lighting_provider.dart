@@ -66,4 +66,3 @@ class LightingNotifier extends _$LightingNotifier {
     ref.invalidateSelf();
   }
 }
-

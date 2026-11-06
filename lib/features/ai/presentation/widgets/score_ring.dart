@@ -11,12 +11,16 @@ class ScoreRing extends StatelessWidget {
     required this.color,
     this.size = 88,
     this.strokeWidth = 8,
+    this.animate = true,
   });
 
   final int score;
   final Color color;
   final double size;
   final double strokeWidth;
+
+  /// Off for still images (share cards), where the ring must be complete
+  final bool animate;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +30,7 @@ class ScoreRing extends StatelessWidget {
     ).colorScheme.onSurface.withValues(alpha: 0.08);
 
     return TweenAnimationBuilder<double>(
-      tween: Tween(begin: 0, end: score / 100),
+      tween: Tween(begin: animate ? 0 : score / 100, end: score / 100),
       duration: const Duration(milliseconds: 1100),
       curve: Curves.easeOutCubic,
       builder: (context, progress, _) {

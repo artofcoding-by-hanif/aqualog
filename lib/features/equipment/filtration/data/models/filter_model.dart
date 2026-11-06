@@ -120,4 +120,3 @@ extension FilterEntityMapper on FilterEntity {
     }
   }
 }
-

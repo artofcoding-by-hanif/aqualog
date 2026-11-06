@@ -27,4 +27,3 @@ abstract class SubstrateLayerRepository {
   /// [layerIds] is an ordered list of layer IDs (index 0 = bottom layer)
   Future<void> reorderSubstrateLayers(int tankId, List<int> layerIds);
 }
-

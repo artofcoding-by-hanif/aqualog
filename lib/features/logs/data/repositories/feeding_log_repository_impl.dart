@@ -55,9 +55,8 @@ class FeedingLogRepositoryImpl implements FeedingLogRepository {
 
   @override
   Stream<List<FeedingLogEntity>> watchLogsForTank(int tankId) {
-    return _db.watchFeedingLogsForTank(tankId).map(
-          (logs) => logs.map((l) => l.toEntity()).toList(),
-        );
+    return _db
+        .watchFeedingLogsForTank(tankId)
+        .map((logs) => logs.map((l) => l.toEntity()).toList());
   }
 }
-

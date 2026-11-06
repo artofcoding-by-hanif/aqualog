@@ -52,15 +52,15 @@ class MaintenanceLogCard extends StatelessWidget {
                     Text(
                       log.title,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       _buildSubtitle(),
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: colorScheme.outline,
-                          ),
+                        color: colorScheme.outline,
+                      ),
                     ),
                     if (tankName != null) ...[
                       const SizedBox(height: 4),
@@ -74,10 +74,8 @@ class MaintenanceLogCard extends StatelessWidget {
                           const SizedBox(width: 4),
                           Text(
                             tankName!,
-                            style:
-                                Theme.of(context).textTheme.bodySmall?.copyWith(
-                                      color: colorScheme.primary,
-                                    ),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(color: colorScheme.primary),
                           ),
                         ],
                       ),
@@ -127,4 +125,3 @@ class MaintenanceLogCard extends StatelessWidget {
     return parts.join(' • ');
   }
 }
-

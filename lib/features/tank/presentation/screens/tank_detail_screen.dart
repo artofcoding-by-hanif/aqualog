@@ -8,6 +8,7 @@ import '../../../../core/theme/color_scheme.dart';
 import '../../../../core/widgets/aqua_widgets.dart';
 import '../../../../router/app_router.dart';
 import '../../../ai/presentation/widgets/tank_health_card.dart';
+import '../../../share/presentation/share_actions.dart';
 import '../../../reminders/domain/entities/reminder.dart';
 import '../../../reminders/presentation/controllers/reminder_provider.dart';
 import '../../domain/entities/tank.dart';
@@ -269,6 +270,11 @@ class _TankDetailScreenState extends ConsumerState<TankDetailScreen> {
       backgroundColor: Theme.of(context).colorScheme.surface,
       foregroundColor: Colors.white,
       actions: [
+        IconButton(
+          icon: const Icon(Icons.ios_share_rounded),
+          tooltip: 'Share tank',
+          onPressed: () => shareTank(context, ref, _tank),
+        ),
         IconButton(
           icon: const Icon(Icons.auto_awesome_rounded),
           tooltip: 'Ask the assistant',

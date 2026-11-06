@@ -14,9 +14,7 @@ class SavedGlassCalculationsScreen extends ConsumerWidget {
     final calculationsAsync = ref.watch(glassCalculationsStreamProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Saved Calculations'),
-      ),
+      appBar: AppBar(title: const Text('Saved Calculations')),
       body: calculationsAsync.when(
         data: (calculations) {
           if (calculations.isEmpty) {
@@ -24,7 +22,11 @@ class SavedGlassCalculationsScreen extends ConsumerWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.calculate_outlined, size: 64, color: AquaPalette.mist),
+                  Icon(
+                    Icons.calculate_outlined,
+                    size: 64,
+                    color: AquaPalette.mist,
+                  ),
                   SizedBox(height: 16),
                   Text('No saved calculations yet'),
                   SizedBox(height: 8),
@@ -43,7 +45,8 @@ class SavedGlassCalculationsScreen extends ConsumerWidget {
             itemBuilder: (context, index) {
               return _CalculationCard(
                 calculation: calculations[index],
-                onDelete: () => _deleteCalculation(context, ref, calculations[index]),
+                onDelete: () =>
+                    _deleteCalculation(context, ref, calculations[index]),
               );
             },
           );
@@ -88,10 +91,7 @@ class _CalculationCard extends StatelessWidget {
   final GlassCalculationEntity calculation;
   final VoidCallback onDelete;
 
-  const _CalculationCard({
-    required this.calculation,
-    required this.onDelete,
-  });
+  const _CalculationCard({required this.calculation, required this.onDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -112,17 +112,41 @@ class _CalculationCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildRow('Glass Thickness', '${calculation.glassThicknessMm.toStringAsFixed(0)} mm'),
-                _buildRow('Glue Thickness', '${calculation.glueThicknessMm.toStringAsFixed(0)} mm'),
+                _buildRow(
+                  'Glass Thickness',
+                  '${calculation.glassThicknessMm.toStringAsFixed(0)} mm',
+                ),
+                _buildRow(
+                  'Glue Thickness',
+                  '${calculation.glueThicknessMm.toStringAsFixed(0)} mm',
+                ),
                 const Divider(),
-                Text('Glass Dimensions', style: Theme.of(context).textTheme.titleSmall),
+                Text(
+                  'Glass Dimensions',
+                  style: Theme.of(context).textTheme.titleSmall,
+                ),
                 const SizedBox(height: 8),
-                _buildRow('Bottom', '${calculation.bottomLengthMm.toStringAsFixed(0)} × ${calculation.bottomWidthMm.toStringAsFixed(0)} mm'),
-                _buildRow('Front/Back (×2)', '${calculation.frontBackLengthMm.toStringAsFixed(0)} × ${calculation.frontBackHeightMm.toStringAsFixed(0)} mm'),
-                _buildRow('Side (×2)', '${calculation.sideWidthMm.toStringAsFixed(0)} × ${calculation.sideHeightMm.toStringAsFixed(0)} mm'),
+                _buildRow(
+                  'Bottom',
+                  '${calculation.bottomLengthMm.toStringAsFixed(0)} × ${calculation.bottomWidthMm.toStringAsFixed(0)} mm',
+                ),
+                _buildRow(
+                  'Front/Back (×2)',
+                  '${calculation.frontBackLengthMm.toStringAsFixed(0)} × ${calculation.frontBackHeightMm.toStringAsFixed(0)} mm',
+                ),
+                _buildRow(
+                  'Side (×2)',
+                  '${calculation.sideWidthMm.toStringAsFixed(0)} × ${calculation.sideHeightMm.toStringAsFixed(0)} mm',
+                ),
                 const Divider(),
-                _buildRow('Total Glass Area', '${calculation.totalGlassAreaSqM.toStringAsFixed(3)} m²'),
-                _buildRow('Estimated Weight', '${calculation.estimatedWeightKg.toStringAsFixed(1)} kg'),
+                _buildRow(
+                  'Total Glass Area',
+                  '${calculation.totalGlassAreaSqM.toStringAsFixed(3)} m²',
+                ),
+                _buildRow(
+                  'Estimated Weight',
+                  '${calculation.estimatedWeightKg.toStringAsFixed(1)} kg',
+                ),
               ],
             ),
           ),
@@ -144,4 +168,3 @@ class _CalculationCard extends StatelessWidget {
     );
   }
 }
-

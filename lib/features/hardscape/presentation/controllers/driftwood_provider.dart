@@ -59,7 +59,10 @@ class DriftwoodNotifier extends _$DriftwoodNotifier {
   }
 
   /// Update driftwood quantity
-  Future<void> updateQuantity(DriftwoodEntity driftwood, int newQuantity) async {
+  Future<void> updateQuantity(
+    DriftwoodEntity driftwood,
+    int newQuantity,
+  ) async {
     final updated = driftwood.copyWith(quantity: newQuantity);
     await _repo.updateDriftwood(updated);
     ref.invalidateSelf();
@@ -91,4 +94,3 @@ class DriftwoodNotifier extends _$DriftwoodNotifier {
     ref.invalidateSelf();
   }
 }
-

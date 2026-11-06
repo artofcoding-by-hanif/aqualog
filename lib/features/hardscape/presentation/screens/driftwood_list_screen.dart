@@ -23,11 +23,10 @@ class DriftwoodListScreen extends ConsumerWidget {
     final driftwoodsAsync = ref.watch(driftwoodsForTankStreamProvider(tankId));
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('$tankName Driftwood'),
-      ),
+      appBar: AppBar(title: Text('$tankName Driftwood')),
       body: driftwoodsAsync.when(
-        data: (driftwoodList) => _buildDriftwoodList(context, ref, driftwoodList),
+        data: (driftwoodList) =>
+            _buildDriftwoodList(context, ref, driftwoodList),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => _buildError(context, error),
       ),
@@ -73,8 +72,8 @@ class DriftwoodListScreen extends ConsumerWidget {
               child: Text(
                 'Curing (${curingDriftwood.length})',
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      color: Theme.of(context).colorScheme.tertiary,
-                    ),
+                  color: Theme.of(context).colorScheme.tertiary,
+                ),
               ),
             ),
             ...curingDriftwood.map(
@@ -90,8 +89,8 @@ class DriftwoodListScreen extends ConsumerWidget {
               child: Text(
                 'Stable (${stableDriftwood.length})',
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+                  color: Theme.of(context).colorScheme.primary,
+                ),
               ),
             ),
             ...stableDriftwood.map(
@@ -144,7 +143,10 @@ class DriftwoodListScreen extends ConsumerWidget {
   }
 
   void _navigateToDetail(BuildContext context, DriftwoodEntity driftwood) {
-    Navigator.pushNamed(context, AppRouter.driftwoodDetail, arguments: driftwood);
+    Navigator.pushNamed(
+      context,
+      AppRouter.driftwoodDetail,
+      arguments: driftwood,
+    );
   }
 }
-

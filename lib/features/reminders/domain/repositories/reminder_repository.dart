@@ -53,4 +53,3 @@ abstract class ReminderRepository {
   /// Snooze a reminder by a specified duration
   Future<void> snoozeReminder(int reminderId, Duration duration);
 }
-

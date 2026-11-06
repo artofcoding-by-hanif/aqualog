@@ -26,4 +26,3 @@ abstract class InvertebrateRepository {
   /// Get count of alive invertebrates for a tank
   Future<int> getAliveInvertebrateCount(int tankId);
 }
-

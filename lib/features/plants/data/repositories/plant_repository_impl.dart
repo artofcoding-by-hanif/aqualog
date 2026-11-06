@@ -43,9 +43,9 @@ class PlantRepositoryImpl implements PlantRepository {
 
   @override
   Stream<List<PlantEntity>> watchPlantsForTank(int tankId) {
-    return _db.watchPlantsForTank(tankId).map(
-      (plantList) => plantList.map((p) => p.toEntity()).toList(),
-    );
+    return _db
+        .watchPlantsForTank(tankId)
+        .map((plantList) => plantList.map((p) => p.toEntity()).toList());
   }
 
   @override
@@ -53,4 +53,3 @@ class PlantRepositoryImpl implements PlantRepository {
     return await _db.getActivePlantCount(tankId);
   }
 }
-

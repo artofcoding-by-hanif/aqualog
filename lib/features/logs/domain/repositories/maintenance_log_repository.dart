@@ -32,4 +32,3 @@ abstract class MaintenanceLogRepository {
   /// Watch all maintenance logs for a tank (reactive stream)
   Stream<List<MaintenanceLogEntity>> watchLogsForTank(int tankId);
 }
-

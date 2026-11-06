@@ -27,9 +27,7 @@ class _HardscapeFormState extends State<HardscapeForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Hardscape'),
-      ),
+      appBar: AppBar(title: const Text('Add Hardscape')),
       body: Form(
         key: _formKey,
         child: ListView(
@@ -66,15 +64,33 @@ class _HardscapeFormState extends State<HardscapeForm> {
               decoration: const InputDecoration(labelText: 'Type'),
               items: _category == 'rock'
                   ? const [
-                      DropdownMenuItem(value: 'dragon_stone', child: Text('Dragon Stone')),
-                      DropdownMenuItem(value: 'seiryu', child: Text('Seiryu Stone')),
-                      DropdownMenuItem(value: 'lava_rock', child: Text('Lava Rock')),
+                      DropdownMenuItem(
+                        value: 'dragon_stone',
+                        child: Text('Dragon Stone'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'seiryu',
+                        child: Text('Seiryu Stone'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'lava_rock',
+                        child: Text('Lava Rock'),
+                      ),
                       DropdownMenuItem(value: 'slate', child: Text('Slate')),
                     ]
                   : const [
-                      DropdownMenuItem(value: 'manzanita', child: Text('Manzanita')),
-                      DropdownMenuItem(value: 'spider_wood', child: Text('Spider Wood')),
-                      DropdownMenuItem(value: 'malaysian', child: Text('Malaysian')),
+                      DropdownMenuItem(
+                        value: 'manzanita',
+                        child: Text('Manzanita'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'spider_wood',
+                        child: Text('Spider Wood'),
+                      ),
+                      DropdownMenuItem(
+                        value: 'malaysian',
+                        child: Text('Malaysian'),
+                      ),
                       DropdownMenuItem(value: 'mopani', child: Text('Mopani')),
                     ],
               onChanged: (value) {
@@ -107,4 +123,3 @@ class _HardscapeFormState extends State<HardscapeForm> {
     }
   }
 }
-

@@ -3,7 +3,8 @@
 class LogEntry {
   final String id;
   final String tankId;
-  final String type; // waterChange, feeding, maintenance, observation, treatment
+  final String
+  type; // waterChange, feeding, maintenance, observation, treatment
   final String title;
   final String? description;
   final Map<String, dynamic>? metadata;
@@ -43,4 +44,3 @@ class LogEntry {
     );
   }
 }
-

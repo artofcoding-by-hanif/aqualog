@@ -23,4 +23,3 @@ abstract class FilterRepository {
   /// Watch all filters for a tank (reactive stream)
   Stream<List<FilterEntity>> watchFiltersForTank(int tankId);
 }
-

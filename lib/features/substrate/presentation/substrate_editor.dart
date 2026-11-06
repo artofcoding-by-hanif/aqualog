@@ -52,7 +52,11 @@ class _SubstrateEditorState extends ConsumerState<SubstrateEditor> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.error_outline, size: 48, color: AquaPalette.danger),
+              const Icon(
+                Icons.error_outline,
+                size: 48,
+                color: AquaPalette.danger,
+              ),
               const SizedBox(height: 16),
               Text('Error: $error'),
             ],

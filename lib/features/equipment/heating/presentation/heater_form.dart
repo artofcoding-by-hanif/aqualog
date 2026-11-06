@@ -30,9 +30,7 @@ class _HeaterFormState extends State<HeaterForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Add Heater'),
-      ),
+      appBar: AppBar(title: const Text('Add Heater')),
       body: Form(
         key: _formKey,
         child: ListView(
@@ -56,7 +54,9 @@ class _HeaterFormState extends State<HeaterForm> {
             const SizedBox(height: 16),
             TextFormField(
               controller: _wattageController,
-              decoration: const InputDecoration(labelText: 'Wattage (optional)'),
+              decoration: const InputDecoration(
+                labelText: 'Wattage (optional)',
+              ),
               keyboardType: TextInputType.number,
             ),
             const SizedBox(height: 16),
@@ -101,4 +101,3 @@ class _HeaterFormState extends State<HeaterForm> {
     }
   }
 }
-

@@ -23,9 +23,7 @@ class PlantListScreen extends ConsumerWidget {
     final plantsAsync = ref.watch(plantsForTankStreamProvider(tankId));
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('$tankName Plants'),
-      ),
+      appBar: AppBar(title: Text('$tankName Plants')),
       body: plantsAsync.when(
         data: (plantList) => _buildPlantList(context, ref, plantList),
         loading: () => const Center(child: CircularProgressIndicator()),
@@ -73,8 +71,8 @@ class PlantListScreen extends ConsumerWidget {
               child: Text(
                 'Active (${activePlants.length})',
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+                  color: Theme.of(context).colorScheme.primary,
+                ),
               ),
             ),
             ...activePlants.map(
@@ -90,8 +88,8 @@ class PlantListScreen extends ConsumerWidget {
               child: Text(
                 'Removed (${removedPlants.length})',
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      color: Theme.of(context).colorScheme.outline,
-                    ),
+                  color: Theme.of(context).colorScheme.outline,
+                ),
               ),
             ),
             ...removedPlants.map(
@@ -147,4 +145,3 @@ class PlantListScreen extends ConsumerWidget {
     Navigator.pushNamed(context, AppRouter.plantDetail, arguments: plant);
   }
 }
-

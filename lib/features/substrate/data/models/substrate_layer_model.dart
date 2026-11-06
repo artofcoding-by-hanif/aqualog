@@ -1,7 +1,8 @@
 import 'package:drift/drift.dart';
 
 import '../../../../core/database/app_database.dart';
-import '../../../../core/database/tables/substrate_layers_table.dart' as db_types;
+import '../../../../core/database/tables/substrate_layers_table.dart'
+    as db_types;
 import '../../domain/entities/substrate_layer.dart';
 
 /// Extension to map between Drift SubstrateLayer and SubstrateLayerEntity
@@ -148,4 +149,3 @@ extension SubstrateLayerEntityMapper on SubstrateLayerEntity {
     }
   }
 }
-

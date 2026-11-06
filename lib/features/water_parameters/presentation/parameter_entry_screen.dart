@@ -30,9 +30,7 @@ class _ParameterEntryScreenState extends State<ParameterEntryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Log Parameters'),
-      ),
+      appBar: AppBar(title: const Text('Log Parameters')),
       body: Form(
         key: _formKey,
         child: ListView(
@@ -107,4 +105,3 @@ class _ParameterEntryScreenState extends State<ParameterEntryScreen> {
     }
   }
 }
-

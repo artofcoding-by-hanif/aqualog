@@ -4,11 +4,7 @@ import '../../domain/entities/fish.dart';
 
 /// Fish card widget for displaying fish summary
 class FishCard extends StatelessWidget {
-  const FishCard({
-    super.key,
-    required this.fish,
-    this.onTap,
-  });
+  const FishCard({super.key, required this.fish, this.onTap});
 
   final FishEntity fish;
   final VoidCallback? onTap;
@@ -45,15 +41,15 @@ class FishCard extends StatelessWidget {
                     Text(
                       fish.displayName,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       _buildSubtitle(),
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: colorScheme.outline,
-                          ),
+                        color: colorScheme.outline,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     _buildStatusRow(context, colorScheme),
@@ -92,13 +88,17 @@ class FishCard extends StatelessWidget {
     if (fish.isDeceased) {
       return Row(
         children: [
-          Icon(Icons.sentiment_very_dissatisfied, size: 14, color: colorScheme.outline),
+          Icon(
+            Icons.sentiment_very_dissatisfied,
+            size: 14,
+            color: colorScheme.outline,
+          ),
           const SizedBox(width: 4),
           Text(
             'Deceased',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: colorScheme.outline,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: colorScheme.outline),
           ),
         ],
       );
@@ -111,9 +111,9 @@ class FishCard extends StatelessWidget {
           const SizedBox(width: 4),
           Text(
             'Quarantined${fish.quarantineDaysRemaining != null ? ' (${fish.quarantineDaysRemaining} days left)' : ''}',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: colorScheme.tertiary,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: colorScheme.tertiary),
           ),
         ],
       );
@@ -125,9 +125,9 @@ class FishCard extends StatelessWidget {
         const SizedBox(width: 4),
         Text(
           fish.ageInTankDisplay,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: colorScheme.outline,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodySmall?.copyWith(color: colorScheme.outline),
         ),
         if (fish.sizeDisplay != 'Unknown') ...[
           const SizedBox(width: 8),
@@ -135,13 +135,12 @@ class FishCard extends StatelessWidget {
           const SizedBox(width: 4),
           Text(
             fish.sizeDisplay,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: colorScheme.outline,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: colorScheme.outline),
           ),
         ],
       ],
     );
   }
 }
-

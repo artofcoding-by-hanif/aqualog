@@ -43,9 +43,8 @@ class DriftwoodRepositoryImpl implements DriftwoodRepository {
 
   @override
   Stream<List<DriftwoodEntity>> watchDriftwoodsForTank(int tankId) {
-    return _db.watchDriftwoodsForTank(tankId).map(
-      (driftwoods) => driftwoods.map((d) => d.toEntity()).toList(),
-    );
+    return _db
+        .watchDriftwoodsForTank(tankId)
+        .map((driftwoods) => driftwoods.map((d) => d.toEntity()).toList());
   }
 }
-

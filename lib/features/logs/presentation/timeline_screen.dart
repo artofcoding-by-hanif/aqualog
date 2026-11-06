@@ -8,9 +8,7 @@ class TimelineScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Timeline'),
-      ),
+      appBar: AppBar(title: const Text('Timeline')),
       body: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: 10,
@@ -33,8 +31,8 @@ class TimelineScreen extends StatelessWidget {
             child: Text(
               '${10 - index}d ago',
               style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                    color: Theme.of(context).colorScheme.outline,
-                  ),
+                color: Theme.of(context).colorScheme.outline,
+              ),
             ),
           ),
           Column(
@@ -51,7 +49,9 @@ class TimelineScreen extends StatelessWidget {
                 Expanded(
                   child: Container(
                     width: 2,
-                    color: Theme.of(context).colorScheme.outline.withValues(alpha: 0.3),
+                    color: Theme.of(
+                      context,
+                    ).colorScheme.outline.withValues(alpha: 0.3),
                   ),
                 ),
             ],
@@ -73,8 +73,8 @@ class TimelineScreen extends StatelessWidget {
                     Text(
                       _getEventDescription(index),
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                            color: Theme.of(context).colorScheme.outline,
-                          ),
+                        color: Theme.of(context).colorScheme.outline,
+                      ),
                     ),
                   ],
                 ),
@@ -118,4 +118,3 @@ class TimelineScreen extends StatelessWidget {
     return descriptions[index % descriptions.length];
   }
 }
-

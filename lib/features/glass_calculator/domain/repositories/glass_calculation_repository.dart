@@ -20,4 +20,3 @@ abstract class GlassCalculationRepository {
   /// Watch all calculations (reactive stream)
   Stream<List<GlassCalculationEntity>> watchAllCalculations();
 }
-

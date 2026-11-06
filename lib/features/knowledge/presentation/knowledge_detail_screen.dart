@@ -74,23 +74,27 @@ class KnowledgeDetailScreen extends StatelessWidget {
           const SizedBox(height: 16),
           Text(
             'Common Name',
-            style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
           ),
           Text(
             'Scientific name',
             style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  fontStyle: FontStyle.italic,
-                  color: Theme.of(context).colorScheme.outline,
-                ),
+              fontStyle: FontStyle.italic,
+              color: Theme.of(context).colorScheme.outline,
+            ),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildSection(BuildContext context, String title, List<Widget> children) {
+  Widget _buildSection(
+    BuildContext context,
+    String title,
+    List<Widget> children,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -98,16 +102,13 @@ class KnowledgeDetailScreen extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Text(
             title,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
           ),
         ),
         const SizedBox(height: 8),
-        if (children.isNotEmpty)
-          Card(
-            child: Column(children: children),
-          ),
+        if (children.isNotEmpty) Card(child: Column(children: children)),
       ],
     );
   }
@@ -125,4 +126,3 @@ class KnowledgeDetailScreen extends StatelessWidget {
     );
   }
 }
-

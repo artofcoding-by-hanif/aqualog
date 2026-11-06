@@ -43,9 +43,8 @@ class FilterRepositoryImpl implements FilterRepository {
 
   @override
   Stream<List<FilterEntity>> watchFiltersForTank(int tankId) {
-    return _db.watchFiltersForTank(tankId).map(
-      (filters) => filters.map((f) => f.toEntity()).toList(),
-    );
+    return _db
+        .watchFiltersForTank(tankId)
+        .map((filters) => filters.map((f) => f.toEntity()).toList());
   }
 }
-

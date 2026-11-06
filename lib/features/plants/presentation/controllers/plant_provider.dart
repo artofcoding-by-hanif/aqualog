@@ -118,4 +118,3 @@ class PlantNotifier extends _$PlantNotifier {
     ref.invalidateSelf();
   }
 }
-

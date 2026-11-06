@@ -16,7 +16,10 @@ SubstrateLayerRepository substrateLayerRepository(Ref ref) {
 
 /// Provider to watch all substrate layers for a tank
 @Riverpod(keepAlive: true)
-Stream<List<SubstrateLayerEntity>> substrateLayersForTankStream(Ref ref, int tankId) {
+Stream<List<SubstrateLayerEntity>> substrateLayersForTankStream(
+  Ref ref,
+  int tankId,
+) {
   final repo = ref.watch(substrateLayerRepositoryProvider);
   return repo.watchSubstrateLayersForTank(tankId);
 }
@@ -36,7 +39,8 @@ class SubstrateLayerNotifier extends _$SubstrateLayerNotifier {
     // No state to initialize
   }
 
-  SubstrateLayerRepository get _repo => ref.read(substrateLayerRepositoryProvider);
+  SubstrateLayerRepository get _repo =>
+      ref.read(substrateLayerRepositoryProvider);
 
   /// Add a new substrate layer
   Future<int> addLayer(SubstrateLayerEntity layer) async {
@@ -58,4 +62,3 @@ class SubstrateLayerNotifier extends _$SubstrateLayerNotifier {
     await _repo.reorderSubstrateLayers(tankId, layerIds);
   }
 }
-

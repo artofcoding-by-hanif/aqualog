@@ -75,4 +75,3 @@ class LogListScreen extends StatelessWidget {
     );
   }
 }
-

@@ -71,7 +71,9 @@ class SubstrateLayerCard extends StatelessWidget {
                     Text(
                       layer.infoSummary,
                       style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.onSurface.withValues(alpha: 0.7),
+                        color: theme.colorScheme.onSurface.withValues(
+                          alpha: 0.7,
+                        ),
                       ),
                     ),
                     if (layer.waterChemistryWarning != null) ...[
@@ -128,7 +130,10 @@ class SubstrateLayerCard extends StatelessWidget {
                       children: [
                         Icon(Icons.delete, color: theme.colorScheme.error),
                         const SizedBox(width: 8),
-                        Text('Delete', style: TextStyle(color: theme.colorScheme.error)),
+                        Text(
+                          'Delete',
+                          style: TextStyle(color: theme.colorScheme.error),
+                        ),
                       ],
                     ),
                   ),
@@ -141,4 +146,3 @@ class SubstrateLayerCard extends StatelessWidget {
     );
   }
 }
-

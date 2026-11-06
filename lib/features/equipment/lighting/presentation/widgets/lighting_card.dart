@@ -4,11 +4,7 @@ import '../../domain/entities/lighting.dart';
 
 /// Lighting card widget for displaying lighting summary
 class LightingCard extends StatelessWidget {
-  const LightingCard({
-    super.key,
-    required this.lighting,
-    this.onTap,
-  });
+  const LightingCard({super.key, required this.lighting, this.onTap});
 
   final LightingEntity lighting;
   final VoidCallback? onTap;
@@ -48,15 +44,15 @@ class LightingCard extends StatelessWidget {
                     Text(
                       lighting.name,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       _buildSubtitle(),
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: colorScheme.outline,
-                          ),
+                        color: colorScheme.outline,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     _buildScheduleInfo(context, colorScheme),
@@ -75,9 +71,10 @@ class LightingCard extends StatelessWidget {
     final parts = <String>[];
     parts.add(lighting.lightingType.displayName);
     if (lighting.brand != null || lighting.model != null) {
-      final brandModel = [lighting.brand, lighting.model]
-          .where((s) => s != null && s.isNotEmpty)
-          .join(' ');
+      final brandModel = [
+        lighting.brand,
+        lighting.model,
+      ].where((s) => s != null && s.isNotEmpty).join(' ');
       if (brandModel.isNotEmpty) {
         parts.add(brandModel);
       }
@@ -101,18 +98,14 @@ class LightingCard extends StatelessWidget {
 
     return Row(
       children: [
-        Icon(
-          Icons.schedule,
-          size: 14,
-          color: colorScheme.outline,
-        ),
+        Icon(Icons.schedule, size: 14, color: colorScheme.outline),
         const SizedBox(width: 4),
         Expanded(
           child: Text(
             schedule ?? features,
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: colorScheme.outline,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: colorScheme.outline),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -121,4 +114,3 @@ class LightingCard extends StatelessWidget {
     );
   }
 }
-

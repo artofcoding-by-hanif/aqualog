@@ -23,4 +23,3 @@ abstract class RockRepository {
   /// Watch all rocks for a tank (reactive stream)
   Stream<List<RockEntity>> watchRocksForTank(int tankId);
 }
-

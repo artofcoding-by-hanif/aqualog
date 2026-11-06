@@ -43,9 +43,11 @@ class InvertebrateRepositoryImpl implements InvertebrateRepository {
 
   @override
   Stream<List<InvertebrateEntity>> watchInvertebratesForTank(int tankId) {
-    return _db.watchInvertebratesForTank(tankId).map(
-      (invertebrates) => invertebrates.map((i) => i.toEntity()).toList(),
-    );
+    return _db
+        .watchInvertebratesForTank(tankId)
+        .map(
+          (invertebrates) => invertebrates.map((i) => i.toEntity()).toList(),
+        );
   }
 
   @override
@@ -53,4 +55,3 @@ class InvertebrateRepositoryImpl implements InvertebrateRepository {
     return await _db.getAliveInvertebrateCount(tankId);
   }
 }
-

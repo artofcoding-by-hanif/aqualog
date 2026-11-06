@@ -20,14 +20,15 @@ class InvertebrateListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final invertebratesAsync = ref.watch(invertebratesForTankStreamProvider(tankId));
+    final invertebratesAsync = ref.watch(
+      invertebratesForTankStreamProvider(tankId),
+    );
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text('$tankName Invertebrates'),
-      ),
+      appBar: AppBar(title: Text('$tankName Invertebrates')),
       body: invertebratesAsync.when(
-        data: (invertebrates) => _buildInvertebrateList(context, ref, invertebrates),
+        data: (invertebrates) =>
+            _buildInvertebrateList(context, ref, invertebrates),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (error, stack) => _buildError(context, error),
       ),
@@ -73,14 +74,15 @@ class InvertebrateListScreen extends ConsumerWidget {
               child: Text(
                 'Active (${alive.length})',
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
+                  color: Theme.of(context).colorScheme.primary,
+                ),
               ),
             ),
             ...alive.map(
               (invertebrate) => InvertebrateCard(
                 invertebrate: invertebrate,
-                onTap: () => _navigateToInvertebrateDetail(context, invertebrate),
+                onTap: () =>
+                    _navigateToInvertebrateDetail(context, invertebrate),
               ),
             ),
           ],
@@ -90,14 +92,15 @@ class InvertebrateListScreen extends ConsumerWidget {
               child: Text(
                 'Deceased (${deceased.length})',
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                      color: Theme.of(context).colorScheme.outline,
-                    ),
+                  color: Theme.of(context).colorScheme.outline,
+                ),
               ),
             ),
             ...deceased.map(
               (invertebrate) => InvertebrateCard(
                 invertebrate: invertebrate,
-                onTap: () => _navigateToInvertebrateDetail(context, invertebrate),
+                onTap: () =>
+                    _navigateToInvertebrateDetail(context, invertebrate),
               ),
             ),
           ],
@@ -143,8 +146,14 @@ class InvertebrateListScreen extends ConsumerWidget {
     );
   }
 
-  void _navigateToInvertebrateDetail(BuildContext context, InvertebrateEntity invertebrate) {
-    Navigator.pushNamed(context, AppRouter.invertebrateDetail, arguments: invertebrate);
+  void _navigateToInvertebrateDetail(
+    BuildContext context,
+    InvertebrateEntity invertebrate,
+  ) {
+    Navigator.pushNamed(
+      context,
+      AppRouter.invertebrateDetail,
+      arguments: invertebrate,
+    );
   }
 }
-

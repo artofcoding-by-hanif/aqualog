@@ -7,6 +7,7 @@ import '../../../../router/app_router.dart';
 import '../../domain/tank_analysis.dart';
 import '../controllers/ai_providers.dart';
 import '../widgets/report_ai_sheet.dart';
+import '../../../share/presentation/share_actions.dart';
 import '../widgets/score_ring.dart';
 import '../widgets/tank_health_card.dart' show timeAgo;
 
@@ -41,6 +42,16 @@ class _TankHealthScreenState extends ConsumerState<TankHealthScreen> {
       appBar: AppBar(
         title: const Text('Health Report'),
         actions: [
+          if (analysis != null)
+            IconButton(
+              icon: const Icon(Icons.ios_share_rounded),
+              tooltip: 'Share score',
+              onPressed: () => shareHealth(
+                context,
+                tankName: widget.tankName,
+                analysis: analysis,
+              ),
+            ),
           if (analysis != null)
             IconButton(
               icon: const Icon(Icons.outlined_flag_rounded),

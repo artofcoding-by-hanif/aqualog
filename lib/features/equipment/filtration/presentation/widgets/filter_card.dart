@@ -4,11 +4,7 @@ import '../../domain/entities/filter.dart';
 
 /// Filter card widget for displaying filter summary
 class FilterCard extends StatelessWidget {
-  const FilterCard({
-    super.key,
-    required this.filter,
-    this.onTap,
-  });
+  const FilterCard({super.key, required this.filter, this.onTap});
 
   final FilterEntity filter;
   final VoidCallback? onTap;
@@ -48,15 +44,15 @@ class FilterCard extends StatelessWidget {
                     Text(
                       filter.name,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       _buildSubtitle(),
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: colorScheme.outline,
-                          ),
+                        color: colorScheme.outline,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     _buildMaintenanceStatus(context, colorScheme),
@@ -75,9 +71,10 @@ class FilterCard extends StatelessWidget {
     final parts = <String>[];
     parts.add(filter.filterType.displayName);
     if (filter.brand != null || filter.model != null) {
-      final brandModel = [filter.brand, filter.model]
-          .where((s) => s != null && s.isNotEmpty)
-          .join(' ');
+      final brandModel = [
+        filter.brand,
+        filter.model,
+      ].where((s) => s != null && s.isNotEmpty).join(' ');
       if (brandModel.isNotEmpty) {
         parts.add(brandModel);
       }
@@ -95,7 +92,10 @@ class FilterCard extends StatelessWidget {
     return colorScheme.primaryContainer;
   }
 
-  Widget _buildMaintenanceStatus(BuildContext context, ColorScheme colorScheme) {
+  Widget _buildMaintenanceStatus(
+    BuildContext context,
+    ColorScheme colorScheme,
+  ) {
     final status = filter.maintenanceStatus;
     final isOverdue = filter.isCleaningDue || filter.isMediaReplacementDue;
 
@@ -111,8 +111,8 @@ class FilterCard extends StatelessWidget {
           child: Text(
             status,
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: isOverdue ? colorScheme.error : colorScheme.outline,
-                ),
+              color: isOverdue ? colorScheme.error : colorScheme.outline,
+            ),
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
@@ -121,4 +121,3 @@ class FilterCard extends StatelessWidget {
     );
   }
 }
-

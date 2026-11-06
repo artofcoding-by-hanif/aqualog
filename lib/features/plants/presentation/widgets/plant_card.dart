@@ -4,11 +4,7 @@ import '../../domain/entities/plant.dart';
 
 /// Plant card widget for displaying plant summary
 class PlantCard extends StatelessWidget {
-  const PlantCard({
-    super.key,
-    required this.plant,
-    this.onTap,
-  });
+  const PlantCard({super.key, required this.plant, this.onTap});
 
   final PlantEntity plant;
   final VoidCallback? onTap;
@@ -48,15 +44,15 @@ class PlantCard extends StatelessWidget {
                     Text(
                       plant.displayName,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                          ),
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       _buildSubtitle(),
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: colorScheme.outline,
-                          ),
+                        color: colorScheme.outline,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     _buildStatusRow(context, colorScheme),
@@ -95,13 +91,17 @@ class PlantCard extends StatelessWidget {
     if (plant.isRemoved) {
       return Row(
         children: [
-          Icon(Icons.remove_circle_outline, size: 14, color: colorScheme.outline),
+          Icon(
+            Icons.remove_circle_outline,
+            size: 14,
+            color: colorScheme.outline,
+          ),
           const SizedBox(width: 4),
           Text(
             'Removed',
-            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: colorScheme.outline,
-                ),
+            style: Theme.of(
+              context,
+            ).textTheme.bodySmall?.copyWith(color: colorScheme.outline),
           ),
         ],
       );
@@ -115,9 +115,9 @@ class PlantCard extends StatelessWidget {
         const SizedBox(width: 4),
         Text(
           '${plant.daysInTank} days',
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: colorScheme.outline,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodySmall?.copyWith(color: colorScheme.outline),
         ),
       ]);
     }
@@ -132,9 +132,9 @@ class PlantCard extends StatelessWidget {
         const SizedBox(width: 4),
         Text(
           plant.lightingRequirement!.displayName,
-          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: colorScheme.outline,
-              ),
+          style: Theme.of(
+            context,
+          ).textTheme.bodySmall?.copyWith(color: colorScheme.outline),
         ),
       ]);
     }
@@ -146,4 +146,3 @@ class PlantCard extends StatelessWidget {
     return Row(children: parts);
   }
 }
-

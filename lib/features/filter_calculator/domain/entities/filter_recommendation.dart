@@ -63,19 +63,21 @@ class FilterCalculator {
 
       // Check if filter can provide required flow
       final canProvide = filter.canProvideFlow(recommendedFlow);
-      
+
       // Calculate if this is an ideal match (bioload matches)
       final isIdealMatch = _isBioloadCompatible(filter.bioloadLevel, bioload);
 
       // Estimate power for the recommended flow
       final estimatedPower = filter.estimatePowerForFlow(recommendedFlow);
 
-      recommendations.add(FilterRecommendation(
-        filterType: filter,
-        recommendedFlowLph: recommendedFlow,
-        estimatedPowerW: estimatedPower,
-        isIdealMatch: canProvide && isIdealMatch,
-      ));
+      recommendations.add(
+        FilterRecommendation(
+          filterType: filter,
+          recommendedFlowLph: recommendedFlow,
+          estimatedPowerW: estimatedPower,
+          isIdealMatch: canProvide && isIdealMatch,
+        ),
+      );
     }
 
     // Sort by ideal match first, then by name
@@ -99,4 +101,3 @@ class FilterCalculator {
     return filterIndex >= requiredIndex;
   }
 }
-

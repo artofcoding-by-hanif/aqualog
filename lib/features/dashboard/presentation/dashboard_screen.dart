@@ -12,6 +12,7 @@ import '../../reminders/presentation/controllers/reminder_provider.dart';
 import '../../tank/domain/entities/tank.dart';
 import '../../tank/presentation/controllers/tank_image_provider.dart';
 import '../../tank/presentation/controllers/tank_provider.dart';
+import '../../share/presentation/milestone_banner.dart';
 import 'widgets/upcoming_reminders.dart';
 import 'widgets/recent_activity.dart';
 
@@ -50,6 +51,7 @@ class DashboardScreen extends ConsumerWidget {
               ],
               const SizedBox(height: 16),
               _AssistantCard(tanks: tanksAsync.value ?? const []),
+              const MilestoneBanner(),
               const SizedBox(height: 24),
               _buildQuickActions(context, ref),
               const SizedBox(height: 28),

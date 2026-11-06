@@ -23,4 +23,3 @@ abstract class LightingRepository {
   /// Watch all lightings for a tank (reactive stream)
   Stream<List<LightingEntity>> watchLightingsForTank(int tankId);
 }
-
