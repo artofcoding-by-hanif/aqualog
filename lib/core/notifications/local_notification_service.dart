@@ -190,6 +190,9 @@ class LocalNotificationService {
     required DateTime scheduledDate,
     String? payload,
     NotificationChannel channel = NotificationChannel.reminders,
+
+    /// Fire again every day at the same time until cancelled
+    bool repeatDaily = false,
   }) async {
     await _ensureInitialized();
 
@@ -215,6 +218,7 @@ class LocalNotificationService {
       details,
       payload: payload,
       androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+      matchDateTimeComponents: repeatDaily ? DateTimeComponents.time : null,
     );
   }
 

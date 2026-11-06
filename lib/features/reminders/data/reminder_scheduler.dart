@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
+import 'package:intl/intl.dart';
+
 import '../../../core/notifications/local_notification_service.dart';
 import '../domain/entities/reminder.dart';
 
@@ -13,6 +16,9 @@ class ReminderScheduler {
 
   ReminderScheduler._(this._notificationService);
 
+  @visibleForTesting
+  ReminderScheduler.forTesting(this._notificationService);
+
   static ReminderScheduler get instance {
     _instance ??= ReminderScheduler._(LocalNotificationService.instance);
     return _instance!;
@@ -25,10 +31,15 @@ class ReminderScheduler {
 
   /// Schedule a notification for a reminder
   ///
-  /// For one-time reminders, schedules a single notification.
-  /// For recurring reminders, schedules the next occurrence.
-  /// The notification will be rescheduled when completed via the repository.
-  Future<void> scheduleReminder(ReminderEntity reminder) async {
+  /// Upcoming reminders fire at their due time; overdue ones fire at the
+  /// next occurrence of their time of day. Either way the notification then
+  /// repeats daily until the reminder is completed (completing cancels and
+  /// reschedules it), so a missed reminder keeps nudging instead of going
+  /// silent.
+  Future<void> scheduleReminder(
+    ReminderEntity reminder, {
+    DateTime? now,
+  }) async {
     if (reminder.id == null) return;
     if (!reminder.isEnabled) return;
     if (reminder.isCompleted &&
@@ -36,10 +47,18 @@ class ReminderScheduler {
       return;
     }
 
-    final scheduledAt = reminder.nextDueAt;
-
-    // Don't schedule if the time has already passed
-    if (scheduledAt.isBefore(DateTime.now())) return;
+    final current = now ?? DateTime.now();
+    // Due day from the repeat rules, at the time of day the user chose
+    // (not the time they last happened to tick it off)
+    final nextDue = reminder.nextDueAt;
+    final due = DateTime(
+      nextDue.year,
+      nextDue.month,
+      nextDue.day,
+      reminder.scheduledAt.hour,
+      reminder.scheduledAt.minute,
+    );
+    final overdue = !due.isAfter(current);
 
     // Create payload with reminder info for handling notification taps
     final payload = jsonEncode({
@@ -51,12 +70,31 @@ class ReminderScheduler {
 
     await _notificationService.scheduleNotification(
       id: reminder.id!,
-      title: _getNotificationTitle(reminder),
-      body: _getNotificationBody(reminder),
-      scheduledDate: scheduledAt,
+      title: overdue
+          ? 'Overdue: ${_getNotificationTitle(reminder)}'
+          : _getNotificationTitle(reminder),
+      body: overdue
+          ? 'Due since ${DateFormat('d MMM').format(due)}. '
+                '${_getNotificationBody(reminder)}'
+          : _getNotificationBody(reminder),
+      scheduledDate: nextFireTime(due, current),
       payload: payload,
       channel: NotificationChannel.reminders,
+      repeatDaily: true,
     );
+  }
+
+  /// When to notify for a reminder [due] at that moment, seen from [now]:
+  /// the due time itself if it's still ahead, otherwise the next time the
+  /// clock shows the due time's hour and minute (today or tomorrow)
+  @visibleForTesting
+  static DateTime nextFireTime(DateTime due, DateTime now) {
+    if (due.isAfter(now)) return due;
+    var next = DateTime(now.year, now.month, now.day, due.hour, due.minute);
+    if (!next.isAfter(now)) {
+      next = DateTime(now.year, now.month, now.day + 1, due.hour, due.minute);
+    }
+    return next;
   }
 
   /// Cancel a scheduled notification for a reminder
